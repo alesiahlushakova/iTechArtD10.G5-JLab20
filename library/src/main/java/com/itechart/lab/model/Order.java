@@ -3,7 +3,7 @@ package com.itechart.lab.model;
 import java.sql.Date;
 import java.util.Objects;
 
-public class Order {
+public class Order extends Entity{
     private int id;
     private Date borrowDate;
     private Status status;

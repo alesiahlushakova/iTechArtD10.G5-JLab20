@@ -4,9 +4,9 @@ import java.io.InputStream;
 import java.sql.Date;
 import java.util.Objects;
 
-public class Book {
+public class Book extends Entity {
     private int id;
-    private InputStream cover;
+    private Byte[] cover;
     private String title;
     private String publisher;
     private Date publish_date;
@@ -24,11 +24,11 @@ public class Book {
         this.id = id;
     }
 
-    public InputStream getCover() {
+    public Byte[] getCover() {
         return cover;
     }
 
-    public void setCover(InputStream cover) {
+    public void setCover(Byte[] cover) {
         this.cover = cover;
     }
 
@@ -48,19 +48,19 @@ public class Book {
         this.publisher = publisher;
     }
 
-    public Date getPublish_date() {
+    public Date getPublishDate() {
         return publish_date;
     }
 
-    public void setPublish_date(Date publish_date) {
+    public void setPublishDate(Date publish_date) {
         this.publish_date = publish_date;
     }
 
-    public int getPage_count() {
+    public int getPageCount() {
         return page_count;
     }
 
-    public void setPage_count(int page_count) {
+    public void setPageCount(int page_count) {
         this.page_count = page_count;
     }
 
@@ -88,7 +88,7 @@ public class Book {
         this.ISBN = ISBN;
     }
 
-    public boolean isStatus() {
+    public boolean getStatus() {
         return status;
     }
 
@@ -102,20 +102,20 @@ public class Book {
         if (!(o instanceof Book)) return false;
         Book book = (Book) o;
         return getId() == book.getId() &&
-                getPage_count() == book.getPage_count() &&
+                getPageCount() == book.getPageCount() &&
                 getTotalAmount() == book.getTotalAmount() &&
-                isStatus() == book.isStatus() &&
+                getStatus() == book.getStatus() &&
                 Objects.equals(getCover(), book.getCover()) &&
                 getTitle().equals(book.getTitle()) &&
                 getPublisher().equals(book.getPublisher()) &&
-                getPublish_date().equals(book.getPublish_date()) &&
+                getPublishDate().equals(book.getPublishDate()) &&
                 Objects.equals(getDescription(), book.getDescription()) &&
                 getISBN().equals(book.getISBN());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getCover(), getTitle(), getPublisher(), getPublish_date(), getPage_count(), getDescription(), getTotalAmount(), getISBN(), isStatus());
+        return Objects.hash(getId(), getCover(), getTitle(), getPublisher(), getPublishDate(), getPageCount(), getDescription(), getTotalAmount(), getISBN(), getStatus());
     }
 
     @Override

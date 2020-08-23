@@ -2,7 +2,7 @@ package com.itechart.lab.model;
 
 import java.util.Objects;
 
-public class Author {
+public class Author extends Entity{
     private int id;
     private String firstname;
     private String lastname;

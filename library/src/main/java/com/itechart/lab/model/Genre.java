@@ -2,7 +2,7 @@ package com.itechart.lab.model;
 
 import java.util.Objects;
 
-public class Genre {
+public class Genre extends Entity {
     private int id;
     private String genre;
 
