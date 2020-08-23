@@ -45,20 +45,20 @@ INSERT INTO `reader` (`first_name`,`last_name`,`email`,`gender`,`phone`,`date_of
  ("dolor. Nulla semper tellus"),
  ("luctus vulputate, nisi sem semper erat, in consectetuer"),
  ("Nam tempor diam dictum sapien.");
- 
- INSERT INTO `book` 
- (`title`,`publisher`,`publish_date`,`page_count`,`description`,`total_amount`,`ISBN`,`status`)
- VALUES
- ("tellus faucibus","Wade Melendez","2020-04-20 00:27:17",101,"Nullam suscipit, est ac facilisis facilisis, magna tellus faucibus",85,"038-928-3139","1"),
- ("morbi tristique senectus","Curran Kim","2020-07-14 12:50:49",198,"est arcu ac orci. Ut",84,"068-533-5011","1"),
- ("vulputate, posuere","Nero Valencia","2019-12-20 03:59:37",344,"tortor at risus.",62,"088-651-5002","0"),
- ("elit, pellentesque","Flynn Walters","2020-05-19 11:59:30",299,"nec, diam. Duis mi enim, condimentum",81,"001-174-9944","0"),
- ("Vivamus","Elvis Holcomb","2020-01-21 04:31:16",78,"semper. Nam tempor diam dictum sapien.",78,"013-482-8151","0"),
- ("pede. Cras vulputate","Timon England","2020-06-10 21:08:30",402,"dui quis accumsan",95,"017-078-6257","1"),
- ("sapien imperdiet","Burton Jimenez","2020-08-31 14:41:23",389,"amet ornare lectus justo eu arcu. Morbi sit",45,"063-792-8805","1"),
- ("in consequat","Kermit Torres","2021-02-08 17:44:39",352,"felis,",97,"053-644-5814","1"),
- ("Integer eu","Brody Duncan","2019-09-05 07:50:45",23,"molestie tortor nibh sit amet",53,"062-331-2666","1"),
- ("libero.","Emerson Wood","2020-11-03 07:03:25",39,"vitae diam. Proin dolor. Nulla semper tellus id nunc",75,"079-997-3345","0");
+
+INSERT INTO `book`
+(`title`,`publisher`,`publish_date`,`page_count`,`description`,`total_amount`,`remaining_amount`,`ISBN`,`status`)
+VALUES
+("tellus faucibus","Wade Melendez","2020-04-20 00:27:17",101,"Nullam suscipit, est ac facilisis facilisis, magna tellus faucibus",85,85,"038-928-3139","1"),
+("morbi tristique senectus","Curran Kim","2020-07-14 12:50:49",198,"est arcu ac orci. Ut",84,84,"068-533-5011","1"),
+("vulputate, posuere","Nero Valencia","2019-12-20 03:59:37",344,"tortor at risus.",62,62,"088-651-5002","0"),
+("elit, pellentesque","Flynn Walters","2020-05-19 11:59:30",299,"nec, diam. Duis mi enim, condimentum",81,81,"001-174-9944","0"),
+("Vivamus","Elvis Holcomb","2020-01-21 04:31:16",78,"semper. Nam tempor diam dictum sapien.",78,78,"013-482-8151","0"),
+("pede. Cras vulputate","Timon England","2020-06-10 21:08:30",402,"dui quis accumsan",95,95,"017-078-6257","1"),
+("sapien imperdiet","Burton Jimenez","2020-08-31 14:41:23",42,"amet ornare lectus justo eu arcu. Morbi sit",45,45,"063-792-8805","1"),
+("in consequat","Kermit Torres","2021-02-08 17:44:39",352,"felis,",97,97,"053-644-5814","1"),
+("Integer eu","Brody Duncan","2019-09-05 07:50:45",23,"molestie tortor nibh sit amet",53,53,"062-331-2666","1"),
+("libero.","Emerson Wood","2020-11-03 07:03:25",39,"vitae diam. Proin dolor. Nulla semper tellus id nunc",75,75,"079-997-3345","0");
  
 INSERT INTO `book_author` (`book_id`,`author_id`) 
 VALUES 

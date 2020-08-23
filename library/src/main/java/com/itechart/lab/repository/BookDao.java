@@ -12,10 +12,11 @@ public class BookDao extends AbstractDao<Book>{
     private static final String SELECT_ALL_QUERY = "SELECT * FROM book";
     private static final String SELECT_BY_ID_QUERY = "SELECT * FROM book WHERE id=?";
     private static final String DELETE_BY_ID_QUERY = "DELETE FROM book WHERE id=?";
-    private static final String INSERT_ENTITY_QUERY = "INSERT INTO book (cover,title,publisher,publish_date,page_count,description,total_amount,ISBN,status) VALUES(?,?,?,?,?,?,?,?,?)";
+    private static final String INSERT_ENTITY_QUERY = "INSERT INTO book (cover,title,publisher,publish_date,page_count,description,total_amount,remaining_amount,ISBN,status) VALUES(?,?,?,?,?,?,?,?,?,?)";
     private static final String UPDATE_ENTITY_QUERY = "UPDATE book SET title=?, publisher=?, publish_date=?, page_count=?, description=?, total_amount=?, ISBN=?, status=? WHERE ExerciseID=?";
-    //private static final String SELECT_FOR_BOOK_LIST_QUERY = "SELECT title, author, publish_date,"
-    private static final String SELECT_AMOUNT_OF_AVAILABLE_BOOKS_QUERY = "SELECT count(*) FROM book WHERE status=true";
+    private static final String SELECT_AMOUNT_OF_AVAILABLE_BOOKS_QUERY = "SELECT remaining_amount FROM book WHERE status=true AND id=?";
+    private static final String UPDATE_WHEN_BORROWING_QUERY = "UPDATE book SET remaining_amount=total_amount-1 WHERE id=?";
+    private static final String UPDATE_WHEN_RETURNING_QUERY = "UPDATE book SET remaining_amount=total_amount+1 WHERE id=?";
     private static final String SELECT_BY_TITLE = "SELECT * FROM book WHERE title=?";
     private static final String SELECT_BY_DESCRIPTION = "SELECT * FROM book WHERE description=?";
     private static final String SELECT_BY_AUTHOR = "SELECT  DISTINCT book.id,cover,title,publisher,publish_date,page_count,description,total_amount,ISBN,status" +
@@ -33,6 +34,7 @@ public class BookDao extends AbstractDao<Book>{
     private static final String PAGE_COUNT_COLUMN = "page_count";
     private static final String DESCRIPTION_COLUMN = "description";
     private static final String TOTAL_AMOUNT_COLUMN = "total_amount";
+    private static final String REMAINING_AMOUNT_COLUMN = "remaining_amount";
     private static final String ISBN_COLUMN = "ISBN";
     private static final String STATUS_COLUMN = "status";
 
@@ -40,14 +42,29 @@ public class BookDao extends AbstractDao<Book>{
         super(connection);
     }
 
-    public int getAmountOfAvailableBooks(Book book) throws DaoException {
-        try(Statement statement = connection.createStatement()){
-           ResultSet resultSet = statement.executeQuery(SELECT_AMOUNT_OF_AVAILABLE_BOOKS_QUERY);
+    public boolean updateAmountWhenBorrowing(int amount, int id) throws DaoException{
+        return executeQuery(UPDATE_WHEN_BORROWING_QUERY,amount, id);
+    }
+
+    public boolean updateAmountWhenReturning(int amount, int id) throws DaoException{
+        return executeQuery(UPDATE_WHEN_RETURNING_QUERY,amount, id);
+    }
+
+    public int getAmountOfAvailableBooks(boolean status, int id) throws DaoException {
+        try(PreparedStatement statement = prepareStatementForQuery(SELECT_AMOUNT_OF_AVAILABLE_BOOKS_QUERY,status, id)){
+           ResultSet resultSet = statement.executeQuery();
            int amount = resultSet.getInt(1);
            return amount;
         } catch (SQLException exception) {
             throw new DaoException(exception.getMessage(), exception);
         }
+    }
+    //TODO lift to service method
+    public boolean isValidStatus(boolean status, int id) throws DaoException{
+        int amount = getAmountOfAvailableBooks(status, id);
+        if(amount > 0){
+            return !status;
+        } else return false;
     }
 
     @Override
@@ -86,6 +103,10 @@ public class BookDao extends AbstractDao<Book>{
         int totalAmount = entity.getTotalAmount();
         String totalAmountValue = String.valueOf(totalAmount);
         parameters.add(totalAmountValue);
+
+        int remainingAmount = entity.getRemainingAmount();
+        String remainingAmountValue = String.valueOf(remainingAmount);
+        parameters.add(remainingAmountValue);
 
         String isbn = entity.getISBN();
         parameters.add(isbn);
@@ -127,6 +148,9 @@ public class BookDao extends AbstractDao<Book>{
 
             int totalAmount = resultSet.getInt(TOTAL_AMOUNT_COLUMN);
             book.setTotalAmount(totalAmount);
+
+            int remainingAmount = resultSet.getInt(REMAINING_AMOUNT_COLUMN);
+            book.setRemainingAmount(remainingAmount);
 
             String isbn = resultSet.getString(ISBN_COLUMN);
             book.setISBN(isbn);

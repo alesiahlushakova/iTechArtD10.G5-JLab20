@@ -5,11 +5,30 @@ import java.util.Objects;
 
 public class Order extends Entity{
     private int id;
+    private int bookId;
+    private int readerId;
     private Date borrowDate;
     private Status status;
     private String comment;
     private Date dueDate;
     private Date returnDate;
+
+
+    public int getBookId() {
+        return bookId;
+    }
+
+    public void setBookId(int bookId) {
+        this.bookId = bookId;
+    }
+
+    public int getReaderId() {
+        return readerId;
+    }
+
+    public void setReaderId(int readerId) {
+        this.readerId = readerId;
+    }
 
     public int getId() {
         return id;
@@ -65,6 +84,8 @@ public class Order extends Entity{
         if (!(o instanceof Order)) return false;
         Order order = (Order) o;
         return getId() == order.getId() &&
+                getBookId() == order.getBookId() &&
+                getReaderId() == order.getReaderId() &&
                 getBorrowDate().equals(order.getBorrowDate()) &&
                 getStatus().equals(order.getStatus()) &&
                 Objects.equals(getComment(), order.getComment()) &&

@@ -13,6 +13,7 @@ public class Book extends Entity {
     private int page_count;
     private String description;
     private int totalAmount;
+    private int remainingAmount;
     private String ISBN;
     private boolean status;
 
@@ -54,6 +55,14 @@ public class Book extends Entity {
 
     public void setPublishDate(Date publish_date) {
         this.publish_date = publish_date;
+    }
+
+    public int getRemainingAmount() {
+        return remainingAmount;
+    }
+
+    public void setRemainingAmount(int remainingAmount) {
+        this.remainingAmount = remainingAmount;
     }
 
     public int getPageCount() {

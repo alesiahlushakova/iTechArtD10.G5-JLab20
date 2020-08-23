@@ -37,6 +37,7 @@ create table book (
                       page_count int not null,
                       description varchar(4000) ,
                       total_amount int not null,
+                      remaining_amount int default total_amount check ( remaining_amount <total_amount or remaining_amount = total_amount ) not null,
                       ISBN varchar(13) not null,
                       status bool not null
 );
@@ -63,7 +64,7 @@ create table book_order (
                             status enum( 'RETURNED','RETURNED_AND_DAMAGED', 'LOST'),
                             comment varchar(255),
                             due_date date not null,
-                            return_date date not null,
+                            return_date date ,
                             foreign key (book_id) references book (id)  on delete cascade,
                             foreign key (reader_id) references reader (id)  on delete cascade
 );

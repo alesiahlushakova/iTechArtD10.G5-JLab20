@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
- abstract class AbstractDao<T extends Entity> {
+ abstract class AbstractDao<T extends Entity> implements Dao<T> {
      public static final int EMPTY_RESULT = 0;
      public static final String NULL_PARAMETER = "null";
 
