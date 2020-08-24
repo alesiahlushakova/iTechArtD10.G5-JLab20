@@ -17,14 +17,18 @@ public class BookDao extends AbstractDao<Book>{
     private static final String SELECT_AMOUNT_OF_AVAILABLE_BOOKS_QUERY = "SELECT remaining_amount FROM book WHERE status=true AND id=?";
     private static final String UPDATE_WHEN_BORROWING_QUERY = "UPDATE book SET remaining_amount=total_amount-1 WHERE id=?";
     private static final String UPDATE_WHEN_RETURNING_QUERY = "UPDATE book SET remaining_amount=total_amount+1 WHERE id=?";
-    private static final String SELECT_BY_TITLE = "SELECT * FROM book WHERE title=?";
-    private static final String SELECT_BY_DESCRIPTION = "SELECT * FROM book WHERE description=?";
-    private static final String SELECT_BY_AUTHOR = "SELECT  DISTINCT book.id,cover,title,publisher,publish_date,page_count,description,total_amount,ISBN,status" +
-            " FROM book INNER JOIN book_author ON book.id=book_id" +
-            "INNER JOIN author ON author.id=author_id WHERE author=?";
-    private static final String SELECT_BY_GENRE = "SELECT  DISTINCT book.id,cover,title,publisher,publish_date,page_count,description,total_amount,ISBN,status" +
-            " FROM book INNER JOIN book_genre ON book.id=book_id" +
-            "INNER JOIN genre ON genre.id=genre_id WHERE genre=?";
+    private static final String SEARCH_QUERY = "SELECT  DISTINCT book.id,cover,title,publisher,publish_date,page_count,description,total_amount,ISBN,status\n" +
+            "             FROM book \n" +
+            "             INNER JOIN book_genre ON book.id=book_id\n" +
+            "             INNER JOIN book_author ba on book.id = ba.book_id\n" +
+            "             INNER JOIN author a on ba.author_id = a.id\n" +
+            "             INNER JOIN genre ON genre.id=genre_id\n" +
+            "             WHERE (title=? OR ? IS NULL ) AND\n" +
+            "                   (description=? OR ? IS NULL ) AND\n" +
+            "                   (genre=? OR ? IS NULL ) AND\n" +
+            "                   (a.last_name=? OR ? IS NULL )";
+    private static final String SEARCH_BY_GENRE = "AND  (genre=? OR ? IS NULL )";
+    private static final String SEARCH_BY_AUTHOR = "AND  (a.last_name=? OR ? IS NULL )";
 
     private static final String ID_COLUMN = "id";
     private static final String COVER_COLUMN = "cover";
@@ -40,6 +44,35 @@ public class BookDao extends AbstractDao<Book>{
 
     public BookDao(Connection connection) {
         super(connection);
+    }
+
+    public List<Book> searchForBookByCriteria (String description,
+                                               String title, List<String> genres,
+                                               String[] authors) throws DaoException{
+
+            StringBuilder sqlQuery = new StringBuilder(SEARCH_QUERY);
+
+            for (String genre:
+                 genres) {
+                sqlQuery.append("AND  (genre=").append(genre).append(" OR ").append(genre).append(" IS NULL )");
+            }
+            for (String author:
+            authors){
+                sqlQuery.append("AND  (a.last_name=").append(author).append(" OR ").append(author).append(" IS NULL )");
+            }
+            try(PreparedStatement preparedStatement
+                    =prepareStatementForQuery(String.valueOf(sqlQuery),description,title)){
+                ResultSet resultSet = preparedStatement.executeQuery();
+                List<Book> bookList = new ArrayList<>();
+                Book book = null;
+                while (resultSet.next()) {
+                    book = buildEntity(resultSet);
+                    bookList.add(book);
+                }
+                return bookList;
+        }catch (SQLException exception) {
+            throw new DaoException(exception.getMessage(), exception);
+        }
     }
 
     public boolean updateAmountWhenBorrowing(int amount, int id) throws DaoException{

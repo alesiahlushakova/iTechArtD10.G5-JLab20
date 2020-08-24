@@ -44,7 +44,7 @@ public class Reader extends Entity {
         this.email = email;
     }
 
-    public boolean isGender() {
+    public boolean getGender() {
         return gender;
     }
 
@@ -74,7 +74,7 @@ public class Reader extends Entity {
         if (!(o instanceof Reader)) return false;
         Reader reader = (Reader) o;
         return getId() == reader.getId() &&
-                isGender() == reader.isGender() &&
+                getGender() == reader.getGender() &&
                 getFirstname().equals(reader.getFirstname()) &&
                 getLastname().equals(reader.getLastname()) &&
                 getEmail().equals(reader.getEmail()) &&
@@ -84,7 +84,7 @@ public class Reader extends Entity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getFirstname(), getLastname(), getEmail(), isGender(), getPhone(), getDateOfRegistration());
+        return Objects.hash(getId(), getFirstname(), getLastname(), getEmail(), getGender(), getPhone(), getDateOfRegistration());
     }
 
     @Override

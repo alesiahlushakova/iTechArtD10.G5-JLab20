@@ -37,7 +37,7 @@ create table book (
                       page_count int not null,
                       description varchar(4000) ,
                       total_amount int not null,
-                      remaining_amount int default total_amount check ( remaining_amount <total_amount or remaining_amount = total_amount ) not null,
+                      remaining_amount int not null,
                       ISBN varchar(13) not null,
                       status bool not null
 );
@@ -61,6 +61,7 @@ create table book_order (
                             book_id int not null,
                             reader_id int not null,
                             borrow_date timestamp not null,
+                            borrow_period enum('1','2','3','6','12') not null ,
                             status enum( 'RETURNED','RETURNED_AND_DAMAGED', 'LOST'),
                             comment varchar(255),
                             due_date date not null,

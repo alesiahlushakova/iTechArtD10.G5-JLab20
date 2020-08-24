@@ -8,6 +8,7 @@ public class Order extends Entity{
     private int bookId;
     private int readerId;
     private Date borrowDate;
+    private Period period;
     private Status status;
     private String comment;
     private Date dueDate;
@@ -29,6 +30,15 @@ public class Order extends Entity{
     public void setReaderId(int readerId) {
         this.readerId = readerId;
     }
+
+    public Period getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(Period period) {
+        this.period = period;
+    }
+
 
     public int getId() {
         return id;
@@ -86,6 +96,7 @@ public class Order extends Entity{
         return getId() == order.getId() &&
                 getBookId() == order.getBookId() &&
                 getReaderId() == order.getReaderId() &&
+                getPeriod() == order.getPeriod() &&
                 getBorrowDate().equals(order.getBorrowDate()) &&
                 getStatus().equals(order.getStatus()) &&
                 Objects.equals(getComment(), order.getComment()) &&
