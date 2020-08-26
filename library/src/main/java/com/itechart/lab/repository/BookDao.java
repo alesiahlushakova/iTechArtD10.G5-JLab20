@@ -4,6 +4,7 @@ import com.itechart.lab.model.Book;
 import org.apache.commons.lang3.ArrayUtils;
 
 
+import java.io.InputStream;
 import java.sql.*;
 import java.sql.Date;
 import java.util.*;
@@ -27,9 +28,14 @@ public class BookDao extends AbstractDao<Book>{
             "                   (description=? OR ? IS NULL ) AND\n" +
             "                   (genre=? OR ? IS NULL ) AND\n" +
             "                   (a.last_name=? OR ? IS NULL )";
-    private static final String SEARCH_BY_GENRE = "AND  (genre=? OR ? IS NULL )";
-    private static final String SEARCH_BY_AUTHOR = "AND  (a.last_name=? OR ? IS NULL )";
-
+    private static final String SELECT_IMAGE_BY_USER_ID_QUERY = "SELECT cover FROM book WHERE id=?";
+    private static final String SELECT_BOOK_AUTHORS_QUERY = "SELECT first_name, last_name FROM book_author" +
+            "INNER JOIN author ON book_author.author_id = author.id" +
+            "WHERE book_author.book_id=?";
+    private static final String UPDATE_STATUS_QUERY = "UPDATE book SET status=? WHERE id=?";
+    private static final String SELECT_BY_FOUND_ROWS_QUERY = "SELECT SQL_CALC_FOUND_ROWS * FROM book LIMIT %d, %d";
+    private static final String SELECT_BY_FOUND_ROWS_FILTERED_QUERY = "SELECT SQL_CALC_FOUND_ROWS * FROM book WHERE status=true LIMIT %d, %d";
+    private static final String SELECT_FOUND_ROWS_QUERY = "SELECT FOUND_ROWS()";
     private static final String ID_COLUMN = "id";
     private static final String COVER_COLUMN = "cover";
     private static final String TITLE_COLUMN = "title";
@@ -44,6 +50,28 @@ public class BookDao extends AbstractDao<Book>{
 
     public BookDao(Connection connection) {
         super(connection);
+    }
+    private int numberOfRecords;
+    public int getNumberOfRecords() {
+        return numberOfRecords;
+    }
+
+    public List<String> getBookAuthors(int id) throws DaoException{
+        try(PreparedStatement statement = prepareStatementForQuery(SELECT_BOOK_AUTHORS_QUERY, id)){
+            ResultSet resultSet = statement.executeQuery();
+            List<String> authorList = new ArrayList<>();
+            String author = null;
+            while (resultSet.next()){
+                String firstname = resultSet.getString(1);
+                String lastname = resultSet.getString(2);
+                author=firstname+" "+lastname;
+                authorList.add(author);
+            }
+
+            return authorList;
+        } catch (SQLException exception) {
+            throw new DaoException(exception.getMessage(), exception);
+        }
     }
 
     public List<Book> searchForBookByCriteria (String description,
@@ -83,6 +111,10 @@ public class BookDao extends AbstractDao<Book>{
         return executeQuery(UPDATE_WHEN_RETURNING_QUERY,amount, id);
     }
 
+    public boolean updateStatus(boolean status, int id) throws DaoException{
+        return executeQuery(UPDATE_STATUS_QUERY,status,id);
+    }
+
     public int getAmountOfAvailableBooks(boolean status, int id) throws DaoException {
         try(PreparedStatement statement = prepareStatementForQuery(SELECT_AMOUNT_OF_AVAILABLE_BOOKS_QUERY,status, id)){
            ResultSet resultSet = statement.executeQuery();
@@ -92,12 +124,76 @@ public class BookDao extends AbstractDao<Book>{
             throw new DaoException(exception.getMessage(), exception);
         }
     }
-    //TODO lift to service method
-    public boolean isValidStatus(boolean status, int id) throws DaoException{
-        int amount = getAmountOfAvailableBooks(status, id);
-        if(amount > 0){
-            return !status;
-        } else return false;
+
+
+    public byte[] selectImageById (int userId)
+            throws DaoException {
+
+        try (PreparedStatement preparedStatement
+                     = prepareStatementForQuery(SELECT_IMAGE_BY_USER_ID_QUERY,
+                userId)) {
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+                byte barray[] = rs.getBytes(1);
+
+                return barray;
+
+            }
+            return null;
+
+        } catch (SQLException exception) {
+            throw new DaoException(exception.getMessage(), exception);
+        }
+
+    }
+
+
+    public List<Book> selectAllBooks(int offSet, int numberOfRecords) throws DaoException {
+        try (Statement statement = connection.createStatement()) {
+            String sqlQuery = String.format(SELECT_BY_FOUND_ROWS_QUERY,
+                    offSet, numberOfRecords);
+            ResultSet resultSet = statement.executeQuery(sqlQuery);
+
+            List<Book> findClients = new ArrayList<>();
+            while (resultSet.next()) {
+                Book user = buildEntity(resultSet);
+
+                findClients.add(user);
+            }
+
+            resultSet = statement.executeQuery(SELECT_FOUND_ROWS_QUERY);
+            if (resultSet.next()) {
+                this.numberOfRecords = resultSet.getInt(1);
+            }
+
+            return findClients;
+        } catch (SQLException exception) {
+            throw new DaoException(exception.getMessage(), exception);
+        }
+    }
+
+    public List<Book> selectAllAvailableBooks(int offSet, int numberOfRecords) throws DaoException {
+        try (Statement statement = connection.createStatement()) {
+            String sqlQuery = String.format(SELECT_BY_FOUND_ROWS_FILTERED_QUERY,
+                    offSet, numberOfRecords);
+            ResultSet resultSet = statement.executeQuery(sqlQuery);
+
+            List<Book> findClients = new ArrayList<>();
+            while (resultSet.next()) {
+                Book user = buildEntity(resultSet);
+
+                findClients.add(user);
+            }
+
+            resultSet = statement.executeQuery(SELECT_FOUND_ROWS_QUERY);
+            if (resultSet.next()) {
+                this.numberOfRecords = resultSet.getInt(1);
+            }
+
+            return findClients;
+        } catch (SQLException exception) {
+            throw new DaoException(exception.getMessage(), exception);
+        }
     }
 
     @Override
@@ -108,7 +204,7 @@ public class BookDao extends AbstractDao<Book>{
         String idValue = String.valueOf(id);
         parameters.add(idValue);
 
-        Byte[] cover = entity.getCover();
+        InputStream cover = entity.getInputStream();
         if(cover == null) {
             parameters.add(NULL_PARAMETER);
         } else {
@@ -160,7 +256,7 @@ public class BookDao extends AbstractDao<Book>{
             book.setId(id);
 
             Blob coverValueBlob = resultSet.getBlob(COVER_COLUMN);
-            byte coverValue[] =  coverValueBlob.getBytes(1,(int)coverValueBlob.length());
+            byte[] coverValue =  coverValueBlob.getBytes(1,(int)coverValueBlob.length());
             Byte[] cover = ArrayUtils.toObject(coverValue);
             book.setCover(cover);
 

@@ -7,6 +7,16 @@ import java.util.Objects;
 public class Book extends Entity {
     private int id;
     private Byte[] cover;
+
+    public InputStream getInputStream() {
+        return inputStream;
+    }
+
+    public void setInputStream(InputStream inputStream) {
+        this.inputStream = inputStream;
+    }
+
+    private InputStream inputStream;
     private String title;
     private String publisher;
     private Date publish_date;
