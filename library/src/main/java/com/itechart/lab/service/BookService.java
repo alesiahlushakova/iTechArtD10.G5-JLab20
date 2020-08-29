@@ -85,7 +85,7 @@ public class BookService {
 
     public boolean createBook(InputStream cover, String title, String publisher,
                               Date publishDate, int pageCount, String description,
-                              int totalAmount, String isbn, boolean status) throws ServiceException {
+                              int totalAmount, String isb, boolean status) throws ServiceException {
         try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
             BookDao bookDao = new BookDao(connectionWrapper.getConnection());
             Book book = new Book();
@@ -112,6 +112,16 @@ public class BookService {
             return bookDao.deleteById(id);
         } catch (DaoException exception) {
             throw new ServiceException("Exception while deleting the book.", exception);
+        }
+    }
+
+    public List<Book>  searchForBook(String title, String description, List<String> genres, List<String> authors)
+        throws ServiceException{
+        try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
+            BookDao bookDao = new BookDao(connectionWrapper.getConnection());
+            return bookDao.searchForBookByCriteria(description, title, genres, authors);
+        } catch (DaoException exception) {
+            throw new ServiceException("Exception while searching for book by criteria", exception);
         }
     }
 

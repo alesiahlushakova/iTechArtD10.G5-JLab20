@@ -76,7 +76,7 @@ public class BookDao extends AbstractDao<Book>{
 
     public List<Book> searchForBookByCriteria (String description,
                                                String title, List<String> genres,
-                                               String[] authors) throws DaoException{
+                                               List<String> authors) throws DaoException{
 
             StringBuilder sqlQuery = new StringBuilder(SEARCH_QUERY);
 
@@ -103,13 +103,7 @@ public class BookDao extends AbstractDao<Book>{
         }
     }
 
-    public boolean updateAmountWhenBorrowing(int amount, int id) throws DaoException{
-        return executeQuery(UPDATE_WHEN_BORROWING_QUERY,amount, id);
-    }
 
-    public boolean updateAmountWhenReturning(int amount, int id) throws DaoException{
-        return executeQuery(UPDATE_WHEN_RETURNING_QUERY,amount, id);
-    }
 
     public boolean updateStatus(boolean status, int id) throws DaoException{
         return executeQuery(UPDATE_STATUS_QUERY,status,id);

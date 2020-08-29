@@ -19,6 +19,7 @@ public class OrderDao extends AbstractDao<Order> {
     private static final String DELETE_BY_ID_QUERY = "DELETE FROM book_order WHERE id=?";
     private static final String INSERT_ENTITY_QUERY = "INSERT INTO book_order (`book_id`,`reader_id`,`borrow_date`,`period`,`status`,`comment`,`due_date`,`return_date`)  VALUES(?,?,?,?,?,?,?,?)";
     private static final String UPDATE_ENTITY_QUERY = "UPDATE book_order SET  book_id=?, reader_id=?, borrow_date=?,`period`=?, status=?, comment=?, due_date=?, return_date=? WHERE id=?";
+    private static final String UPDATE_STATUS_ENTITY_QUERY = "UPDATE book_order SET  status=? WHERE id=?";
     private static final String SELECT_BOOK_AVAILABILITY_DATE_QUERY = "SELECT due_date from book_order" +
             "WHERE return_date IS NULL AND book_id=?" +
             "ORDER BY due_date" +
@@ -27,6 +28,8 @@ public class OrderDao extends AbstractDao<Order> {
             "FROM book_order INNER JOIN reader" +
             "ON reader_id=reader.id" +
             "WHERE order.id=? ";
+    private static final String UPDATE_WHEN_BORROWING_QUERY = "UPDATE book SET remaining_amount=total_amount-1 WHERE id=?";
+    private static final String UPDATE_WHEN_RETURNING_QUERY = "UPDATE book SET remaining_amount=total_amount+1 WHERE id=?";
     private static final String ID_COLUMN = "id";
     private static final String BOOK_ID_COLUMN = "book_id";
     private static final String READER_ID_COLUMN = "reader_id";
@@ -99,6 +102,19 @@ public class OrderDao extends AbstractDao<Order> {
         }
 
         return parameters;
+    }
+
+    public boolean updateStatus(Status status, int id) throws DaoException{
+        return executeQuery(UPDATE_STATUS_ENTITY_QUERY,String.valueOf(status),id);
+    }
+
+
+    public boolean updateAmountWhenBorrowing(int id) throws DaoException{
+        return executeQuery(UPDATE_WHEN_BORROWING_QUERY,id);
+    }
+
+    public boolean updateAmountWhenReturning( int id) throws DaoException{
+        return executeQuery(UPDATE_WHEN_RETURNING_QUERY,id);
     }
 
     @Override
