@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static com.itechart.lab.command.Command.MESSAGE_ATTRIBUTE;
 import static com.itechart.lab.view.MessageManager.NONE_MESSAGE_KEY;
 
 

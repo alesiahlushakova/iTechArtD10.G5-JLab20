@@ -2,6 +2,7 @@ package com.itechart.lab.model;
 
 import java.io.InputStream;
 import java.sql.Date;
+import java.util.List;
 import java.util.Objects;
 
 public class Book extends Entity {
@@ -23,6 +24,16 @@ public class Book extends Entity {
     private int page_count;
     private String description;
     private int totalAmount;
+
+    public List<String> getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(List<String> authors) {
+        this.authors = authors;
+    }
+
+    private List<String> authors;
     private int remainingAmount;
     private String ISBN;
     private boolean status;

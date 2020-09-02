@@ -12,6 +12,11 @@ public enum CommandType {
         {
             this.command = new EmptyCommand();
         }
+    },
+    BOOK_LIST{
+        {
+            this.command = new BookListCommand();
+        }
     };
 
 

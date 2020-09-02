@@ -1,6 +1,10 @@
 package com.itechart.lab.repository.pool;
 
+
+
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,10 +12,10 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.Properties;
 import java.util.ResourceBundle;
-import java.util.logging.Logger;
+
 
 public class ConnectionMaker {
-    private static final Logger LOGGER = (Logger) LogManager.getLogger(ConnectionMaker.class);
+    private static final Logger LOGGER = LogManager.getLogger(ConnectionMaker.class);
 
     private static final String RESOURCE_BUNDLE_FILE_NAME = "database";
     private static final String POOL_SIZE_PROPERTY_KEY = "db.poolSize";
@@ -47,7 +51,7 @@ public class ConnectionMaker {
             DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
             LOGGER.info("Driver was registered successfully");
         } catch (SQLException exception) {
-            LOGGER.warning("SQL exception was detected during driver registration.");
+            LOGGER.warn("SQL exception was detected during driver registration.");
             throw new ExceptionInInitializerError("Driver hasn't been registered. " + exception.getMessage());
         }
 
@@ -65,7 +69,7 @@ public class ConnectionMaker {
             LOGGER.info("Connection was created successfully");
             return connection;
         } catch (SQLException exception) {
-            LOGGER.warning("SQL exception was detected during connection creating.");
+            LOGGER.warn("SQL exception was detected during connection creating.");
             throw new ExceptionInInitializerError("Connection hasn't been created. " + exception.getMessage());
         }
     }

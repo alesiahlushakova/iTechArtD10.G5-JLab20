@@ -15,6 +15,15 @@ import java.util.Map;
 public class BookService {
 
 
+    public List<String> getBookAuthor(int id) throws ServiceException{
+        try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
+            BookDao bookDao = new BookDao(connectionWrapper.getConnection());
+         return   bookDao.getBookAuthors(id);
+        } catch (DaoException exception) {
+            throw new ServiceException("Exception during finding all book authors operation.", exception);
+        }
+    }
+
     public Map<List<Book>, Integer> findAllBooksByPages(int offSet, int numberOfRecords) throws ServiceException {
         try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
             BookDao bookDao = new BookDao(connectionWrapper.getConnection());
@@ -85,7 +94,7 @@ public class BookService {
 
     public boolean createBook(InputStream cover, String title, String publisher,
                               Date publishDate, int pageCount, String description,
-                              int totalAmount, String isb, boolean status) throws ServiceException {
+                              int totalAmount, String isbn, boolean status) throws ServiceException {
         try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
             BookDao bookDao = new BookDao(connectionWrapper.getConnection());
             Book book = new Book();

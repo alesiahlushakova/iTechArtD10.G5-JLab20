@@ -9,7 +9,7 @@ public class MessageManager {
     public static final Locale DEFAULT_LOCALE = new Locale("", "");
 
     public static final String NONE_MESSAGE_KEY = "NONE";
-
+    public static final String COMMAND_ERROR_MESSAGE_KEY = "message.command_error";
 
 
     private static final String RESOURCE_FILE_NAME = "messages";

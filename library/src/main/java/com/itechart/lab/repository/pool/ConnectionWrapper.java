@@ -4,10 +4,12 @@ import org.apache.logging.log4j.LogManager;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 public class ConnectionWrapper  implements AutoCloseable{
-    private static final Logger LOGGER = (Logger) LogManager.getLogger(ConnectionWrapper.class);
+    private static final Logger LOGGER = LogManager.getLogger(ConnectionWrapper.class);
     private final Connection connection;
 
 
@@ -21,7 +23,7 @@ public class ConnectionWrapper  implements AutoCloseable{
         try {
             connection.setAutoCommit(false);
         } catch (SQLException exception) {
-            LOGGER.severe("Transaction start failed. ");
+            LOGGER.error("Transaction start failed. ");
         }
     }
 
@@ -30,7 +32,7 @@ public class ConnectionWrapper  implements AutoCloseable{
         try {
             connection.commit();
         } catch (SQLException exception) {
-            LOGGER.severe("Transaction commit failed. ");
+            LOGGER.error("Transaction commit failed. ");
         }
     }
 
@@ -39,7 +41,7 @@ public class ConnectionWrapper  implements AutoCloseable{
         try {
             connection.rollback();
         } catch (SQLException exception) {
-            LOGGER.severe("Transaction rollback failed. ");
+            LOGGER.error("Transaction rollback failed. ");
         }
     }
 
@@ -48,7 +50,7 @@ public class ConnectionWrapper  implements AutoCloseable{
         try {
             connection.setAutoCommit(true);
         } catch (SQLException exception) {
-            LOGGER.severe("Transaction end failed. ");
+            LOGGER.error("Transaction end failed. ");
         }
     }
 

@@ -1,6 +1,7 @@
 package com.itechart.lab.command;
 
 
+import static com.itechart.lab.view.MessageManager.NONE_MESSAGE_KEY;
 
 public class CurrentJsp {
 
@@ -9,7 +10,8 @@ public class CurrentJsp {
      */
 
     public static final String MAIN_PAGE_PATH = "/index.jsp";
- //   public static final String ERROR_PAGE_PATH = "/error.jsp";
+    public static final String BOOK_LIST_PAGE_PATH = "/book_list.jsp";
+    public static final String ERROR_PAGE_PATH = "/error.jsp";
 
     private String pageUrl;
     private boolean isRedirect;

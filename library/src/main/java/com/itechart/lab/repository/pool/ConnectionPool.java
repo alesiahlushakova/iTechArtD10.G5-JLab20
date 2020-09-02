@@ -8,10 +8,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 public class ConnectionPool {
-    private final static Logger LOGGER = (Logger) LogManager.getLogger(ConnectionPool.class);
+    private final static Logger LOGGER = LogManager.getLogger(ConnectionPool.class);
 
     private static Lock instanceLocker = new ReentrantLock();
     private static Lock poolLocker = new ReentrantLock();

@@ -56,7 +56,7 @@ public class BookDao extends AbstractDao<Book>{
         return numberOfRecords;
     }
 
-    public List<String> getBookAuthors(int id) throws DaoException{
+    public  List<String> getBookAuthors(int id) throws DaoException{
         try(PreparedStatement statement = prepareStatementForQuery(SELECT_BOOK_AUTHORS_QUERY, id)){
             ResultSet resultSet = statement.executeQuery();
             List<String> authorList = new ArrayList<>();
@@ -247,7 +247,10 @@ public class BookDao extends AbstractDao<Book>{
             Book book = new Book();
 
             int id = resultSet.getInt(ID_COLUMN);
+            List<String> authorList = getBookAuthors(id);
             book.setId(id);
+
+            book.setAuthors(authorList);
 
             Blob coverValueBlob = resultSet.getBlob(COVER_COLUMN);
             byte[] coverValue =  coverValueBlob.getBytes(1,(int)coverValueBlob.length());

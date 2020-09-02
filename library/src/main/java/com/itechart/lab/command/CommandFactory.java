@@ -7,6 +7,9 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static com.itechart.lab.command.Command.COMMAND_PARAMETER;
+import static com.itechart.lab.command.Command.MESSAGE_ATTRIBUTE;
+import static com.itechart.lab.view.MessageManager.COMMAND_ERROR_MESSAGE_KEY;
 
 
 public class CommandFactory {
