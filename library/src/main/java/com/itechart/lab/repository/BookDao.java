@@ -29,9 +29,10 @@ public class BookDao extends AbstractDao<Book>{
             "                   (genre=? OR ? IS NULL ) AND\n" +
             "                   (a.last_name=? OR ? IS NULL )";
     private static final String SELECT_IMAGE_BY_USER_ID_QUERY = "SELECT cover FROM book WHERE id=?";
-    private static final String SELECT_BOOK_AUTHORS_QUERY = "SELECT first_name, last_name FROM book_author" +
-            "INNER JOIN author ON book_author.author_id = author.id" +
-            "WHERE book_author.book_id=?";
+    private static final String SELECT_BOOK_AUTHORS_QUERY = "\n" +
+            "SELECT first_name, last_name FROM book_author\n" +
+            "            INNER JOIN author ON author_id = id\n" +
+            "            WHERE book_id=?";
     private static final String UPDATE_STATUS_QUERY = "UPDATE book SET status=? WHERE id=?";
     private static final String SELECT_BY_FOUND_ROWS_QUERY = "SELECT SQL_CALC_FOUND_ROWS * FROM book LIMIT %d, %d";
     private static final String SELECT_BY_FOUND_ROWS_FILTERED_QUERY = "SELECT SQL_CALC_FOUND_ROWS * FROM book WHERE status=true LIMIT %d, %d";
@@ -253,9 +254,12 @@ public class BookDao extends AbstractDao<Book>{
             book.setAuthors(authorList);
 
             Blob coverValueBlob = resultSet.getBlob(COVER_COLUMN);
-            byte[] coverValue =  coverValueBlob.getBytes(1,(int)coverValueBlob.length());
-            Byte[] cover = ArrayUtils.toObject(coverValue);
-            book.setCover(cover);
+            if (coverValueBlob != null) {
+                byte[] coverValue =  coverValueBlob.getBytes(1,(int)coverValueBlob.length());
+                Byte[] cover = ArrayUtils.toObject(coverValue);
+                book.setCover(cover);
+
+            }
 
             String title = resultSet.getString(TITLE_COLUMN);
             book.setTitle(title);

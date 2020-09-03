@@ -2,6 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="tag" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <html>
 <head>
     <title>
@@ -9,7 +10,11 @@
     </title>
 </head>
 <body>
-<tag:client_description books="${requestScope.list}"/>
+<div>
+
+    <tag:book_description books="${requestScope.list}"/>
+</div>
+
 
 <div class="navigation_buttons">
     <ul>

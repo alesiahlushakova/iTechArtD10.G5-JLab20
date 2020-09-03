@@ -26,6 +26,9 @@
                 <td>${count}</td>
                 <td>${book.title}</td>
                 <td>${book.publishDate} </td>
+                <td>     <c:forEach var="author" items="${book.authors}">
+                    ${author};
+                </c:forEach></td>
                 <td>${book.remainingAmount} out of ${book.totalAmount}</td>
             </tr>
         </c:forEach>

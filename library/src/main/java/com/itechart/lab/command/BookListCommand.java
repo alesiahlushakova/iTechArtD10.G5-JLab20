@@ -52,7 +52,7 @@ public class BookListCommand implements Command {
              request.setAttribute(NUMBER_OF_PAGE_ATTRIBUTE, numberOfPages);
              request.setAttribute(CURRENT_PAGE_INDEX_ATTRIBUTE, pageIndex);
              request.setAttribute(LIST_ATTRIBUTE, foundBooks);
-             return new CurrentJsp(CurrentJsp.BOOK_LIST_PAGE_PATH, true);
+             return new CurrentJsp(CurrentJsp.BOOK_LIST_PAGE_PATH, false);
 
          } catch (ServiceException exception) {
              LOGGER.error(exception.getMessage(), exception);

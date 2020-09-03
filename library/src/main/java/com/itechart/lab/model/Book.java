@@ -20,10 +20,14 @@ public class Book extends Entity {
     private InputStream inputStream;
     private String title;
     private String publisher;
-    private Date publish_date;
-    private int page_count;
+    private Date publishDate;
+    private int pageCount;
     private String description;
     private int totalAmount;
+    private List<String> authors;
+    private int remainingAmount;
+    private String ISBN;
+    private boolean status;
 
     public List<String> getAuthors() {
         return authors;
@@ -33,10 +37,6 @@ public class Book extends Entity {
         this.authors = authors;
     }
 
-    private List<String> authors;
-    private int remainingAmount;
-    private String ISBN;
-    private boolean status;
 
     public int getId() {
         return id;
@@ -71,11 +71,11 @@ public class Book extends Entity {
     }
 
     public Date getPublishDate() {
-        return publish_date;
+        return publishDate;
     }
 
     public void setPublishDate(Date publish_date) {
-        this.publish_date = publish_date;
+        this.publishDate = publish_date;
     }
 
     public int getRemainingAmount() {
@@ -87,11 +87,11 @@ public class Book extends Entity {
     }
 
     public int getPageCount() {
-        return page_count;
+        return pageCount;
     }
 
     public void setPageCount(int page_count) {
-        this.page_count = page_count;
+        this.pageCount = page_count;
     }
 
     public String getDescription() {
@@ -155,8 +155,8 @@ public class Book extends Entity {
                 ", cover=" + cover +
                 ", title='" + title + '\'' +
                 ", publisher='" + publisher + '\'' +
-                ", publish_date=" + publish_date +
-                ", page_count=" + page_count +
+                ", publish_date=" + publishDate +
+                ", page_count=" + pageCount +
                 ", description='" + description + '\'' +
                 ", totalAmount=" + totalAmount +
                 ", ISBN='" + ISBN + '\'' +
