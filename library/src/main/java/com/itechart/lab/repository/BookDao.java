@@ -14,7 +14,7 @@ public class BookDao extends AbstractDao<Book>{
     private static final String SELECT_BY_ID_QUERY = "SELECT * FROM book WHERE id=?";
     private static final String DELETE_BY_ID_QUERY = "DELETE FROM book WHERE id=?";
     private static final String INSERT_ENTITY_QUERY = "INSERT INTO book (cover,title,publisher,publish_date,page_count,description,total_amount,remaining_amount,ISBN,status) VALUES(?,?,?,?,?,?,?,?,?,?)";
-    private static final String UPDATE_ENTITY_QUERY = "UPDATE book SET title=?, publisher=?, publish_date=?, page_count=?, description=?, total_amount=?, ISBN=?, status=? WHERE ExerciseID=?";
+    private static final String UPDATE_ENTITY_QUERY = "UPDATE book SET cover=?, title=?, publisher=?, publish_date=?, page_count=?, description=?, total_amount=?,remaining_amount=?, ISBN=?, status=? WHERE id=?";
     private static final String SELECT_AMOUNT_OF_AVAILABLE_BOOKS_QUERY = "SELECT remaining_amount FROM book WHERE status=true AND id=?";
     private static final String UPDATE_WHEN_BORROWING_QUERY = "UPDATE book SET remaining_amount=total_amount-1 WHERE id=?";
     private static final String UPDATE_WHEN_RETURNING_QUERY = "UPDATE book SET remaining_amount=total_amount+1 WHERE id=?";
@@ -33,6 +33,10 @@ public class BookDao extends AbstractDao<Book>{
             "SELECT first_name, last_name FROM book_author\n" +
             "            INNER JOIN author ON author_id = id\n" +
             "            WHERE book_id=?";
+    private static final String SELECT_BOOK_GENRES_QUERY = "\n" +
+            "SELECT genre FROM book_genre\n" +
+            "            INNER JOIN genre ON genre_id = id\n" +
+            "            WHERE genre_id=?";
     private static final String UPDATE_STATUS_QUERY = "UPDATE book SET status=? WHERE id=?";
     private static final String SELECT_BY_FOUND_ROWS_QUERY = "SELECT SQL_CALC_FOUND_ROWS * FROM book LIMIT %d, %d";
     private static final String SELECT_BY_FOUND_ROWS_FILTERED_QUERY = "SELECT SQL_CALC_FOUND_ROWS * FROM book WHERE status=true LIMIT %d, %d";
@@ -67,6 +71,22 @@ public class BookDao extends AbstractDao<Book>{
                 String lastname = resultSet.getString(2);
                 author=firstname+" "+lastname;
                 authorList.add(author);
+            }
+
+            return authorList;
+        } catch (SQLException exception) {
+            throw new DaoException(exception.getMessage(), exception);
+        }
+    }
+
+    public  List<String> getBookGenres(int id) throws DaoException{
+        try(PreparedStatement statement = prepareStatementForQuery(SELECT_BOOK_GENRES_QUERY, id)){
+            ResultSet resultSet = statement.executeQuery();
+            List<String> authorList = new ArrayList<>();
+            String genre = null;
+            while (resultSet.next()){
+                genre = resultSet.getString(1);;
+                authorList.add(genre);
             }
 
             return authorList;
@@ -195,16 +215,13 @@ public class BookDao extends AbstractDao<Book>{
     protected List<String> getEntityParameters(Book entity) {
         List<String> parameters = new ArrayList<>();
 
-        int id = entity.getId();
-        String idValue = String.valueOf(id);
-        parameters.add(idValue);
 
-        InputStream cover = entity.getInputStream();
+
+        String cover = entity.getCover();
         if(cover == null) {
             parameters.add(NULL_PARAMETER);
         } else {
-            String coverValue = String.valueOf(cover);
-            parameters.add(coverValue);
+            parameters.add(cover);
         }
 
         String title = entity.getTitle();
@@ -235,7 +252,7 @@ public class BookDao extends AbstractDao<Book>{
         String isbn = entity.getISBN();
         parameters.add(isbn);
 
-        boolean status = entity.getStatus();
+        int status = entity.getStatus();
         String statusValue = String.valueOf(status);
         parameters.add(statusValue);
 
@@ -248,17 +265,17 @@ public class BookDao extends AbstractDao<Book>{
             Book book = new Book();
 
             int id = resultSet.getInt(ID_COLUMN);
-            List<String> authorList = getBookAuthors(id);
             book.setId(id);
 
+            List<String> authorList = getBookAuthors(id);
             book.setAuthors(authorList);
 
-            Blob coverValueBlob = resultSet.getBlob(COVER_COLUMN);
-            if (coverValueBlob != null) {
-                byte[] coverValue =  coverValueBlob.getBytes(1,(int)coverValueBlob.length());
-                Byte[] cover = ArrayUtils.toObject(coverValue);
-                book.setCover(cover);
+            List<String> genreList = getBookGenres(id);
+            book.setGenres(genreList);
 
+            String coverValueBlob = resultSet.getString(COVER_COLUMN);
+            if (coverValueBlob != null) {
+                book.setCover(coverValueBlob);
             }
 
             String title = resultSet.getString(TITLE_COLUMN);
@@ -285,7 +302,7 @@ public class BookDao extends AbstractDao<Book>{
             String isbn = resultSet.getString(ISBN_COLUMN);
             book.setISBN(isbn);
 
-            boolean status = resultSet.getBoolean(STATUS_COLUMN);
+            int status = resultSet.getInt(STATUS_COLUMN);
             book.setStatus(status);
 
             return book;

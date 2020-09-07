@@ -41,6 +41,17 @@ public class BookService {
         }
     }
 
+    public Book findBook(int id) throws ServiceException
+    {
+      try(ConnectionWrapper connectionWrapper = new ConnectionWrapper()){
+          BookDao bookDao = new BookDao(connectionWrapper.getConnection());
+
+         return bookDao.selectEntityById(id);
+      }  catch (DaoException exception) {
+          throw new ServiceException("Exception during finding  book", exception);
+      }
+    }
+
     public Map<List<Book>, Integer> findAllBooksByPagesFiltered(int offSet, int numberOfRecords) throws ServiceException {
         try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
             BookDao bookDao = new BookDao(connectionWrapper.getConnection());
@@ -94,7 +105,7 @@ public class BookService {
 
     public boolean createBook(InputStream cover, String title, String publisher,
                               Date publishDate, int pageCount, String description,
-                              int totalAmount, String isbn, boolean status) throws ServiceException {
+                              int totalAmount, String isbn, int status) throws ServiceException {
         try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
             BookDao bookDao = new BookDao(connectionWrapper.getConnection());
             Book book = new Book();
@@ -134,21 +145,9 @@ public class BookService {
         }
     }
 
-    public boolean editBook(InputStream cover, String title, String publisher,
-                            Date publishDate, int pageCount, String description,
-                            int totalAmount, String isbn, boolean status) throws ServiceException {
+    public boolean editBook(Book book) throws ServiceException {
         try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
             BookDao bookDao = new BookDao(connectionWrapper.getConnection());
-            Book book = new Book();
-            book.setInputStream(cover);
-            book.setTitle(title);
-            book.setPublisher(publisher);
-            book.setPublishDate((java.sql.Date) publishDate);
-            book.setPageCount(pageCount);
-            book.setDescription(description);
-            book.setTotalAmount(totalAmount);
-            book.setISBN(isbn);
-            book.setStatus(status);
             return bookDao.update(book);
         } catch (DaoException exception) {
             throw new ServiceException("Exception while updating the book.", exception);

@@ -30,7 +30,7 @@ create table genre (
 
 create table book (
                       id int primary key auto_increment not null,
-                      cover blob,
+                      cover varchar(500),
                       title varchar(255) not null,
                       publisher varchar(255) not null,
                       publish_date date not null,

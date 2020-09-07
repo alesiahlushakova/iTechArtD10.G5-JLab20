@@ -38,6 +38,7 @@
                 <a href="controller?command=book_list&page=${requestScope.pageIndex + 1}">${pageScope.next}</a>
             </li>
         </c:if>
+
     </ul>
 </div>
 </body>

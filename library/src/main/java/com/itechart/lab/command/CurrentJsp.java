@@ -11,6 +11,7 @@ public class CurrentJsp {
 
     public static final String MAIN_PAGE_PATH = "/index.jsp";
     public static final String BOOK_LIST_PAGE_PATH = "/book_list.jsp";
+    public static final String BOOK_PAGE_PATH = "/book_page.jsp";
     public static final String ERROR_PAGE_PATH = "/error.jsp";
 
     private String pageUrl;

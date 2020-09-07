@@ -7,16 +7,7 @@ import java.util.Objects;
 
 public class Book extends Entity {
     private int id;
-    private Byte[] cover;
-
-    public InputStream getInputStream() {
-        return inputStream;
-    }
-
-    public void setInputStream(InputStream inputStream) {
-        this.inputStream = inputStream;
-    }
-
+    private String cover;
     private InputStream inputStream;
     private String title;
     private String publisher;
@@ -25,9 +16,10 @@ public class Book extends Entity {
     private String description;
     private int totalAmount;
     private List<String> authors;
+    private List<String> genres;
     private int remainingAmount;
     private String ISBN;
-    private boolean status;
+    private int status;
 
     public List<String> getAuthors() {
         return authors;
@@ -37,7 +29,23 @@ public class Book extends Entity {
         this.authors = authors;
     }
 
+    public void setCover(String cover) {
+        this.cover = cover;
+    }
 
+
+    public String getCover() {
+        return cover;
+    }
+
+
+    public InputStream getInputStream() {
+        return inputStream;
+    }
+
+    public void setInputStream(InputStream inputStream) {
+        this.inputStream = inputStream;
+    }
     public int getId() {
         return id;
     }
@@ -46,13 +54,14 @@ public class Book extends Entity {
         this.id = id;
     }
 
-    public Byte[] getCover() {
-        return cover;
+    public List<String> getGenres() {
+        return genres;
     }
 
-    public void setCover(Byte[] cover) {
-        this.cover = cover;
+    public void setGenres(List<String> genres) {
+        this.genres = genres;
     }
+
 
     public String getTitle() {
         return title;
@@ -118,11 +127,11 @@ public class Book extends Entity {
         this.ISBN = ISBN;
     }
 
-    public boolean getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 

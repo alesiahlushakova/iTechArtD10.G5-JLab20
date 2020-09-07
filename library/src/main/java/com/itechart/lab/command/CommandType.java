@@ -17,6 +17,20 @@ public enum CommandType {
         {
             this.command = new BookListCommand();
         }
+    },
+    SHOW_BOOK{
+        {
+
+            this.command = new ShowBookCommand();
+        }
+    },
+    ADD_BOOK{
+        {this.command  = new AddBookCommand();}
+    },
+    DELETE_BOOK{
+        {
+            this.command = new DeleteBookCommand();
+        }
     };
 
 

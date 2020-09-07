@@ -21,16 +21,16 @@
         </tr>
         <c:forEach var="book" items="${books}">
             <c:set var="count" value="${pageScope.count+1}"/>
-            <c:set var="book_id" value="${book.id}" scope="session"/>
+            <c:set var="bookId" value="${book.id}" scope="request"/>
             <tr>
                 <td>${count}</td>
-                <td>${book.title}</td>
+                <td><a href="${pageContext.request.contextPath}/controller?command=show_book&bookId=${book.id}">${book.title}</a></td>
                 <td>${book.publishDate} </td>
                 <td>     <c:forEach var="author" items="${book.authors}">
                     ${author};
                 </c:forEach></td>
                 <td>${book.remainingAmount} out of ${book.totalAmount}</td>
-            </tr>
+                   </tr>
         </c:forEach>
     </table>
 </div>
