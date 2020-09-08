@@ -67,5 +67,18 @@
 
 </ul>
 </form>
+
+<ul>
+    <c:forEach var="order"  items="${requestScope.orders} ">
+        <li>email ${order.reader.email}</li>
+        <li> <a href="${pageContext.request.contextPath}/controller?command=edit_book&bookId=${requestScope.book.id}&orderId=${order.id}">Discard
+            <i class="fa fa-info-circle" aria-hidden="true"></i>name ${order.reader.firstname} ${order.reader.lastname}</a> </li>
+        <li>borrow date ${order.borrowDate}</li>
+        <li>due date ${order.dueDate}</li>
+        <li>return date ${order.returnDate}</li>
+    </c:forEach>
+    <a href="${pageContext.request.contextPath}/controller?command=add_record&bookId=${requestScope.book.id}">Add
+        <i class="fa fa-info-circle" aria-hidden="true"></i></a></li>
+</ul>
 </body>
 </html>

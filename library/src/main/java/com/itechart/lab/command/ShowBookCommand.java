@@ -1,7 +1,9 @@
 package com.itechart.lab.command;
 
 import com.itechart.lab.model.Book;
+import com.itechart.lab.model.Order;
 import com.itechart.lab.service.BookService;
+import com.itechart.lab.service.OrderService;
 import com.itechart.lab.service.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.sql.Date;
+import java.util.List;
 
 public class ShowBookCommand implements Command {
 
@@ -23,6 +26,9 @@ public class ShowBookCommand implements Command {
             BookService bookService = new BookService();
             Book book = bookService.findBook(bookId);
             Date availabilityDate = (Date) bookService.calculateBookAvailability(bookId);
+            OrderService orderService = new OrderService();
+            List<Order> orders= orderService.findBookOrderers(bookId);
+            request.setAttribute(ORDERS_ATTRIBUTE,orders);
             request.setAttribute(BOOK_ATTRIBUTE, book);
             request.setAttribute(AVAILABILITY_DATE, availabilityDate);
             return new CurrentJsp(CurrentJsp.BOOK_PAGE_PATH, false);

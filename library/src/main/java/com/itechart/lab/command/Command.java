@@ -23,6 +23,11 @@ public interface Command {
     String STATUS_PARAMETER = "status";
     String GENRES_PARAMETER = "genres";
     String AUTHORS_PARAMETER = "authors";
+    String EMAIL_PARAMETER = "email";
+    String FIRSTNAME_PARAMETER = "firstname";
+    String LASTNAME_PARAMETER = "lastname";
+    String PERIOD_PARAMETER = "period";
+    String COMMENT_PARAMETER = "comment";
 
     /**
      * Attributes.
@@ -32,6 +37,7 @@ public interface Command {
     String CURRENT_PAGE_INDEX_ATTRIBUTE = "pageIndex";
     String MESSAGE_ATTRIBUTE = "message";
     String BOOK_ATTRIBUTE = "book";
+    String ORDERS_ATTRIBUTE = "orders";
     String AVAILABILITY_DATE = "availability_date";
     String IS_RECORD_INSERTED = "recordInserted";
 

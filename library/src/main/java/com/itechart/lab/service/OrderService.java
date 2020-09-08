@@ -10,18 +10,12 @@ import com.itechart.lab.repository.OrderDao;
 import com.itechart.lab.repository.pool.ConnectionWrapper;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class OrderService {
-    public boolean saveOrder(Order order) throws ServiceException {
-        try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
-            OrderDao orderDao = new OrderDao(connectionWrapper.getConnection());
-            return orderDao.insert(order);
-        } catch (DaoException exception) {
-            throw new ServiceException("Exception saving the book.", exception);
-        }
 
-    }
 
     public boolean createOrder(int bookId, int readerId,String status, Period period,
                                String comment) throws ServiceException {
@@ -59,8 +53,19 @@ public class OrderService {
         }
     }
 
-    public boolean editOrder(int bookId, int readerId,String status, Period period,
-                               String comment) throws ServiceException {
+    public List<Order> findBookOrderers(int bookId) throws ServiceException{
+        try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
+            OrderDao orderDao = new OrderDao(connectionWrapper.getConnection());
+
+            return orderDao.selectBookOrders(bookId);
+        }
+        catch (DaoException exception) {
+            throw new ServiceException("Exception while finding order.", exception);
+        }
+    }
+
+    public boolean saveOrder(int bookId, int readerId, Status status, Period period,
+                             String comment) throws ServiceException {
         try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
             OrderDao orderDao = new OrderDao(connectionWrapper.getConnection());
             Order order = new Order();

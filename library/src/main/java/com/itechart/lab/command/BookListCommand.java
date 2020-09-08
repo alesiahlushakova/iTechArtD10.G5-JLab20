@@ -29,10 +29,8 @@ public class BookListCommand implements Command {
              }
              int currentOffSet = (pageIndex - 1) * MAX_RECORDS_PER_PAGE_COUNT;
 
-             HttpSession session = request.getSession();
 
              BookService bookService = new BookService();
-            // bookService.getBookAuthor()
              Map<List<Book>, Integer> books = bookService.findAllBooksByPages(currentOffSet, MAX_RECORDS_PER_PAGE_COUNT);
              Set<Map.Entry<List<Book>, Integer>> entries = books.entrySet();
 

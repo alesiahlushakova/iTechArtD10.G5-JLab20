@@ -15,12 +15,16 @@ public class ReaderDao extends AbstractDao<Reader>{
      */
     private static final String SELECT_ALL_QUERY = "SELECT * FROM reader";
     private static final String SELECT_BY_ID_QUERY = "SELECT * FROM reader WHERE id=?";
+    private static final String SELECT_EMAIL_BY_ID_QUERY = "SELECT id FROM reader WHERE email=?";
     private static final String DELETE_BY_ID_QUERY = "DELETE FROM reader WHERE id=?";
     private static final String INSERT_ENTITY_QUERY = "INSERT INTO reader (`first_name`,`last_name`,`email`,`gender`,`phone`,`date_of_registration`)  VALUES(?,?,?,?,?,?)";
     private static final String UPDATE_ENTITY_QUERY = "UPDATE reader SET  first_name=?, last_name=?, email=?,gender=?, phone=?, date_of_registration=? WHERE id=?";
     private static final String SELECT_EMAIL_QUERY = "SELECT email FROM reader";
     private static final String SELECT_NAME_BY_MAIL_QUERY = "SELECT first_name FROM reader WHERE email=?";
-
+    private static final String SELECT_RECORD_QUERY = "SELECT email, first_name, borrow_date, borrow_period, status, comment" +
+            "FROM book_order INNER JOIN reader" +
+            "ON reader_id=reader.id" +
+            "WHERE book_id=? ";
 
     private static final String ID_COLUMN = "id";
     private static final String FIRST_NAME_COLUMN = "first_name";
@@ -34,6 +38,21 @@ public class ReaderDao extends AbstractDao<Reader>{
     public ReaderDao(Connection connection){
         super(connection);
     }
+
+//    public List<Reader> selectBookBorrowers(int bookId) throws DaoException{
+//        try(PreparedStatement preparedStatement
+//                    = prepareStatementForQuery(SELECT_RECORD_QUERY, bookId)){
+//            ResultSet resultSet = preparedStatement.executeQuery();
+//
+//            Reader reader = new Reader();
+//            if(resultSet.next()) {
+//                name = resultSet.getString(FIRST_NAME_COLUMN);
+//            }
+//            return name;
+//        } catch (SQLException exception) {
+//            throw new DaoException(exception.getMessage(), exception);
+//        }
+//    }
 
     public List<String> getEmails() throws DaoException{
         try(Statement statement
@@ -60,6 +79,22 @@ public class ReaderDao extends AbstractDao<Reader>{
                 name = resultSet.getString(FIRST_NAME_COLUMN);
             }
             return name;
+        } catch (SQLException exception) {
+            throw new DaoException(exception.getMessage(), exception);
+        }
+    }
+
+    public int selectIdByMail(String email) throws DaoException {
+        int result = 0;
+        try(PreparedStatement preparedStatement
+                    = prepareStatementForQuery(SELECT_EMAIL_BY_ID_QUERY, email)){
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+
+            if(resultSet.next()) {
+               result= resultSet.getInt(ID_COLUMN);
+            }
+            return result;
         } catch (SQLException exception) {
             throw new DaoException(exception.getMessage(), exception);
         }
