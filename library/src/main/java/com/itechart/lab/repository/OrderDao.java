@@ -18,6 +18,7 @@ public class OrderDao extends AbstractDao<Order> {
     private static final String SELECT_ALL_QUERY = "SELECT * FROM book_order";
     private static final String SELECT_ALL_ABOUT_READER_QUERY = "SELECT * FROM reader WHERE id=?";
     private static final String SELECT_BY_ID_QUERY = "SELECT * FROM book_order WHERE id=?";
+    private static final String UPDATE_TOTAL_AMOUNT_QUERY = "UPDATE book_order SET total_amount=total_amount-1 WHERE id=?";
     private static final String SELECT_BY_BOOK_ID_QUERY = "SELECT * FROM book_order WHERE book_id=?";
     private static final String DELETE_BY_ID_QUERY = "DELETE FROM book_order WHERE id=?";
     private static final String INSERT_ENTITY_QUERY = "INSERT INTO book_order (`book_id`,`reader_id`,`borrow_date`,`borrow_period`,`status`,`comment`,`due_date`,`return_date`)  VALUES(?,?,?,?,?,?,?,?)";
@@ -156,6 +157,10 @@ public class OrderDao extends AbstractDao<Order> {
 
     public boolean updateAmountWhenReturning( int id) throws DaoException{
         return executeQuery(UPDATE_WHEN_RETURNING_QUERY,id);
+    }
+
+    public boolean updateTotalAmount( int id) throws DaoException{
+        return executeQuery(UPDATE_TOTAL_AMOUNT_QUERY,id);
     }
 
     @Override

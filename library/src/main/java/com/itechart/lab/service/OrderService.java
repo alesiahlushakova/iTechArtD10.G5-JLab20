@@ -64,6 +64,37 @@ public class OrderService {
         }
     }
 
+    public Order findOrder(int id) throws ServiceException{
+        try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
+            OrderDao orderDao = new OrderDao(connectionWrapper.getConnection());
+
+            return orderDao.selectEntityById(id);
+        }
+        catch (DaoException exception) {
+            throw new ServiceException("Exception while finding order.", exception);
+        }
+    }
+
+    public boolean editOrder(int orderId,Status status) throws ServiceException {
+        try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
+            OrderDao orderDao = new OrderDao(connectionWrapper.getConnection());
+            Order order = new Order();
+            order.setId(orderId);
+            Order order1 = orderDao.selectEntityById(orderId);
+            if (status != order1.getStatus()){
+                if (status == Status.LOST || status == Status.RETURNED_AND_DAMAGED) {
+                    orderDao.updateTotalAmount(orderId);
+                } else if (status == Status.RETURNED) {
+                    orderDao.updateAmountWhenReturning(orderId);
+                }
+            }
+            return orderDao.updateStatus(status, orderId);
+        } catch (DaoException exception) {
+            throw new ServiceException("Exception while editing order.", exception);
+        }
+
+    }
+
     public boolean saveOrder(int bookId, int readerId, Status status, Period period,
                              String comment) throws ServiceException {
         try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {

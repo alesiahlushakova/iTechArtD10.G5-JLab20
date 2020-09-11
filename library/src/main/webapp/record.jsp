@@ -8,14 +8,15 @@
 <body>
 
 <form method="POST" action="${pageContext.request.contextPath}/controller">
-    <c:choose>
-        <c:when test="${requestScope.order.id eq 0}">
-            <input type="hidden" name="command" value="add_order"/>
-        </c:when>
-        <c:otherwise>
-            <input type="hidden" name="command" value="edit_order"/>
+    <input type="hidden" name="command" value="add_order"/>
+<%--    <c:choose>--%>
+<%--        <c:when test="${requestScope.order.id eq 0}">--%>
+<%--          --%>
+<%--        </c:when>--%>
+<%--        <c:otherwise>--%>
+<%--            <input type="hidden" name="command" value="edit_order"/>--%>
 
-        </c:otherwise>
+<%--        </c:otherwise>--%>
 
             <label>email <input title="email" type="email"
                                                   name="email" value="${requestScope.order.reader.email}"/></label>
@@ -40,9 +41,9 @@
             <label>comment <input title="comment" type="text"
                                      name="comment" value="${requestScope.order.comment}"/></label>
 
-    </c:choose>
+<%--    </c:choose>--%>
     <button id="save_training_program" class="save_button" type="submit"
-            disabled>${pageScope.save_training_program} <i class="fa fa-plus-square"
+            disabled>Borrow book <i class="fa fa-plus-square"
                                                            aria-hidden="true"></i></button>
 </form>
 

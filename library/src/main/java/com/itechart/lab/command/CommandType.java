@@ -31,6 +31,14 @@ public enum CommandType {
         {
             this.command = new DeleteBookCommand();
         }
+    },
+    ADD_RECORD{
+        {
+            this.command = new AddRecordCommand();
+        }
+    },
+    EDIT_RECORD{
+        {this.command = new EditRecordCommand();}
     };
 
 

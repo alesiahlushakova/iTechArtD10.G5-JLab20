@@ -12,6 +12,7 @@ public interface Command {
     String COMMAND_PARAMETER = "command";
     String PAGE_PARAMETER = "page";
     String BOOK_ID_PARAMETER = "bookId";
+    String ORDER_ID_PARAMETER = "orderId";
     String TITLE_PARAMETER = "title";
     String COVER_PARAMETER = "cover";
     String PUBLISHER_PARAMETER = "publisher";

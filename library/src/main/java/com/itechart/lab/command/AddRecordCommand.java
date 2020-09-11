@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 public class AddRecordCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(AddRecordCommand.class);
@@ -17,7 +18,10 @@ public class AddRecordCommand implements Command {
     @Override
     public CurrentJsp execute(HttpServletRequest request) {
         try {
-            int bookId = Integer.parseInt(request.getParameter(BOOK_ID_PARAMETER));
+            HttpSession httpSession = request.getSession();
+
+            int bookId = (int) httpSession.getAttribute("id");
+            //= Integer.parseInt(request.getParameter(BOOK_ID_PARAMETER));
             String email = request.getParameter(EMAIL_PARAMETER);
             String firstname = request.getParameter(FIRSTNAME_PARAMETER);
             String lastname = request.getParameter(LASTNAME_PARAMETER);
@@ -34,9 +38,10 @@ public class AddRecordCommand implements Command {
             }
 
             OrderService orderService = new OrderService();
-            Order order = new Order();
+
 orderService.saveOrder(bookId,readerId,status,period,comment);
-           return new CurrentJsp(CurrentJsp.BOOK_LIST_PAGE_PATH, false);
+
+           return new CurrentJsp(CurrentJsp.BOOK_PAGE_PATH, false);
 
         } catch (ServiceException exception) {
             LOGGER.error(exception.getMessage(), exception);

@@ -30,6 +30,12 @@
                     ${author};
                 </c:forEach></td>
                 <td>${book.remainingAmount} out of ${book.totalAmount}</td>
+                <td><li>
+                    <a href="controller?command=delete_book&bookId=${requestScope.book.id}">Discard</a>
+                </li>
+                    <li>
+                        <a href="controller?book_page.jsp">${pageScope.previous}</a>
+                    </li></td>
                    </tr>
         </c:forEach>
     </table>

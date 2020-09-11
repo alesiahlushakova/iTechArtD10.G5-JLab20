@@ -1,16 +1,16 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@ taglib prefix="tag" tagdir="/WEB-INF/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title>Title</title>
 </head>
 <body>
-<form method="POST" action="${pageContext.request.contextPath}/controller?command=add_book&bookId=${requestScope.book.id}" enctype="multipart/form-data">
+<form method="POST" action="${pageContext.request.contextPath}/controller?command=edit_book&bookId=${requestScope.book.id}" enctype="multipart/form-data">
 
 <img id="foo" width="30" height="30" src="${pageContext.request.contextPath}/imageServlet" onerror="this.src='${pageContext.request.contextPath}/images/avatar.jpg'" />
 <ul>
-
+                <c:set var="id" value="${requestScope.book.id}" scope="session"/>
     <input type="file" id="cover" name="cover"/>
     <li>Title ${requestScope.book.title}</li>
     <input id="title"  type="text" name="title" value="${requestScope.book.title}"/>
@@ -67,17 +67,10 @@
 
 </ul>
 </form>
-
+<tag:order_description orders="${requestScope.orders}"/>
 <ul>
-    <c:forEach var="order"  items="${requestScope.orders} ">
-        <li>email ${order.reader.email}</li>
-        <li> <a href="${pageContext.request.contextPath}/controller?command=edit_book&bookId=${requestScope.book.id}&orderId=${order.id}">Discard
-            <i class="fa fa-info-circle" aria-hidden="true"></i>name ${order.reader.firstname} ${order.reader.lastname}</a> </li>
-        <li>borrow date ${order.borrowDate}</li>
-        <li>due date ${order.dueDate}</li>
-        <li>return date ${order.returnDate}</li>
-    </c:forEach>
-    <a href="${pageContext.request.contextPath}/controller?command=add_record&bookId=${requestScope.book.id}">Add
+
+    <a href="${pageContext.request.contextPath}/record.jsp">Add record
         <i class="fa fa-info-circle" aria-hidden="true"></i></a></li>
 </ul>
 </body>
