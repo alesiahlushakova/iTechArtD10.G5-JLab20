@@ -11,6 +11,7 @@ import com.itechart.lab.repository.pool.ConnectionWrapper;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -104,12 +105,14 @@ public class OrderService {
             order.setBookId(bookId);
             order.setReaderId(readerId);
             order.setStatus(Status.ORDERED);
+            order.setPeriod(period);
             order.setComment(comment);
             PeriodCalculator periodCalculator = new PeriodCalculator();
             long millis=System.currentTimeMillis();
             java.sql.Date date=new java.sql.Date(millis);
             java.sql.Date dueDate = periodCalculator.calculateExpirationDate(period, date);
             order.setDueDate(dueDate);
+            order.setBorrowDate(new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
             order.setReturnDate(null);
             return orderDao.insert(order);
         } catch (DaoException exception) {

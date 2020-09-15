@@ -2,6 +2,7 @@ package com.itechart.lab.command;
 
 import com.itechart.lab.model.Book;
 import com.itechart.lab.service.BookService;
+import com.itechart.lab.service.ReaderService;
 import com.itechart.lab.service.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -46,7 +47,10 @@ public class BookListCommand implements Command {
 
              int numberOfPages = (int) Math.ceil(numberOfRecords * 1.0 / MAX_RECORDS_PER_PAGE_COUNT);
 
-
+             ReaderService readerService = new ReaderService();
+             List<String> emails = readerService.findEmails();
+             HttpSession httpSession = request.getSession();
+             httpSession.setAttribute("emails", emails);
              request.setAttribute(NUMBER_OF_PAGE_ATTRIBUTE, numberOfPages);
              request.setAttribute(CURRENT_PAGE_INDEX_ATTRIBUTE, pageIndex);
              request.setAttribute(LIST_ATTRIBUTE, foundBooks);

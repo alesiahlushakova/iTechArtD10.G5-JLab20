@@ -220,7 +220,7 @@ public class OrderDao extends AbstractDao<Order> {
             String email = resultSet.getString(EMAIL_COLUMN);
             reader.setEmail(email);
 
-            boolean gender = resultSet.getBoolean(GENDER_COLUMN);
+            int gender = resultSet.getInt(GENDER_COLUMN);
             reader.setGender(gender);
 
             String phone = resultSet.getString(PHONE_COLUMN);

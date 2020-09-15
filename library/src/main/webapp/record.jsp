@@ -9,23 +9,14 @@
 
 <form method="POST" action="${pageContext.request.contextPath}/controller">
     <input type="hidden" name="command" value="add_order"/>
-<%--    <c:choose>--%>
-<%--        <c:when test="${requestScope.order.id eq 0}">--%>
-<%--          --%>
-<%--        </c:when>--%>
-<%--        <c:otherwise>--%>
-<%--            <input type="hidden" name="command" value="edit_order"/>--%>
 
-<%--        </c:otherwise>--%>
+            <label>email </label>
+    <select title="email" class="duration_select" name="email">
+        <c:forEach var="email" items="${sessionScope.emails}">
+            <option value="${email}">${email}</option>
+        </c:forEach>
 
-            <label>email <input title="email" type="email"
-                                                  name="email" value="${requestScope.order.reader.email}"/></label>
-            <label>first name <input title="firstname" type="text"
-                                name="firstname" value="${requestScope.order.reader.firstname}"/></label>
-
-            <label>last name <input title="lastname" type="text"
-                                     name="lastname" value="${requestScope.order.reader.lastname}"/></label>
-
+    </select>
             <label>borrow date <input title="borrowDate" type="text"
                                      name="borrowDate" value="${requestScope.order.borrowDate}"/></label>
 
@@ -34,16 +25,12 @@
 
 
 
-            <label>status <input title="status" type="text"
-                                     name="status" value="${requestScope.order.status}"/></label>
-
-
             <label>comment <input title="comment" type="text"
                                      name="comment" value="${requestScope.order.comment}"/></label>
 
-<%--    </c:choose>--%>
+
     <button id="save_training_program" class="save_button" type="submit"
-            disabled>Borrow book <i class="fa fa-plus-square"
+            >Borrow book <i class="fa fa-plus-square"
                                                            aria-hidden="true"></i></button>
 </form>
 

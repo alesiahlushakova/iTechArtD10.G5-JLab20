@@ -8,7 +8,7 @@ public class Reader extends Entity {
     private String firstname;
     private String lastname;
     private String email;
-    private boolean gender;
+    private int gender;
     private String phone;
     private Date dateOfRegistration;
 
@@ -44,11 +44,11 @@ public class Reader extends Entity {
         this.email = email;
     }
 
-    public boolean getGender() {
+    public int getGender() {
         return gender;
     }
 
-    public void setGender(boolean gender) {
+    public void setGender(int gender) {
         this.gender = gender;
     }
 

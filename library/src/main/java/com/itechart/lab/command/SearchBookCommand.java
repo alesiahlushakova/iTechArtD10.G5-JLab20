@@ -33,7 +33,7 @@ public class SearchBookCommand implements Command {
             request.setAttribute(LIST_ATTRIBUTE,books);
 
 
-            return new CurrentJsp(CurrentJsp.BOOK_PAGE_PATH, false);
+            return new CurrentJsp(CurrentJsp.BOOK_LIST_PAGE_PATH, false);
 
         } catch (ServiceException exception) {
             LOGGER.error(exception.getMessage(), exception);

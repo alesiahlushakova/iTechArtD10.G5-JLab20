@@ -108,18 +108,7 @@ public class BookService {
                               int totalAmount, String isbn, int status) throws ServiceException {
         try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
             BookDao bookDao = new BookDao(connectionWrapper.getConnection());
-            Book book = new Book();
-            book.setInputStream(cover);
-            book.setTitle(title);
-            book.setPublisher(publisher);
-            book.setPublishDate((java.sql.Date) publishDate);
-            book.setPageCount(pageCount);
-            book.setDescription(description);
-            book.setTotalAmount(totalAmount);
-            book.setRemainingAmount(totalAmount);
-            book.setISBN(isbn);
-            book.setStatus(status);
-            return bookDao.insert(book);
+            return bookDao.insertBook(cover, title, publisher, publishDate, pageCount,description,totalAmount,isbn,status);
         } catch (DaoException exception) {
             throw new ServiceException("Exception while saving the book.", exception);
         }

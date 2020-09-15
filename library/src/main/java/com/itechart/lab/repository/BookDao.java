@@ -1,10 +1,13 @@
 package com.itechart.lab.repository;
 
 import com.itechart.lab.model.Book;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.sql.Date;
 import java.util.*;
@@ -18,16 +21,12 @@ public class BookDao extends AbstractDao<Book>{
     private static final String SELECT_AMOUNT_OF_AVAILABLE_BOOKS_QUERY = "SELECT remaining_amount FROM book WHERE status=true AND id=?";
     private static final String UPDATE_WHEN_BORROWING_QUERY = "UPDATE book SET remaining_amount=total_amount-1 WHERE id=?";
     private static final String UPDATE_WHEN_RETURNING_QUERY = "UPDATE book SET remaining_amount=total_amount+1 WHERE id=?";
-    private static final String SEARCH_QUERY = "SELECT  DISTINCT book.id,cover,title,publisher,publish_date,page_count,description,total_amount,ISBN,status\n" +
+    private static final String SEARCH_QUERY = "SELECT  DISTINCT book.id,cover,title,publisher,publish_date,page_count,description,total_amount,remaining_amount,ISBN,status\n" +
             "             FROM book \n" +
             "             INNER JOIN book_genre ON book.id=book_id\n" +
             "             INNER JOIN book_author ba on book.id = ba.book_id\n" +
             "             INNER JOIN author a on ba.author_id = a.id\n" +
-            "             INNER JOIN genre ON genre.id=genre_id\n" +
-            "             WHERE (title=? OR ? IS NULL ) AND\n" +
-            "                   (description=? OR ? IS NULL ) AND\n" +
-            "                   (genre=? OR ? IS NULL ) AND\n" +
-            "                   (a.last_name=? OR ? IS NULL )";
+            "             INNER JOIN genre ON genre.id=genre_id\n" ;
     private static final String SELECT_IMAGE_BY_USER_ID_QUERY = "SELECT cover FROM book WHERE id=?";
     private static final String SELECT_BOOK_AUTHORS_QUERY = "\n" +
             "SELECT first_name, last_name FROM book_author\n" +
@@ -79,6 +78,19 @@ public class BookDao extends AbstractDao<Book>{
         }
     }
 
+    public boolean insertBook(InputStream cover, String title, String publisher,
+                          java.util.Date publishDate, int pageCount, String description,
+                          int totalAmount, String isbn, int status)
+            throws DaoException {
+        try (PreparedStatement preparedStatement = prepareStatementForQuery(
+                INSERT_ENTITY_QUERY, cover, title, publisher, publishDate, pageCount,description,totalAmount,totalAmount,isbn,status)) {
+            return preparedStatement.execute();
+
+        } catch (SQLException exception) {
+            throw new DaoException(exception.getMessage(), exception);
+        }
+    }
+
     public  List<String> getBookGenres(int id) throws DaoException{
         try(PreparedStatement statement = prepareStatementForQuery(SELECT_BOOK_GENRES_QUERY, id)){
             ResultSet resultSet = statement.executeQuery();
@@ -99,19 +111,23 @@ public class BookDao extends AbstractDao<Book>{
                                                String title, List<String> genres,
                                                List<String> authors) throws DaoException{
 
+
             StringBuilder sqlQuery = new StringBuilder(SEARCH_QUERY);
+            sqlQuery.append("WHERE (title='").append(title).append("' OR '").append(title).
+                    append("' = '' ) AND (description='").append(description).append("' OR '").append(description).append( "' = ''  ) ");
 
             for (String genre:
                  genres) {
-                sqlQuery.append("AND  (genre=").append(genre).append(" OR ").append(genre).append(" IS NULL )");
-            }
+                    sqlQuery.append("AND  (genre='").append(genre).append("' OR '").append(genre).append("' = '' )");
+                }
             for (String author:
             authors){
-                sqlQuery.append("AND  (a.last_name=").append(author).append(" OR ").append(author).append(" IS NULL )");
+                    sqlQuery.append("AND  (a.last_name='").append(author).append("' OR '").append(author).append("' = '' )");
+
             }
-            try(PreparedStatement preparedStatement
-                    =prepareStatementForQuery(String.valueOf(sqlQuery),description,title)){
-                ResultSet resultSet = preparedStatement.executeQuery();
+            try(Statement preparedStatement
+                    =connection.createStatement()){
+                ResultSet resultSet = preparedStatement.executeQuery(String.valueOf(sqlQuery));
                 List<Book> bookList = new ArrayList<>();
                 Book book = null;
                 while (resultSet.next()) {
@@ -217,11 +233,17 @@ public class BookDao extends AbstractDao<Book>{
 
 
 
-        String cover = entity.getCover();
+        InputStream cover = entity.getInputStream();
         if(cover == null) {
             parameters.add(NULL_PARAMETER);
         } else {
-            parameters.add(cover);
+            String text = null;
+            try {
+                text = IOUtils.toString(cover, StandardCharsets.UTF_8.name());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            parameters.add(String.valueOf(text));
         }
 
         String title = entity.getTitle();

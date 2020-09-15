@@ -18,7 +18,7 @@ public class DeleteBookCommand implements Command{
     public CurrentJsp execute(HttpServletRequest request) {
         try {
             HttpSession session = request.getSession();
-            int bookId = (int) session.getAttribute(BOOK_ID_PARAMETER);
+            int bookId = Integer.parseInt( request.getParameter(BOOK_ID_PARAMETER));
 
             BookService bookService = new BookService();
             boolean isOperationSuccessful = bookService.deleteBook(bookId);

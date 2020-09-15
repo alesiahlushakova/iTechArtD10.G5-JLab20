@@ -62,7 +62,7 @@ create table book_order (
                             reader_id int not null,
                             borrow_date timestamp not null,
                             borrow_period enum('ONE','TWO','THREE','SIX','TWELVE') not null ,
-                            status enum( 'RETURNED','RETURNED_AND_DAMAGED', 'LOST'),
+                            status enum( 'ORDERED','RETURNED','RETURNED_AND_DAMAGED', 'LOST'),
                             comment varchar(255),
                             due_date date not null,
                             return_date date ,

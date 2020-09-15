@@ -27,14 +27,24 @@ public enum CommandType {
     ADD_BOOK{
         {this.command  = new AddBookCommand();}
     },
+    EDIT_BOOK{
+        {
+            this.command = new EditBookCommand();
+        }
+    },
     DELETE_BOOK{
         {
             this.command = new DeleteBookCommand();
         }
     },
-    ADD_RECORD{
+    ADD_ORDER{
         {
             this.command = new AddRecordCommand();
+        }
+    },
+    SEARCH_BOOK{
+        {
+            this.command = new SearchBookCommand();
         }
     },
     EDIT_RECORD{

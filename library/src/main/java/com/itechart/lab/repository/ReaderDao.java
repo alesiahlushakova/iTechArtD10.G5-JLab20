@@ -113,7 +113,7 @@ public class ReaderDao extends AbstractDao<Reader>{
         String email = entity.getEmail();
         parameters.add(email);
 
-        boolean gender = entity.getGender();
+       int gender = entity.getGender();
         String genderValue = String.valueOf(gender);
         parameters.add(genderValue);
 
@@ -148,7 +148,7 @@ public class ReaderDao extends AbstractDao<Reader>{
             String email = resultSet.getString(EMAIL_COLUMN);
             reader.setEmail(email);
 
-            boolean gender = resultSet.getBoolean(GENDER_COLUMN);
+            int gender = resultSet.getInt(GENDER_COLUMN);
             reader.setGender(gender);
 
             String phone = resultSet.getString(PHONE_COLUMN);

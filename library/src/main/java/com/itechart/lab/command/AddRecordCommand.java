@@ -23,19 +23,17 @@ public class AddRecordCommand implements Command {
             int bookId = (int) httpSession.getAttribute("id");
             //= Integer.parseInt(request.getParameter(BOOK_ID_PARAMETER));
             String email = request.getParameter(EMAIL_PARAMETER);
-            String firstname = request.getParameter(FIRSTNAME_PARAMETER);
-            String lastname = request.getParameter(LASTNAME_PARAMETER);
 
             Period period = Period.valueOf(request.getParameter(PERIOD_PARAMETER));
             Status status = Status.valueOf(request.getParameter(STATUS_PARAMETER));
            String comment = request.getParameter(COMMENT_PARAMETER);
             ReaderService readerService = new ReaderService();
             int readerId = readerService.findIdByMail(email);
-            if(readerId > 0){
-                readerService.editReader(readerId,email,firstname,lastname);
-            } else {
-                readerService.saveReader(email,firstname,lastname);
-            }
+//            if(readerId > 0){
+//                readerService.editReader(readerId,email,firstname,lastname);
+//            } else {
+   //          int  readerId = readerService.saveReader(email,firstname,lastname);
+//            }
 
             OrderService orderService = new OrderService();
 

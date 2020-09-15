@@ -5,6 +5,8 @@ import com.itechart.lab.repository.DaoException;
 import com.itechart.lab.repository.ReaderDao;
 import com.itechart.lab.repository.pool.ConnectionWrapper;
 
+import java.util.List;
+
 public class ReaderService {
 
     public Reader findReader(int readerId) throws ServiceException{
@@ -17,7 +19,18 @@ public class ReaderService {
         }
     }
 
-    public boolean saveReader(String email, String firstname, String lastname)
+    public List<String> findEmails () throws ServiceException {
+        try(ConnectionWrapper connectionWrapper = new ConnectionWrapper()){
+            ReaderDao readerDao = new ReaderDao(connectionWrapper.getConnection());
+
+            return readerDao.getEmails();
+
+        } catch (DaoException e) {
+            throw new ServiceException("Error in finding mails");
+        }
+    }
+
+    public int saveReader(String email, String firstname, String lastname)
         throws ServiceException{
         try(ConnectionWrapper connectionWrapper = new ConnectionWrapper()){
             ReaderDao readerDao = new ReaderDao(connectionWrapper.getConnection());
@@ -26,7 +39,8 @@ public class ReaderService {
           reader.setFirstname(firstname);
           reader.setLastname(lastname);
 
-            return readerDao.insert(reader);
+            readerDao.insert(reader);
+           return readerDao.selectIdByMail(email);
 
         } catch (DaoException e) {
             throw new ServiceException("Error in finding a reader");

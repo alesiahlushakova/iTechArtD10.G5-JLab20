@@ -3,7 +3,18 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
   <display-name>Archetype Created Web Application</display-name>
+  <error-page>
+    <location>/error.jsp</location>
+  </error-page>
 
+  <servlet>
+    <servlet-name>imageServlet</servlet-name>
+    <servlet-class>com.itechart.lab.controller.ImageServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>imageServlet</servlet-name>
+    <url-pattern>/imageServlet</url-pattern>
+  </servlet-mapping>
   <servlet>
     <servlet-name>controller</servlet-name>
     <servlet-class>com.itechart.lab.controller.Controller</servlet-class>

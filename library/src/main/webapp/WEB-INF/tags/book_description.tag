@@ -13,6 +13,7 @@
     <table>
         <tr>
             <th><span>&#8470;</span></th>
+            <th>Cover</th>
             <th>Title</th>
             <th>Publish date</th>
             <th>Authors</th>
@@ -24,6 +25,8 @@
             <c:set var="bookId" value="${book.id}" scope="request"/>
             <tr>
                 <td>${count}</td>
+                <td>   <img id="foo" width="30" height="30" src="${pageContext.request.contextPath}/imageServlet?bookId=${book.id}" onerror="this.src='${pageContext.request.contextPath}/images/avatar.jpg';" >
+                </td>
                 <td><a href="${pageContext.request.contextPath}/controller?command=show_book&bookId=${book.id}">${book.title}</a></td>
                 <td>${book.publishDate} </td>
                 <td>     <c:forEach var="author" items="${book.authors}">
@@ -31,7 +34,7 @@
                 </c:forEach></td>
                 <td>${book.remainingAmount} out of ${book.totalAmount}</td>
                 <td><li>
-                    <a href="controller?command=delete_book&bookId=${requestScope.book.id}">Discard</a>
+                    <a href="controller?command=delete_book&bookId=${book.id}">Discard</a>
                 </li>
                     <li>
                         <a href="controller?book_page.jsp">${pageScope.previous}</a>
@@ -39,4 +42,8 @@
                    </tr>
         </c:forEach>
     </table>
+    <a href="${pageContext.request.contextPath}/create_book.jsp">Add book
+        <i class="fa fa-info-circle" aria-hidden="true"></i></a></li>
+    <a href="${pageContext.request.contextPath}/search_page.jsp">Search
+        <i class="fa fa-info-circle" aria-hidden="true"></i></a></li>
 </div>
