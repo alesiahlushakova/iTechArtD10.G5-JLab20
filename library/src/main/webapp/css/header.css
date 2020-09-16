@@ -1,0 +1,126 @@
+.header {
+    border-radius: 8px;
+    background-color: rgba(120, 120, 120, 0.7);
+    text-align: center;
+    width: 98%;
+    color: white;
+    box-sizing: border-box;
+    margin: 0 auto 20px;
+    padding: 5px;
+}
+
+.register_login_a {
+    color: #de81df;
+    text-decoration: none;
+}
+
+.logout_a {
+    color: #90d9d3;
+    text-decoration: none;
+}
+
+.hello_message a:hover {
+    text-decoration: underline;
+}
+
+.hello_text {
+    margin-right: 5px;
+}
+
+.user_menu {
+    box-sizing: border-box;
+    padding-right: 20px;
+    width: 98%;
+    border-radius: 8px;
+    background-color: rgba(120, 120, 120, 0.7);
+    margin: 0 auto 20px;
+}
+.user_menu ul {
+    display: flex;
+    justify-content: space-around;
+    list-style: none;
+}
+
+.user_menu a {
+    text-decoration: none;
+    font-size: 20px;
+    color: white;
+}
+
+.user_menu a:hover {
+    color: #df22d9;
+}
+
+.user_menu a .fa {
+    color: white;
+}
+
+.user_menu a .fa:hover {
+    text-decoration: underline;
+}
+
+.user_menu form {
+    font-size: 20px;
+    color: white;
+    border: 2px white;
+    margin: 0;
+}
+
+.user_menu label:hover {
+    color: #de81df;
+}
+
+.user_menu input {
+    border-color: white;
+    border-radius: 5px;
+    font-size: 15px;
+    font-weight: bold;
+    font-family: 'Caviar', serif;
+}
+
+.user_menu button .fa:hover {
+    color: #de81df;
+}
+@media screen and (min-width:800px){
+    .change_level{
+        float: left;
+        font-size: 22px;
+        padding-top: 7px;
+    }
+    .hello_message {
+        float: right;
+        font-size: 22px;
+        padding-top: 7px;
+    }
+    .top {
+        display: block;
+        margin-top: 0;
+    }
+}
+@media screen and (max-width:800px){
+    .change_level{
+        display:none;
+        margin:0;
+    }
+    .top {
+        display:none;
+        margin:0;
+    }
+}
+
+.change_level ul {
+    list-style: none;
+}
+
+.change_level li {
+    display: inline-block;
+}
+
+.change_level a {
+    color: white;
+    text-decoration: none;
+}
+
+.change_level a:hover {
+    color: #de81df;
+}

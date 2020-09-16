@@ -96,7 +96,7 @@ public class OrderService {
 
     }
 
-    public boolean saveOrder(int bookId, int readerId, Status status, Period period,
+    public boolean saveOrder(int bookId, int readerId,  Period period,
                              String comment) throws ServiceException {
         try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
             OrderDao orderDao = new OrderDao(connectionWrapper.getConnection());

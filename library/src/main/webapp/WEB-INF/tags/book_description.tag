@@ -4,9 +4,6 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css">
 <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,300i,700&amp;subset=cyrillic"
       rel="stylesheet">
-
-
-
 <div class="table_user">
 
 
@@ -25,7 +22,7 @@
             <c:set var="bookId" value="${book.id}" scope="request"/>
             <tr>
                 <td>${count}</td>
-                <td>   <img id="foo" width="30" height="30" src="${pageContext.request.contextPath}/imageServlet?bookId=${book.id}" onerror="this.src='${pageContext.request.contextPath}/images/avatar.jpg';" >
+                <td>   <img id="foo" width="30" height="30" src="${pageContext.request.contextPath}/imageServlet?bookId=${book.id}" onerror="this.src='${pageContext.request.contextPath}/images/avatar.png';" >
                 </td>
                 <td><a href="${pageContext.request.contextPath}/controller?command=show_book&bookId=${book.id}">${book.title}</a></td>
                 <td>${book.publishDate} </td>
@@ -44,6 +41,5 @@
     </table>
     <a href="${pageContext.request.contextPath}/create_book.jsp">Add book
         <i class="fa fa-info-circle" aria-hidden="true"></i></a></li>
-    <a href="${pageContext.request.contextPath}/search_page.jsp">Search
-        <i class="fa fa-info-circle" aria-hidden="true"></i></a></li>
+
 </div>

@@ -25,7 +25,7 @@ public class AddRecordCommand implements Command {
             String email = request.getParameter(EMAIL_PARAMETER);
 
             Period period = Period.valueOf(request.getParameter(PERIOD_PARAMETER));
-            Status status = Status.valueOf(request.getParameter(STATUS_PARAMETER));
+
            String comment = request.getParameter(COMMENT_PARAMETER);
             ReaderService readerService = new ReaderService();
             int readerId = readerService.findIdByMail(email);
@@ -37,7 +37,7 @@ public class AddRecordCommand implements Command {
 
             OrderService orderService = new OrderService();
 
-orderService.saveOrder(bookId,readerId,status,period,comment);
+orderService.saveOrder(bookId,readerId,period,comment);
 
            return new CurrentJsp(CurrentJsp.BOOK_PAGE_PATH, false);
 

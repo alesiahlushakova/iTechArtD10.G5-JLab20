@@ -6,6 +6,12 @@
       rel="stylesheet">
 
 
+
+<div class="table_user">
+
+
+
+
 <ul>
     <c:forEach var="order"   items="${orders}">
                 <li>email ${order.reader.email}</li>
@@ -18,3 +24,4 @@
     </c:forEach>
 
 </ul>
+</div>
