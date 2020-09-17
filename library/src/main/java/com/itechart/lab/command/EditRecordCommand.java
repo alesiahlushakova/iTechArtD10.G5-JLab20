@@ -17,7 +17,7 @@ public class EditRecordCommand implements Command {
     @Override
     public CurrentJsp execute(HttpServletRequest request) {
         try {
-            int bookId = Integer.parseInt(request.getParameter(BOOK_ID_PARAMETER));
+         //   int bookId = Integer.parseInt(request.getParameter(BOOK_ID_PARAMETER));
             int orderId = Integer.parseInt(request.getParameter(ORDER_ID_PARAMETER));
 
 

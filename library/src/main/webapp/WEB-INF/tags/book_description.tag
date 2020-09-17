@@ -33,13 +33,11 @@
                 <td><li>
                     <a href="controller?command=delete_book&bookId=${book.id}">Discard</a>
                 </li>
-                    <li>
-                        <a href="controller?book_page.jsp">${pageScope.previous}</a>
-                    </li></td>
+                  <li>  <a href="${pageContext.request.contextPath}/create_book.jsp">Add book
+                        <i class="fa fa-info-circle" aria-hidden="true"></i></a></li></td>
                    </tr>
         </c:forEach>
     </table>
-    <a href="${pageContext.request.contextPath}/create_book.jsp">Add book
-        <i class="fa fa-info-circle" aria-hidden="true"></i></a></li>
+
 
 </div>

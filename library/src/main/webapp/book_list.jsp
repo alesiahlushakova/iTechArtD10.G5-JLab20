@@ -31,7 +31,7 @@
     <ul>
         <c:if test="${requestScope.pageIndex != 1}">
             <li>
-                <a href="controller?command=book_list&page=${requestScope.pageIndex - 1}">${pageScope.previous}</a>
+                <a href="controller?command=book_list&page=${requestScope.pageIndex - 1}">previous</a>
             </li>
         </c:if>
         <c:forEach begin="1" end="${requestScope.numberOfPages}" var="i">
@@ -46,7 +46,7 @@
         </c:forEach>
         <c:if test="${requestScope.pageIndex < requestScope.numberOfPages}">
             <li>
-                <a href="controller?command=book_list&page=${requestScope.pageIndex + 1}">${pageScope.next}</a>
+                <a href="controller?command=book_list&page=${requestScope.pageIndex + 1}">next</a>
             </li>
         </c:if>
 

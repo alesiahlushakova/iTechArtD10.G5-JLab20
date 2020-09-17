@@ -9,19 +9,33 @@
 
 <div class="table_user">
 
-
-
-
-<ul>
+<table>
+    <tr>
+        <th><span>&#8470;</span></th>
+        <th>Email</th>
+        <th>Name</th>
+        <th>Borrow date</th>
+        <th>Due date</th>
+        <th>Return date</th>
+        <th></th>
+    </tr>
     <c:forEach var="order"   items="${orders}">
-                <li>email ${order.reader.email}</li>
-                <li> <a href="${pageContext.request.contextPath}/controller?command=edit_record&bookId=${requestScope.book.id}&orderId=${order.id}">
-                    <i class="fa fa-info-circle" aria-hidden="true"></i>name ${order.reader.firstname} ${order.reader.lastname}</a> </li>
-                <li>borrow date ${order.borrowDate}</li>
-                <li>due date ${order.dueDate}</li>
-              <li>return date ${order.returnDate}</li>
 
+    <tr>
+        <td>
+            ${order.reader.email}
+        </td>
+        <td>
+            <a href="${pageContext.request.contextPath}/controller?command=edit_record&orderId=${order.id}">
+                <i class="fa fa-info-circle" aria-hidden="true"></i> ${order.reader.firstname} ${order.reader.lastname}</a>
+        </td>
+        <td>${order.borrowDate}</td>
+        <td>${order.dueDate}</td>
+        <td> ${order.dueDate} </td>
+    </tr>
     </c:forEach>
+</table>
 
-</ul>
+
+
 </div>

@@ -18,7 +18,7 @@
         <ul>
             <c:set var="id" value="${requestScope.book.id}" scope="session"/>
             <input type="file" id="cover" name="cover"/>
-            <li>Title ${requestScope.book.title}</li>
+            <li>Title </li>
             <input id="title"  type="text" name="title" value="${requestScope.book.title}"/>
 
             <li>Author(s)
@@ -26,9 +26,9 @@
                     <input id="author"  type="text" name="author" value="${author}"/>
                 </c:forEach>
             </li>
-            <li>Publisher ${requestScope.book.publisher}</li>
+            <li>Publisher </li>
             <input id="publisher" type="text" name="publisher" value="${requestScope.book.publisher}"/>
-            <li>Publish Date ${requestScope.book.publishDate}</li>
+            <li>Publish Date </li>
             <input id="publishDate"  type="text" name="publishDate" value="${requestScope.book.publishDate}"/>
             <li>Genre(s)
                 <c:forEach var="genre" items="${requestScope.book.genres}">
@@ -37,20 +37,20 @@
                 </c:forEach>
             </li>
             <%--    <c:set var="genres" value="${requestScope.book.genres}" scope="request"/>--%>
-            <li>Page count ${requestScope.book.pageCount}</li>
+            <li>Page count </li>
             <input id="pageCount"  type="text" name="pageCount" value="${requestScope.book.pageCount}"/>
 
-            <li>ISBN ${requestScope.book.ISBN}</li>
+            <li>ISBN </li>
             <input id="isbn"  type="text" name="isbn" value="${requestScope.book.ISBN}"/>
 
-            <li>Description ${requestScope.book.description}</li>
+            <li>Description </li>
             <input id="description"  type="text" name="description" value="${requestScope.book.description}"/>
 
-            <li>Total amount ${requestScope.book.totalAmount}</li>
+            <li>Total amount </li>
             <input id="totalAmount"  type="text" name="totalAmount" value="${requestScope.book.totalAmount}"/>
 
             <li>Status
-                ${requestScope.book.status}
+
                 <input id="status"  type="text" name="status" value="${requestScope.book.status}"/>
 
                 <c:choose>
@@ -76,10 +76,13 @@
 </div>
 
 <tag:order_description orders="${requestScope.orders}"/>
-<ul>
+<div class="save_button">
+    <ul>
 
-    <a href="${pageContext.request.contextPath}/record.jsp">Add record
-        <i class="fa fa-info-circle" aria-hidden="true"></i></a></li>
-</ul>
+        <a href="${pageContext.request.contextPath}/record.jsp">Add record
+            <i class="fa fa-info-circle" aria-hidden="true"></i></a></li>
+    </ul>
+</div>
+
 </body>
 </html>
