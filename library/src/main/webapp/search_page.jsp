@@ -12,7 +12,7 @@
 <tag:nav_bar/>
 <div class="create_training_program">
     <form method="POST" action="${pageContext.request.contextPath}/controller">
-        <input type="hidden" name="command" value="search_book"/>>
+        <input type="hidden" name="command" value="search_book"/>
         <p><label>description <input id="description" title="description"
                                      type="text" name="description" value="" /></label></p>
 
@@ -29,7 +29,8 @@
 
     </form>
 </div>
-
-
+<script>
+    <jsp:directive.include file="/js/searchValidation.js"/>
+</script>
 </body>
 </html>

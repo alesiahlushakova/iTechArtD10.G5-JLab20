@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 public class EditRecordCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(AddRecordCommand.class);
@@ -17,9 +18,10 @@ public class EditRecordCommand implements Command {
     @Override
     public CurrentJsp execute(HttpServletRequest request) {
         try {
-         //   int bookId = Integer.parseInt(request.getParameter(BOOK_ID_PARAMETER));
-            int orderId = Integer.parseInt(request.getParameter(ORDER_ID_PARAMETER));
+            HttpSession httpSession = request.getSession();
 
+         //   int bookId = Integer.parseInt(request.getParameter(BOOK_ID_PARAMETER));
+            int orderId = (int) httpSession.getAttribute(ORDER_ID_PARAMETER);
 
             Status status = Status.valueOf(request.getParameter(STATUS_PARAMETER));
 

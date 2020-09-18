@@ -4,8 +4,8 @@ import java.util.Objects;
 
 public class Author extends Entity{
     private int id;
-    private String firstname;
-    private String lastname;
+    private String name;
+
 
     public int getId() {
         return id;
@@ -15,20 +15,12 @@ public class Author extends Entity{
         this.id = id;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public String getName() {
+        return name;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setName(String firstname) {
+        this.name = firstname;
     }
 
     @Override
@@ -37,21 +29,20 @@ public class Author extends Entity{
         if (!(o instanceof Author)) return false;
         Author author = (Author) o;
         return getId() == author.getId() &&
-                getFirstname().equals(author.getFirstname()) &&
-                getLastname().equals(author.getLastname());
+                getName().equals(author.getName()) ;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getFirstname(), getLastname());
+        return Objects.hash(getId(), getName());
     }
 
     @Override
     public String toString() {
         return "Author{" +
                 "id=" + id +
-                ", firstname='" + firstname + '\'' +
-                ", lastname='" + lastname + '\'' +
+                ", firstname='" + name + '\'' +
+                ", lastname='" +
                 '}';
     }
 }

@@ -14,6 +14,22 @@
 
 <div class="user_menu">
     <ul>
+        <li>
+            <form id="addGenre" name="AddGenreForm" method="POST"
+                  action="${pageContext.request.contextPath}/controller">
+                <input type="hidden" name="command" value="add_genre"/>
+                <label>Add genre<input type="text" name="genre" value=""/></label>
+                <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+            </form>
+        </li>
+        <li>
+            <form id="addAuthor" name="AddAuthorForm" method="POST"
+                  action="${pageContext.request.contextPath}/controller">
+                <input type="hidden" name="command" value="add_author"/>
+                <label>Add author <input type="text" name="author" value=""/></label>
+                <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+            </form>
+        </li>
 
                     <li>
                         <a href="${pageContext.request.contextPath}/controller?command=book_list">${pageScope.create_training_program}</a>

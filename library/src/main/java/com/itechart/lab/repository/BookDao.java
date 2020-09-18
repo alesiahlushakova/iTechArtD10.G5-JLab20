@@ -29,7 +29,7 @@ public class BookDao extends AbstractDao<Book>{
             "             INNER JOIN genre ON genre.id=genre_id\n" ;
     private static final String SELECT_IMAGE_BY_USER_ID_QUERY = "SELECT cover FROM book WHERE id=?";
     private static final String SELECT_BOOK_AUTHORS_QUERY = "\n" +
-            "SELECT first_name, last_name FROM book_author\n" +
+            "SELECT name FROM book_author\n" +
             "            INNER JOIN author ON author_id = id\n" +
             "            WHERE book_id=?";
     private static final String SELECT_BOOK_GENRES_QUERY = "\n" +
@@ -39,7 +39,7 @@ public class BookDao extends AbstractDao<Book>{
     private static final String UPDATE_STATUS_QUERY = "UPDATE book SET status=? WHERE id=?";
     private static final String SELECT_BY_FOUND_ROWS_QUERY = "SELECT SQL_CALC_FOUND_ROWS * FROM book LIMIT %d, %d";
     private static final String SELECT_BY_FOUND_ROWS_FILTERED_QUERY = "SELECT SQL_CALC_FOUND_ROWS * FROM book WHERE status=true LIMIT %d, %d";
-    private static final String SELECT_FOUND_ROWS_QUERY = "SELECT FOUND_ROWS()";
+    private static final String SELECT_FOUND_ROWS_QUERY = "SELECT COUNT(*) from book";
     private static final String ID_COLUMN = "id";
     private static final String COVER_COLUMN = "cover";
     private static final String TITLE_COLUMN = "title";
@@ -67,9 +67,7 @@ public class BookDao extends AbstractDao<Book>{
             String author = null;
             while (resultSet.next()){
                 String firstname = resultSet.getString(1);
-                String lastname = resultSet.getString(2);
-                author=firstname+" "+lastname;
-                authorList.add(author);
+                authorList.add(firstname);
             }
 
             return authorList;
@@ -122,7 +120,7 @@ public class BookDao extends AbstractDao<Book>{
                 }
             for (String author:
             authors){
-                    sqlQuery.append("AND  (a.last_name='").append(author).append("' OR '").append(author).append("' = '' )");
+                    sqlQuery.append("AND  (a.name='").append(author).append("' OR '").append(author).append("' = '' )");
 
             }
             try(Statement preparedStatement
@@ -194,6 +192,7 @@ public class BookDao extends AbstractDao<Book>{
 
             resultSet = statement.executeQuery(SELECT_FOUND_ROWS_QUERY);
             if (resultSet.next()) {
+
                 this.numberOfRecords = resultSet.getInt(1);
             }
 

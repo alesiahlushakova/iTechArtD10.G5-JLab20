@@ -13,44 +13,44 @@
 <div class="create_exercise">
     <form method="POST" action="${pageContext.request.contextPath}/controller?command=add_book" enctype="multipart/form-data">
 
-        <img id="foo" width="30" height="30" src="${pageContext.request.contextPath}/imageServlet" onerror="this.src='${pageContext.request.contextPath}/images/avatar.jpg'" />
+        <img id="foo" width="60" height="60" src="${pageContext.request.contextPath}/imageServlet" onerror="this.src='${pageContext.request.contextPath}/images/avatar.jpg'" />
         <ul>
             <c:set var="id" value="${requestScope.book.id}" scope="session"/>
             <input type="file" id="photo" name="photo"/>
             <li>Title ${requestScope.book.title}</li>
-            <input id="title"  type="text" name="title" value="${requestScope.book.title}"/>
+            <input id="title"  type="text" name="title" value="${requestScope.book.title}" onkeyup="checkTitle()"/>
 
             <li>Author(s)
 
-                <input id="author"  type="text" name="author" value="${author}"/>
+                <input id="author"  type="text" name="author" value="${author}" onkeyup="checkAuthor()"/>
 
             </li>
             <li>Publisher ${requestScope.book.publisher}</li>
-            <input id="publisher" type="text" name="publisher" value="${requestScope.book.publisher}"/>
+            <input id="publisher" type="text" name="publisher" value="${requestScope.book.publisher}" onkeyup="checkPublisher()"/>
             <li>Publish Date ${requestScope.book.publishDate}</li>
-            <input id="publishDate"  type="text" name="publishDate" value="${requestScope.book.publishDate}"/>
+            <input id="publishDate"  type="text" name="publishDate" value="${requestScope.book.publishDate}" onkeyup="checkPublishDate()"/>
             <li>Genre(s)
 
-                <input id="genre"  type="text" name="genre" value="${genre}"/>
+                <input id="genre"  type="text" name="genre" value="${genre}" onkeyup="checkGenre()"/>
                 <%--            <c:set var="genre" value="${genre}" scope="request"/>--%>
 
             </li>
             <%--    <c:set var="genres" value="${requestScope.book.genres}" scope="request"/>--%>
             <li>Page count ${requestScope.book.pageCount}</li>
-            <input id="pageCount"  type="text" name="pageCount" value="${requestScope.book.pageCount}"/>
+            <input id="pageCount"  type="text" name="pageCount" value="${requestScope.book.pageCount}" onkeyup="checkPageCount()"/>
 
             <li>ISBN ${requestScope.book.ISBN}</li>
-            <input id="isbn"  type="text" name="isbn" value="${requestScope.book.ISBN}"/>
+            <input id="isbn"  type="text" name="isbn" value="${requestScope.book.ISBN}" onkeyup="checkIsbn()"/>
 
             <li>Description ${requestScope.book.description}</li>
-            <input id="description"  type="text" name="description" value="${requestScope.book.description}"/>
+            <input id="description"  type="text" name="description" value="${requestScope.book.description}" onkeyup="checkDescription()"/>
 
             <li>Total amount ${requestScope.book.totalAmount}</li>
-            <input id="totalAmount"  type="text" name="totalAmount" value="${requestScope.book.totalAmount}"/>
+            <input id="totalAmount"  type="text" name="totalAmount" value="${requestScope.book.totalAmount}" onkeyup="checkTotalAmount()"/>
 
             <li>Status
                 ${requestScope.book.status}
-                <input id="status"  type="text" name="status" value="${requestScope.book.status}"/>
+                <input id="status"  type="text" name="status" value="${requestScope.book.status}" />
 
                 <c:choose>
                     <c:when test="${requestScope.book.status eq 1}">
@@ -66,13 +66,14 @@
 
 
             <button id="save" class="save_button" type="submit"
-            >Save <i class="fa fa-plus-square"
+            disabled>Save <i class="fa fa-plus-square"
                      aria-hidden="true"></i></button>
 
         </ul>
     </form>
 </div>
-
-
+<script>
+    <jsp:directive.include file="/js/bookValidation.js"/>
+</script>
 </body>
 </html>

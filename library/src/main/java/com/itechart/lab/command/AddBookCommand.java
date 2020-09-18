@@ -49,14 +49,7 @@ public class AddBookCommand implements Command{
                 inputStream = filePart.getInputStream();
             }
 
-            book.setTitle(title);
-            book.setCover(cover);
-            book.setPublisher(publisher);
-            book.setPublishDate(publishDate);
-            book.setPageCount(pageCount);
-            book.setDescription(description);
-            book.setISBN(isbn);
-            book.setStatus(status);
+
  //           List<String> authors = (List<String>) request.getAttribute(AUTHORS_PARAMETER);
    //         List<String> genres = (List<String>) request.getAttribute(GENRES_PARAMETER);
             bookService.createBook(inputStream,title,publisher,publishDate,pageCount,description,totalAmount,isbn,status);

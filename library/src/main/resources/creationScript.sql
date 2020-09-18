@@ -19,8 +19,7 @@ create table reader (
 
 create table author (
                         id int primary key auto_increment not null,
-                        first_name varchar(255) not null,
-                        last_name varchar(255) not null
+                        name varchar(255) not null
 );
 
 create table genre (

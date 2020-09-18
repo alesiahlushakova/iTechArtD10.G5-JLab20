@@ -18,23 +18,22 @@ public class AuthorDao extends AbstractDao<Author> {
      */
     private static final String SELECT_ALL_QUERY = "SELECT * FROM author";
     private static final String SELECT_BY_ID_QUERY = "SELECT * FROM author WHERE id=?";
-    private static final String SELECT_BY_INITIALS_QUERY = "SELECT * FROM author WHERE first_name=? AND last_name=?";
+    private static final String SELECT_BY_INITIALS_QUERY = "SELECT * FROM author WHERE name=? ";
     private static final String DELETE_BY_ID_QUERY = "DELETE FROM author WHERE id=?";
-    private static final String INSERT_ENTITY_QUERY = "INSERT INTO author (`first_name`, `last_name`)  VALUES(?,?)";
-    private static final String UPDATE_ENTITY_QUERY = "UPDATE author SET  first_name=?, last_name=? WHERE id=?";
+    private static final String INSERT_ENTITY_QUERY = "INSERT INTO author (`name`)  VALUES(?)";
+    private static final String UPDATE_ENTITY_QUERY = "UPDATE author SET  name=? WHERE id=?";
 
     private static final String ID_COLUMN = "id";
-    private static final String FIRSTNAME_COLUMN = "first_name";
-    private static final String LASTNAME_COLUMN = "last_name";
+    private static final String FIRSTNAME_COLUMN = "name";
+
 
     public AuthorDao(Connection connection) {
         super(connection);
     }
 
-    public boolean checkAuthorForUniqueness(String fitstname, String
-                                             lastname) throws DaoException {
+    public boolean checkAuthorForUniqueness(String fitstname) throws DaoException {
         try (PreparedStatement preparedStatement
-                     = prepareStatementForQuery(SELECT_BY_INITIALS_QUERY, fitstname, lastname)) {
+                     = prepareStatementForQuery(SELECT_BY_INITIALS_QUERY, fitstname)) {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             return resultSet.next();
@@ -47,11 +46,8 @@ public class AuthorDao extends AbstractDao<Author> {
     protected List<String> getEntityParameters(Author entity) {
         List<String> parameters = new ArrayList<>();
 
-        String firstname = entity.getFirstname();
+        String firstname = entity.getName();
         parameters.add(firstname);
-
-        String lastname = entity.getLastname();
-        parameters.add(lastname);
 
         return parameters;
     }
@@ -65,10 +61,9 @@ public class AuthorDao extends AbstractDao<Author> {
             author.setId(id);
 
             String firstnameColumn = resultSet.getString(FIRSTNAME_COLUMN);
-            author.setFirstname(firstnameColumn);
+            author.setName(firstnameColumn);
 
-            String lastname = resultSet.getString(LASTNAME_COLUMN);
-            author.setLastname(lastname);
+
             return author;
         } catch (SQLException exception) {
             throw new DaoException(exception.getMessage(), exception);

@@ -21,8 +21,7 @@
             </c:forEach>
 
         </select>
-        <label>borrow date <input title="borrowDate" type="text"
-                                  name="borrowDate" value="${requestScope.order.borrowDate}"/></label>
+
         <label>time period</label>
         <select title="period" class="duration_select" name="period">
             <option value="ONE">month</option>
@@ -35,7 +34,7 @@
 
 
         <label>comment <input title="comment" type="text"
-                              name="comment" value="${requestScope.order.comment}"/></label>
+                              name="comment" value="${requestScope.order.comment}" onkeyup="checkComment()"/></label>
 
 
         <button id="save_training_program" class="save_button" type="submit"
@@ -43,7 +42,8 @@
                         aria-hidden="true"></i></button>
     </form>
 </div>
-
-
+<script>
+    <jsp:directive.include file="/js/recordValidation.js"/>
+</script>
 </body>
 </html>

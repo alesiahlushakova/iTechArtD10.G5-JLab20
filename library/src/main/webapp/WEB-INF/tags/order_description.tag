@@ -26,7 +26,8 @@
             ${order.reader.email}
         </td>
         <td>
-            <a href="${pageContext.request.contextPath}/controller?command=edit_record&orderId=${order.id}">
+            <c:set var="orderId" scope="session" value="${order.id}"/>
+            <a href="${pageContext.request.contextPath}/edit_record.jsp">
                 <i class="fa fa-info-circle" aria-hidden="true"></i> ${order.reader.firstname} ${order.reader.lastname}</a>
         </td>
         <td>${order.borrowDate}</td>

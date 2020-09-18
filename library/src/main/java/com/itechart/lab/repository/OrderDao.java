@@ -28,7 +28,7 @@ public class OrderDao extends AbstractDao<Order> {
             "WHERE return_date IS NULL AND book_id=? " +
             "ORDER BY due_date " +
             "LIMIT 1";
-    private static final String SELECT_RECORD_QUERY = "SELECT email, first_name, borrow_date, borrow_period, status, comment" +
+    private static final String SELECT_RECORD_QUERY = "SELECT email, name, borrow_date, borrow_period, status, comment" +
             "FROM book_order INNER JOIN reader" +
             "ON reader_id=reader.id" +
             "WHERE book_id=? ";

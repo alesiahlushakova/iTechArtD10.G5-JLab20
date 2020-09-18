@@ -16,7 +16,7 @@ import java.util.Set;
 public class BookListCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger(BookListCommand.class);
-    private static final int MAX_RECORDS_PER_PAGE_COUNT = 20;
+    private static final int MAX_RECORDS_PER_PAGE_COUNT = 10;
     private static final int FIRST_PAGE_INDEX = 1;
     @Override
     public CurrentJsp execute(HttpServletRequest request) {
