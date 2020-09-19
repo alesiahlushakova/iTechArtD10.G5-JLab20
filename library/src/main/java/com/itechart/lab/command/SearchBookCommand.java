@@ -8,29 +8,33 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import static com.itechart.lab.view.MessageManager.INFORMATION_NOT_FOUND_MESSAGE_KEY;
 
 public class SearchBookCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger(SearchBookCommand.class);
+
     @Override
     public CurrentJsp execute(HttpServletRequest request) {
 
         try {
             String title = request.getParameter("title");
             String description = request.getParameter("description");
-            List<String> authors = new ArrayList<>();
-            authors.add(request.getParameter("author"));
-            List<String> genres = new ArrayList<>();
-            genres.add(request.getParameter("genre"));
+            String[] genres = request.getParameterValues(GENRES_PARAMETER);
+            String[] authors = request.getParameterValues(AUTHORS_PARAMETER);
+
             BookService bookService = new BookService();
-          List<Book> books =  bookService.searchForBook(title, description, genres, authors);
+            List<Book> books = bookService.searchForBook(title, description,
+                    Arrays.asList(genres), Arrays.asList(authors));
             if (books.isEmpty()) {
                 return new CurrentJsp(CurrentJsp.MAIN_PAGE_PATH,
-                        false, "INFORMATION_NOT_FOUND_MESSAGE_KEY");
+                        false, INFORMATION_NOT_FOUND_MESSAGE_KEY);
             }
 
-            request.setAttribute(LIST_ATTRIBUTE,books);
+            request.setAttribute(LIST_ATTRIBUTE, books);
 
 
             return new CurrentJsp(CurrentJsp.BOOK_LIST_PAGE_PATH, false);

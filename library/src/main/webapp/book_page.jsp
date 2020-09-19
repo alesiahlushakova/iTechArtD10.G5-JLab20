@@ -22,19 +22,31 @@
             <input id="title"  type="text" name="title" value="${requestScope.book.title}" onkeyup="checkTitle()"/>
 
             <li>Author(s)
-                <c:forEach var="author" items="${requestScope.book.authors}">
-                    <input id="author"  type="text" name="author" value="${author}" onkeyup="checkAuthor()"/>
-                </c:forEach>
+<%--                <c:forEach var="author" items="${requestScope.book.authors}">--%>
+<%--                    <input id="author"  type="text" name="author" value="${author}" onkeyup="checkAuthor()"/>--%>
+<%--                </c:forEach>--%>
+
+                <select class="mdb-select colorful-select dropdown-primary md-form" name="authors" multiple searchable="Search here..">
+                    <option value="" disabled selected>Choose genre</option>
+                    <c:forEach var="author" items="${requestScope.book.authors}">
+                        <option>${author.name}</option>
+                    </c:forEach>
+                </select>
             </li>
             <li>Publisher </li>
             <input id="publisher" type="text" name="publisher" value="${requestScope.book.publisher}" onkeyup="checkPublisher()"/>
             <li>Publish Date </li>
             <input id="publishDate"  type="date" name="publishDate" value="${requestScope.book.publishDate}" onkeyup="checkPublishDate()"/>
             <li>Genre(s)
-                <c:forEach var="genre" items="${requestScope.book.genres}">
-                    <input id="genre"  type="text" name="genre" value="${genre}" onkeyup="checkGenre()"/>
-                    <%--            <c:set var="genre" value="${genre}" scope="request"/>--%>
-                </c:forEach>
+<%--                <c:forEach var="genre" items="${requestScope.book.genres}">--%>
+<%--                    <input id="genre"  type="text" name="genre" value="${genre}" onkeyup="checkGenre()"/>--%>
+<%--                    &lt;%&ndash;            <c:set var="genre" value="${genre}" scope="request"/>&ndash;%&gt;--%>
+<%--                </c:forEach>--%>
+                <select name="genres" multiple>
+                    <c:forEach var="genre" items="${requestScope.book.genres}">
+                        <option>${genre.genre}</option>
+                    </c:forEach>
+                </select>
             </li>
             <%--    <c:set var="genres" value="${requestScope.book.genres}" scope="request"/>--%>
             <li>Page count </li>

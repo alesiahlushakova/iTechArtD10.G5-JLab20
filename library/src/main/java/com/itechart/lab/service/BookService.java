@@ -1,6 +1,9 @@
 package com.itechart.lab.service;
 
+import com.itechart.lab.model.Author;
 import com.itechart.lab.model.Book;
+import com.itechart.lab.model.Genre;
+import com.itechart.lab.model.Status;
 import com.itechart.lab.repository.BookDao;
 import com.itechart.lab.repository.DaoException;
 import com.itechart.lab.repository.OrderDao;
@@ -105,12 +108,19 @@ public class BookService {
 
     public boolean createBook(InputStream cover, String title, String publisher,
                               Date publishDate, int pageCount, String description,
-                              int totalAmount, String isbn, int status) throws ServiceException {
+                              int totalAmount, String isbn, List<Integer> authors, List<Integer> genres) throws ServiceException {
         try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
             BookDao bookDao = new BookDao(connectionWrapper.getConnection());
-            return bookDao.insertBook(cover, title, publisher, publishDate, pageCount,description,totalAmount,isbn,status);
+            int id = bookDao.insertBook(cover, title, publisher,
+                    publishDate, pageCount,description,totalAmount,isbn, 1);
+            if(id > 0){
+             boolean isRelatedAuthor = bookDao.relateWithAuthors(id,authors);
+             boolean isRelatedGenre = bookDao.relateWithGenres(id,genres);
+                return isRelatedAuthor && isRelatedGenre;
+            }
+            return false;
         } catch (DaoException exception) {
-            throw new ServiceException("Exception while saving the book.", exception);
+            throw new ServiceException("Exception while saving the book genres and authors.", exception);
         }
 
     }

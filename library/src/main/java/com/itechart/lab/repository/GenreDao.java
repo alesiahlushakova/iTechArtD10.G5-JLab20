@@ -34,7 +34,7 @@ public class GenreDao extends AbstractDao<Genre> {
                      = prepareStatementForQuery(SELECT_BY_GENRE_QUERY, genre)) {
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            return resultSet.next();
+            return !resultSet.next();
         } catch (SQLException exception) {
             throw new DaoException(exception.getMessage(), exception);
         }

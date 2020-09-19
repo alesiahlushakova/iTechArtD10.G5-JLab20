@@ -7,73 +7,85 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.mdb-select').materialSelect();
+        });
+    </script>
 </head>
 <body class="page">
+
 <tag:nav_bar/>
 <div class="create_exercise">
     <form method="POST" action="${pageContext.request.contextPath}/controller?command=add_book" enctype="multipart/form-data">
-
-        <img id="foo" width="60" height="60" src="${pageContext.request.contextPath}/imageServlet" onerror="this.src='${pageContext.request.contextPath}/images/avatar.jpg'" />
-        <ul>
+    <ul>
             <c:set var="id" value="${requestScope.book.id}" scope="session"/>
             <input type="file" id="photo" name="photo"/>
-            <li>Title ${requestScope.book.title}</li>
+            <li>Title </li>
             <input id="title"  type="text" name="title" value="${requestScope.book.title}" onkeyup="checkTitle()"/>
 
             <li>Author(s)
 
-                <input id="author"  type="text" name="author" value="${author}" onkeyup="checkAuthor()"/>
-
+                <select class="mdb-select colorful-select dropdown-primary md-form" name="authors" multiple searchable="Search here..">
+                    <option value="" disabled selected>Choose genre</option>
+                    <c:forEach var="author" items="${sessionScope.authors}">
+                        <option>${author.name}</option>
+                    </c:forEach>
+                </select>
+                <button class="btn-save btn btn-primary btn-sm">Save</button>
             </li>
-            <li>Publisher ${requestScope.book.publisher}</li>
+            <li>Publisher</li>
             <input id="publisher" type="text" name="publisher" value="${requestScope.book.publisher}" onkeyup="checkPublisher()"/>
-            <li>Publish Date ${requestScope.book.publishDate}</li>
-            <input id="publishDate"  type="text" name="publishDate" value="${requestScope.book.publishDate}" onkeyup="checkPublishDate()"/>
+            <li>Publish Date </li>
+            <input id="publishDate"  type="date" name="publishDate" value="${requestScope.book.publishDate}" onkeyup="checkPublishDate()"/>
             <li>Genre(s)
-
-                <input id="genre"  type="text" name="genre" value="${genre}" onkeyup="checkGenre()"/>
-                <%--            <c:set var="genre" value="${genre}" scope="request"/>--%>
+                <select name="genres" multiple>
+                    <c:forEach var="genre" items="${sessionScope.genres}">
+                        <option>${genre.genre}</option>
+                    </c:forEach>
+                </select>
 
             </li>
-            <%--    <c:set var="genres" value="${requestScope.book.genres}" scope="request"/>--%>
-            <li>Page count ${requestScope.book.pageCount}</li>
+
+            <li>Page count </li>
             <input id="pageCount"  type="text" name="pageCount" value="${requestScope.book.pageCount}" onkeyup="checkPageCount()"/>
 
-            <li>ISBN ${requestScope.book.ISBN}</li>
+            <li>ISBN </li>
             <input id="isbn"  type="text" name="isbn" value="${requestScope.book.ISBN}" onkeyup="checkIsbn()"/>
 
-            <li>Description ${requestScope.book.description}</li>
+            <li>Description  </li>
             <input id="description"  type="text" name="description" value="${requestScope.book.description}" onkeyup="checkDescription()"/>
 
-            <li>Total amount ${requestScope.book.totalAmount}</li>
+            <li>Total amount  </li>
             <input id="totalAmount"  type="text" name="totalAmount" value="${requestScope.book.totalAmount}" onkeyup="checkTotalAmount()"/>
 
             <li>Status
-                ${requestScope.book.status}
-                <input id="status"  type="text" name="status" value="${requestScope.book.status}" />
 
-                <c:choose>
-                    <c:when test="${requestScope.book.status eq 1}">
-                        Available (${requestScope.book.remainingAmount} out of ${requestScope.book.totalAmount})
-                    </c:when>
-                    <c:otherwise>
-                        Unavailable (expected to become available on ${requestScope.availabilityDate}
-                    </c:otherwise>
-                </c:choose>
 
             </li>
 
 
 
             <button id="save" class="save_button" type="submit"
-            disabled>Save <i class="fa fa-plus-square"
+            >Save <i class="fa fa-plus-square"
                      aria-hidden="true"></i></button>
 
         </ul>
     </form>
 </div>
 <script>
-    <jsp:directive.include file="/js/bookValidation.js"/>
+    // Material Select Initialization
+    //
+    <%--<jsp:directive.include file="/js/bookValidation.js"/>--%>
 </script>
 </body>
 </html>

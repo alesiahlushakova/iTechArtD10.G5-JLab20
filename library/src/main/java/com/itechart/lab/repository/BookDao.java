@@ -3,6 +3,7 @@ package com.itechart.lab.repository;
 import com.itechart.lab.model.Book;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import sun.nio.cs.ext.IBM037;
 
 
 import java.io.IOException;
@@ -15,7 +16,10 @@ import java.util.*;
 public class BookDao extends AbstractDao<Book>{
     private static final String SELECT_ALL_QUERY = "SELECT * FROM book";
     private static final String SELECT_BY_ID_QUERY = "SELECT * FROM book WHERE id=?";
+    private static final String SELECT_BY_ISBN_AND_TITLE = "SELECT id FROM book WHERE isbn=? AND title=?";
     private static final String DELETE_BY_ID_QUERY = "DELETE FROM book WHERE id=?";
+    private static final String RELATE_WITH_AUTHORS_QUERY = "INSERT INTO book_author (book_id, author_id) VALUES (?,?)";
+    private static final String RELATE_WITH_GENRES_QUERY = "INSERT INTO book_genre (book_id, genre_id) VALUES (?,?)";
     private static final String INSERT_ENTITY_QUERY = "INSERT INTO book (cover,title,publisher,publish_date,page_count,description,total_amount,remaining_amount,ISBN,status) VALUES(?,?,?,?,?,?,?,?,?,?)";
     private static final String UPDATE_ENTITY_QUERY = "UPDATE book SET cover=?, title=?, publisher=?, publish_date=?, page_count=?, description=?, total_amount=?,remaining_amount=?, ISBN=?, status=? WHERE id=?";
     private static final String SELECT_AMOUNT_OF_AVAILABLE_BOOKS_QUERY = "SELECT remaining_amount FROM book WHERE status=true AND id=?";
@@ -76,14 +80,23 @@ public class BookDao extends AbstractDao<Book>{
         }
     }
 
-    public boolean insertBook(InputStream cover, String title, String publisher,
+    public int insertBook(InputStream cover, String title, String publisher,
                           java.util.Date publishDate, int pageCount, String description,
                           int totalAmount, String isbn, int status)
             throws DaoException {
         try (PreparedStatement preparedStatement = prepareStatementForQuery(
                 INSERT_ENTITY_QUERY, cover, title, publisher, publishDate, pageCount,description,totalAmount,totalAmount,isbn,status)) {
-            return preparedStatement.execute();
-
+            boolean isSuccess =  preparedStatement.execute();
+            if(isSuccess){
+                try (PreparedStatement preparedStatement1 = prepareStatementForQuery(
+                        SELECT_BY_ISBN_AND_TITLE, isbn, title)) {
+                    ResultSet resultSet = preparedStatement1.executeQuery();
+                    return resultSet.getInt(1);
+                } catch (SQLException exception) {
+                    throw new DaoException(exception.getMessage(), exception);
+                }
+            }
+                return 0;
         } catch (SQLException exception) {
             throw new DaoException(exception.getMessage(), exception);
         }
@@ -154,6 +167,47 @@ public class BookDao extends AbstractDao<Book>{
         }
     }
 
+    public boolean relateWithGenres(int bookId, List<Integer> genres) throws DaoException {
+        boolean isRelated=false;
+        for (Integer genre:
+                genres ) {
+            isRelated = false;
+            if(genre == null){
+                throw new DaoException("Error while creating relation");
+            }
+            try(PreparedStatement statement = prepareStatementForQuery(RELATE_WITH_GENRES_QUERY,bookId, genre)){
+                boolean isSuccess = statement.execute();
+                if(isSuccess){
+                    isRelated =true;
+                }
+
+            } catch (SQLException exception) {
+                throw new DaoException("Error while creating relation", exception);
+            }
+        }
+        return isRelated;
+    }
+
+    public boolean relateWithAuthors(int bookId, List<Integer> authors) throws DaoException {
+        boolean isRelated=false;
+        for (Integer author:
+            authors ) {
+            isRelated = false;
+            if(author == null){
+                throw new DaoException("Error while creating relation");
+            }
+            try(PreparedStatement statement = prepareStatementForQuery(RELATE_WITH_AUTHORS_QUERY,bookId, author)){
+               boolean isSuccess = statement.execute();
+               if(isSuccess){
+                   isRelated =true;
+               }
+
+            } catch (SQLException exception) {
+                throw new DaoException("Error while creating relation", exception);
+            }
+        }
+      return isRelated;
+    }
 
     public byte[] selectImageById (int userId)
             throws DaoException {

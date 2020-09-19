@@ -1,9 +1,9 @@
 package com.itechart.lab.command;
 
+import com.itechart.lab.model.Author;
 import com.itechart.lab.model.Book;
-import com.itechart.lab.service.BookService;
-import com.itechart.lab.service.ReaderService;
-import com.itechart.lab.service.ServiceException;
+import com.itechart.lab.model.Genre;
+import com.itechart.lab.service.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,6 +30,11 @@ public class BookListCommand implements Command {
              }
              int currentOffSet = (pageIndex - 1) * MAX_RECORDS_PER_PAGE_COUNT;
 
+             AuthorService authorService = new AuthorService();
+             List<Author> authors = authorService.findAllAuthors();
+
+             GenreService genreService = new GenreService();
+             List<Genre> genres = genreService.findAllGenres();
 
              BookService bookService = new BookService();
              Map<List<Book>, Integer> books = bookService.findAllBooksByPages(currentOffSet, MAX_RECORDS_PER_PAGE_COUNT);
@@ -43,7 +48,6 @@ public class BookListCommand implements Command {
                  numberOfRecords = entry.getValue();
              }
 
-            // for ()
 
              int numberOfPages = (int) Math.ceil(numberOfRecords * 1.0 / MAX_RECORDS_PER_PAGE_COUNT);
 
@@ -51,6 +55,8 @@ public class BookListCommand implements Command {
              List<String> emails = readerService.findEmails();
              HttpSession httpSession = request.getSession();
              httpSession.setAttribute("emails", emails);
+             httpSession.setAttribute("genres", genres);
+             httpSession.setAttribute("authors", authors);
              request.setAttribute(NUMBER_OF_PAGE_ATTRIBUTE, numberOfPages);
              request.setAttribute(CURRENT_PAGE_INDEX_ATTRIBUTE, pageIndex);
              request.setAttribute(LIST_ATTRIBUTE, foundBooks);

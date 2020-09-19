@@ -7,6 +7,8 @@ import com.itechart.lab.repository.DaoException;
 import com.itechart.lab.repository.GenreDao;
 import com.itechart.lab.repository.pool.ConnectionWrapper;
 
+import java.util.List;
+
 public class AuthorService {
     public boolean saveAuthor(String author) throws ServiceException {
         try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
@@ -22,5 +24,15 @@ public class AuthorService {
             throw new ServiceException("Exception saving the author.", exception);
         }
 
+    }
+
+    public List<Author> findAllAuthors() throws ServiceException {
+        try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
+            AuthorDao authorDao = new AuthorDao(connectionWrapper.getConnection());
+            return authorDao.selectAll();
+
+        } catch (DaoException exception) {
+            throw new ServiceException("Exception finding authors.", exception);
+        }
     }
 }

@@ -1,32 +1,41 @@
 package com.itechart.lab.command;
 
+import com.itechart.lab.model.Author;
 import com.itechart.lab.model.Book;
+import com.itechart.lab.model.Genre;
+import com.itechart.lab.service.AuthorService;
 import com.itechart.lab.service.BookService;
+import com.itechart.lab.service.GenreService;
 import com.itechart.lab.service.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.util.ArrayUtils;
+import org.graalvm.util.CollectionsUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import java.io.InputStream;
+import java.sql.Array;
 import java.sql.Date;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+
+import static com.itechart.lab.view.MessageManager.*;
 
 public class AddBookCommand implements Command{
 
-    private static final String EXTENSION_VALIDATOR = "EXTENSION";
-    private static final String SIZE_VALIDATOR = "SIZE";
-    private static final String UNIQUENESS_VALIDATOR = "UNIQUENESS";
     private static final Logger LOGGER = LogManager.getLogger(AddBookCommand.class);
     @Override
     public CurrentJsp execute(HttpServletRequest request) {
 
+        HttpSession session = request.getSession();
         try {
 
             BookService bookService = new BookService();
-            Book book = new Book();
+
             String title = request.getParameter(TITLE_PARAMETER);
             String cover = request.getParameter(COVER_PARAMETER);
             String publisher = request.getParameter(PUBLISHER_PARAMETER);
@@ -35,10 +44,34 @@ public class AddBookCommand implements Command{
             String description = request.getParameter(DESCRIPTION_PARAMETER);
             int totalAmount = Integer.parseInt(request.getParameter(TOTAL_AMOUNT_PARAMETER));
             String isbn = request.getParameter(ISBN_PARAMETER);
-            int status = Integer.parseInt(request.getParameter(STATUS_PARAMETER));
-            InputStream inputStream = null; // input stream of the upload file
+            String[] genres = request.getParameterValues(GENRES_PARAMETER);
+            String[] authors = request.getParameterValues(AUTHORS_PARAMETER);
+            List<Genre> genres1 = (List<Genre>) session.getAttribute("genres");
+            List<Author> authors1 = (List<Author>) session.getAttribute("authors");
+            List<Integer> genreIdArray = null;
+            List<Integer> authorIdArray = null;
+            for (Genre genre:
+                 genres1) {
+                for (String name:
+                     genres) {
+                    if(genre.getGenre().equals(name)){
+                        genreIdArray.add(genre.getId());
+                    }
+                }
+            }
 
-            // obtains the upload file part in this multipart request
+            for (Author author:
+                    authors1) {
+                for (String name:
+                        authors) {
+                    if(author.getName().equals(name)){
+                        authorIdArray.add(author.getId());
+                    }
+                }
+            }
+
+            InputStream inputStream = null;
+
             Part filePart = request.getPart("photo");
             if (filePart != null) {
 
@@ -49,13 +82,18 @@ public class AddBookCommand implements Command{
                 inputStream = filePart.getInputStream();
             }
 
+          boolean isOperationSuccessful =  bookService.createBook(inputStream,title,publisher,publishDate,
+                  pageCount,description,totalAmount,isbn, authorIdArray, genreIdArray);
+            if (!isOperationSuccessful) {
+                return new CurrentJsp(CurrentJsp.BOOK_LIST_PAGE_PATH, false, BOOK_WAS_NOT_ADDED_MESSAGE_KEY);
+            }
 
- //           List<String> authors = (List<String>) request.getAttribute(AUTHORS_PARAMETER);
-   //         List<String> genres = (List<String>) request.getAttribute(GENRES_PARAMETER);
-            bookService.createBook(inputStream,title,publisher,publishDate,pageCount,description,totalAmount,isbn,status);
+            session.setAttribute(IS_RECORD_INSERTED, true);
 
 
-            return new CurrentJsp(CurrentJsp.BOOK_LIST_PAGE_PATH, false);
+            return new CurrentJsp(CurrentJsp.BOOK_LIST_PAGE_PATH, false, BOOK_WAS_ADDED_MESSAGE_KEY);
+
+
 
         } catch (Exception exception) {
             LOGGER.error(exception.getMessage(), exception);

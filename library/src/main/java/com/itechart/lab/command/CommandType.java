@@ -18,6 +18,16 @@ public enum CommandType {
             this.command = new BookListCommand();
         }
     },
+    ADD_AUTHOR {
+        {
+            this.command = new AddAuthorCommand();
+        }
+    },
+    ADD_GENRE{
+        {
+            this.command = new AddGenreCommand();
+        }
+    },
     SHOW_BOOK{
         {
 

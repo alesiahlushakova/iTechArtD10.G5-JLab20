@@ -36,7 +36,7 @@ public class AuthorDao extends AbstractDao<Author> {
                      = prepareStatementForQuery(SELECT_BY_INITIALS_QUERY, fitstname)) {
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            return resultSet.next();
+            return !resultSet.next();
         } catch (SQLException exception) {
             throw new DaoException(exception.getMessage(), exception);
         }

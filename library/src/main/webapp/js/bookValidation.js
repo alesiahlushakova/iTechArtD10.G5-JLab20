@@ -32,7 +32,7 @@ var description = document.getElementById("description");
 
 
 var submitChange = function () {
-    if (titleChecked && authorChecked && genreChecked && publisherChecked && publishDateChecked
+    if (titleChecked  && publisherChecked
     && pageCountChecked && totalAmountChecked && isbnChecked && descriptionChecked) {
         submit.disabled = false;
         submit.classList.add("active");

@@ -12,6 +12,8 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import static com.itechart.lab.view.MessageManager.*;
+
 public class AddRecordCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(AddRecordCommand.class);
 
@@ -21,7 +23,7 @@ public class AddRecordCommand implements Command {
             HttpSession httpSession = request.getSession();
 
             int bookId = (int) httpSession.getAttribute("id");
-            //= Integer.parseInt(request.getParameter(BOOK_ID_PARAMETER));
+
             String email = request.getParameter(EMAIL_PARAMETER);
 
             Period period = Period.valueOf(request.getParameter(PERIOD_PARAMETER));
@@ -29,17 +31,20 @@ public class AddRecordCommand implements Command {
            String comment = request.getParameter(COMMENT_PARAMETER);
             ReaderService readerService = new ReaderService();
             int readerId = readerService.findIdByMail(email);
-//            if(readerId > 0){
-//                readerService.editReader(readerId,email,firstname,lastname);
-//            } else {
-   //          int  readerId = readerService.saveReader(email,firstname,lastname);
-//            }
 
             OrderService orderService = new OrderService();
 
-orderService.saveOrder(bookId,readerId,period,comment);
+ boolean isOperationSuccessful = orderService.saveOrder(bookId,readerId,period,comment);
+            if (!isOperationSuccessful) {
+                return new CurrentJsp(CurrentJsp.BOOK_LIST_PAGE_PATH, false, ORDER_WAS_NOT_ADDED_MESSAGE_KEY);
+            }
 
-           return new CurrentJsp(CurrentJsp.BOOK_PAGE_PATH, false);
+            httpSession.setAttribute(IS_RECORD_INSERTED, true);
+
+
+            return new CurrentJsp(CurrentJsp.BOOK_LIST_PAGE_PATH, false, ORDER_WAS_ADDED_MESSAGE_KEY);
+
+
 
         } catch (ServiceException exception) {
             LOGGER.error(exception.getMessage(), exception);
