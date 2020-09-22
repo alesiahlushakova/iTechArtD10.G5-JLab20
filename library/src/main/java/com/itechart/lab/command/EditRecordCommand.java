@@ -20,7 +20,7 @@ public class EditRecordCommand implements Command {
         try {
             HttpSession httpSession = request.getSession();
 
-         //   int bookId = Integer.parseInt(request.getParameter(BOOK_ID_PARAMETER));
+
             int orderId = (int) httpSession.getAttribute(ORDER_ID_PARAMETER);
 
             Status status = Status.valueOf(request.getParameter(STATUS_PARAMETER));

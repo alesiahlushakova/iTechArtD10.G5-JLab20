@@ -29,7 +29,7 @@ public class GenreDao extends AbstractDao<Genre> {
         super(connection);
     }
 
-    public boolean checkGenreForUniqueness(String genre) throws DaoException {
+    public boolean isGenreUnique(String genre) throws DaoException {
         try (PreparedStatement preparedStatement
                      = prepareStatementForQuery(SELECT_BY_GENRE_QUERY, genre)) {
             ResultSet resultSet = preparedStatement.executeQuery();

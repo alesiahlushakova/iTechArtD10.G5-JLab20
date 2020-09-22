@@ -31,7 +31,7 @@ public class AuthorDao extends AbstractDao<Author> {
         super(connection);
     }
 
-    public boolean checkAuthorForUniqueness(String fitstname) throws DaoException {
+    public boolean isAuthorUnique(String fitstname) throws DaoException {
         try (PreparedStatement preparedStatement
                      = prepareStatementForQuery(SELECT_BY_INITIALS_QUERY, fitstname)) {
             ResultSet resultSet = preparedStatement.executeQuery();

@@ -2,9 +2,6 @@ package com.itechart.lab.repository;
 
 import com.itechart.lab.model.Book;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.ArrayUtils;
-import sun.nio.cs.ext.IBM037;
-
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,7 +13,7 @@ import java.util.*;
 public class BookDao extends AbstractDao<Book>{
     private static final String SELECT_ALL_QUERY = "SELECT * FROM book";
     private static final String SELECT_BY_ID_QUERY = "SELECT * FROM book WHERE id=?";
-    private static final String SELECT_BY_ISBN_AND_TITLE = "SELECT id FROM book WHERE isbn=? AND title=?";
+    private static final String SELECT_BY_ISBN_AND_TITLE = "SELECT id FROM book WHERE isbn=? AND title=? limit 1";
     private static final String DELETE_BY_ID_QUERY = "DELETE FROM book WHERE id=?";
     private static final String RELATE_WITH_AUTHORS_QUERY = "INSERT INTO book_author (book_id, author_id) VALUES (?,?)";
     private static final String RELATE_WITH_GENRES_QUERY = "INSERT INTO book_genre (book_id, genre_id) VALUES (?,?)";
@@ -84,14 +81,18 @@ public class BookDao extends AbstractDao<Book>{
                           java.util.Date publishDate, int pageCount, String description,
                           int totalAmount, String isbn, int status)
             throws DaoException {
+        int id = 0;
         try (PreparedStatement preparedStatement = prepareStatementForQuery(
                 INSERT_ENTITY_QUERY, cover, title, publisher, publishDate, pageCount,description,totalAmount,totalAmount,isbn,status)) {
             boolean isSuccess =  preparedStatement.execute();
-            if(isSuccess){
+            if(!isSuccess){
                 try (PreparedStatement preparedStatement1 = prepareStatementForQuery(
                         SELECT_BY_ISBN_AND_TITLE, isbn, title)) {
                     ResultSet resultSet = preparedStatement1.executeQuery();
-                    return resultSet.getInt(1);
+                    if (resultSet.next()){
+                        id = resultSet.getInt(1);
+                    }
+                    return id;
                 } catch (SQLException exception) {
                     throw new DaoException(exception.getMessage(), exception);
                 }
@@ -177,7 +178,7 @@ public class BookDao extends AbstractDao<Book>{
             }
             try(PreparedStatement statement = prepareStatementForQuery(RELATE_WITH_GENRES_QUERY,bookId, genre)){
                 boolean isSuccess = statement.execute();
-                if(isSuccess){
+                if(!isSuccess){
                     isRelated =true;
                 }
 
@@ -198,7 +199,7 @@ public class BookDao extends AbstractDao<Book>{
             }
             try(PreparedStatement statement = prepareStatementForQuery(RELATE_WITH_AUTHORS_QUERY,bookId, author)){
                boolean isSuccess = statement.execute();
-               if(isSuccess){
+               if(!isSuccess){
                    isRelated =true;
                }
 

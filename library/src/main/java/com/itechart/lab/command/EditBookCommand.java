@@ -10,6 +10,7 @@ import org.apache.logging.log4j.core.util.ArrayUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.sql.Date;
+import java.util.Arrays;
 import java.util.List;
 
 public class EditBookCommand implements Command{
@@ -34,7 +35,8 @@ public class EditBookCommand implements Command{
             int pageCount = Integer.parseInt(request.getParameter(PAGE_COUNT_PARAMETER));
             String description = request.getParameter(DESCRIPTION_PARAMETER);
             String isbn = request.getParameter(ISBN_PARAMETER);
-
+            String[] genres = request.getParameterValues(GENRES_PARAMETER);
+            String[] authors = request.getParameterValues(AUTHORS_PARAMETER);
             int status = Integer.parseInt(request.getParameter(STATUS_PARAMETER));
             book.setTitle(title);
             book.setCover(cover);
@@ -44,8 +46,8 @@ public class EditBookCommand implements Command{
             book.setDescription(description);
             book.setISBN(isbn);
             book.setStatus(status);
-            //           List<String> authors = (List<String>) request.getAttribute(AUTHORS_PARAMETER);
-            //         List<String> genres = (List<String>) request.getAttribute(GENRES_PARAMETER);
+            book.setAuthors(Arrays.asList(authors));
+            book.setGenres(Arrays.asList(genres));
             bookService.editBook(book);
             return new CurrentJsp(CurrentJsp.BOOK_PAGE_PATH, false);
 

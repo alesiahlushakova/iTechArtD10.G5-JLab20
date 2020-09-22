@@ -25,12 +25,23 @@ public class SearchBookCommand implements Command {
             String description = request.getParameter("description");
             String[] genres = request.getParameterValues(GENRES_PARAMETER);
             String[] authors = request.getParameterValues(AUTHORS_PARAMETER);
-
+            List<String> authorList = new ArrayList<>();
             BookService bookService = new BookService();
+            List<String> genreList = new ArrayList<>();
+            if (genres == null) {
+                genreList = new ArrayList<>();
+            } else {
+                genreList = Arrays.asList(genres);
+            }
+            if (authors == null) {
+                authorList = new ArrayList<>();
+            } else {
+                authorList = Arrays.asList(authors);
+            }
             List<Book> books = bookService.searchForBook(title, description,
-                    Arrays.asList(genres), Arrays.asList(authors));
+                    genreList, authorList);
             if (books.isEmpty()) {
-                return new CurrentJsp(CurrentJsp.MAIN_PAGE_PATH,
+                return new CurrentJsp(CurrentJsp.SEARCH_PAGE_PATH,
                         false, INFORMATION_NOT_FOUND_MESSAGE_KEY);
             }
 

@@ -10,6 +10,7 @@
 <div class="table_user">
 
 <table>
+
     <tr>
         <th><span>&#8470;</span></th>
         <th>Email</th>
@@ -19,8 +20,8 @@
         <th>Return date</th>
         <th></th>
     </tr>
-    <c:forEach var="order"   items="${orders}">
 
+    <c:forEach var="order"   items="${orders}">
     <tr>
         <td>
             ${order.reader.email}

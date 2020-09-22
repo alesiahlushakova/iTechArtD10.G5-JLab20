@@ -36,13 +36,15 @@ public class AddRecordCommand implements Command {
 
  boolean isOperationSuccessful = orderService.saveOrder(bookId,readerId,period,comment);
             if (!isOperationSuccessful) {
-                return new CurrentJsp(CurrentJsp.BOOK_LIST_PAGE_PATH, false, ORDER_WAS_NOT_ADDED_MESSAGE_KEY);
+                return new CurrentJsp("/controller?command=book_list",
+                        true, ORDER_WAS_NOT_ADDED_MESSAGE_KEY);
             }
 
             httpSession.setAttribute(IS_RECORD_INSERTED, true);
 
 
-            return new CurrentJsp(CurrentJsp.BOOK_LIST_PAGE_PATH, false, ORDER_WAS_ADDED_MESSAGE_KEY);
+            return new CurrentJsp("/controller?command=book_list",
+                    true, ORDER_WAS_ADDED_MESSAGE_KEY);
 
 
 

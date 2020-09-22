@@ -24,7 +24,7 @@
 
 
         <button id="save_training_program" class="save_button" type="submit"
-        disabled>Borrow book <i class="fa fa-plus-square"
+        >Edit status <i class="fa fa-plus-square"
                         aria-hidden="true"></i></button>
     </form>
 </div>

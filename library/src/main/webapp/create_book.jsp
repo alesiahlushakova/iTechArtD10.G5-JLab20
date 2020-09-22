@@ -75,17 +75,16 @@
 
 
 
-            <button id="save" class="save_button" type="submit"
-            >Save <i class="fa fa-plus-square"
+            <button id="save" name="submit" class="save_button" type="submit"
+            disabled>Save <i class="fa fa-plus-square"
                      aria-hidden="true"></i></button>
 
         </ul>
     </form>
 </div>
 <script>
-    // Material Select Initialization
-    //
-    <%--<jsp:directive.include file="/js/bookValidation.js"/>--%>
+
+    <jsp:directive.include file="/js/bookValidation.js"/>
 </script>
 </body>
 </html>

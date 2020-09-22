@@ -32,11 +32,16 @@ var description = document.getElementById("description");
 
 
 var submitChange = function () {
-    if (titleChecked  && publisherChecked
-    && pageCountChecked && totalAmountChecked && isbnChecked && descriptionChecked) {
+
+    //  && publisherChecked
+    //     && pageCountChecked && totalAmountChecked && isbnChecked && descriptionChecked
+    if (titleChecked === true) {
+
         submit.disabled = false;
         submit.classList.add("active");
+        alert(titleChecked);
     } else {
+        alert(titleChecked+"((((");
         submit.disabled = true;
         submit.classList.remove("active");
     }

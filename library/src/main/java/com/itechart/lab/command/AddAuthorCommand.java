@@ -35,7 +35,8 @@ public class AddAuthorCommand implements Command {
             session.setAttribute(IS_RECORD_INSERTED, true);
 
 
-            return new CurrentJsp(CurrentJsp.BOOK_LIST_PAGE_PATH, false, AUTHOR_WAS_ADDED_MESSAGE_KEY);
+            return new CurrentJsp("/controller?command=book_list",
+                    true, AUTHOR_WAS_ADDED_MESSAGE_KEY);
 
         } catch (Exception exception) {
             LOGGER.error(exception.getMessage(), exception);

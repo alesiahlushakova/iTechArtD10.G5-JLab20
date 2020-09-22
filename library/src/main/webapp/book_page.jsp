@@ -29,7 +29,7 @@
                 <select class="mdb-select colorful-select dropdown-primary md-form" name="authors" multiple searchable="Search here..">
                     <option value="" disabled selected>Choose genre</option>
                     <c:forEach var="author" items="${requestScope.book.authors}">
-                        <option>${author.name}</option>
+                        <option>${author}</option>
                     </c:forEach>
                 </select>
             </li>
@@ -44,7 +44,7 @@
 <%--                </c:forEach>--%>
                 <select name="genres" multiple>
                     <c:forEach var="genre" items="${requestScope.book.genres}">
-                        <option>${genre.genre}</option>
+                        <option>${genre}</option>
                     </c:forEach>
                 </select>
             </li>
@@ -79,7 +79,7 @@
             <li>
                 <a href="${pageContext.request.contextPath}/controller?command=book_list">Discard
                     <i class="fa fa-info-circle" aria-hidden="true"></i></a></li>
-            <button id="save" class="save_button" type="submit"
+            <button id="submit" class="save_button" type="submit"
            disabled >Save <i class="fa fa-plus-square"
                      aria-hidden="true"></i></button>
 
