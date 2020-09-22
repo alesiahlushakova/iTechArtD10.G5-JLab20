@@ -14,17 +14,14 @@
 <div class="reg_form">
     <form method="POST" action="${pageContext.request.contextPath}/controller?command=edit_book&bookId=${requestScope.book.id}" enctype="multipart/form-data">
 
-        <img id="foo" width="300" height="400" src="${pageContext.request.contextPath}/imageServlet?bookId=${requestScope.book.id}" onerror="this.src='${pageContext.request.contextPath}/images/avatar.png'" />
+        <img  width="300" height="400" src="${pageContext.request.contextPath}/imageServlet?bookId=${requestScope.book.id}" onerror="this.src='${pageContext.request.contextPath}/images/avatar.png'" />
         <ul>
             <c:set var="id" value="${requestScope.book.id}" scope="session"/>
-            <input type="file" id="cover" name="cover" />
+            <input type="file" id="photo" name="photo" onkeyup="checkCover()"/>
             <li>Title </li>
             <input id="title"  type="text" name="title" value="${requestScope.book.title}" onkeyup="checkTitle()"/>
 
             <li>Author(s)
-<%--                <c:forEach var="author" items="${requestScope.book.authors}">--%>
-<%--                    <input id="author"  type="text" name="author" value="${author}" onkeyup="checkAuthor()"/>--%>
-<%--                </c:forEach>--%>
 
                 <select class="mdb-select colorful-select dropdown-primary md-form" name="authors" multiple searchable="Search here..">
                     <option value="" disabled selected>Choose genre</option>
@@ -38,18 +35,14 @@
             <li>Publish Date </li>
             <input id="publishDate"  type="date" name="publishDate" value="${requestScope.book.publishDate}" onkeyup="checkPublishDate()"/>
             <li>Genre(s)
-<%--                <c:forEach var="genre" items="${requestScope.book.genres}">--%>
-<%--                    <input id="genre"  type="text" name="genre" value="${genre}" onkeyup="checkGenre()"/>--%>
-<%--                    &lt;%&ndash;            <c:set var="genre" value="${genre}" scope="request"/>&ndash;%&gt;--%>
-<%--                </c:forEach>--%>
+
                 <select name="genres" multiple>
                     <c:forEach var="genre" items="${requestScope.book.genres}">
                         <option>${genre}</option>
                     </c:forEach>
                 </select>
             </li>
-            <%--    <c:set var="genres" value="${requestScope.book.genres}" scope="request"/>--%>
-            <li>Page count </li>
+             <li>Page count </li>
             <input id="pageCount"  type="text" name="pageCount" value="${requestScope.book.pageCount}" onkeyup="checkPageCount()"/>
 
             <li>ISBN </li>

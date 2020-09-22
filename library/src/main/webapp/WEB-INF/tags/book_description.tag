@@ -22,7 +22,7 @@
             <c:set var="bookId" value="${book.id}" scope="request"/>
             <tr>
                 <td>${count}</td>
-                <td>   <img id="foo" width="30" height="30" src="${pageContext.request.contextPath}/imageServlet?bookId=${book.id}" onerror="this.src='${pageContext.request.contextPath}/images/avatar.png';" >
+                <td>   <img id="cover" width="30" height="30" src="${pageContext.request.contextPath}/imageServlet?bookId=${book.id}" onerror="this.src='${pageContext.request.contextPath}/images/avatar.png';" >
                 </td>
                 <td><a href="${pageContext.request.contextPath}/controller?command=show_book&bookId=${book.id}">${book.title}</a></td>
                 <td>${book.publishDate} </td>

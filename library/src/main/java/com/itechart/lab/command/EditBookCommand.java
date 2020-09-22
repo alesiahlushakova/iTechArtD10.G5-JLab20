@@ -9,6 +9,8 @@ import org.apache.logging.log4j.core.util.ArrayUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
+import java.io.InputStream;
 import java.sql.Date;
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +31,6 @@ public class EditBookCommand implements Command{
             BookService bookService = new BookService();
             Book book = bookService.findBook(bookId);
             String title = request.getParameter(TITLE_PARAMETER);
-            String cover = request.getParameter(COVER_PARAMETER);
             String publisher = request.getParameter(PUBLISHER_PARAMETER);
             Date publishDate = Date.valueOf(request.getParameter(PUBLISH_DATE_PARAMETER));
             int pageCount = Integer.parseInt(request.getParameter(PAGE_COUNT_PARAMETER));
@@ -38,8 +39,20 @@ public class EditBookCommand implements Command{
             String[] genres = request.getParameterValues(GENRES_PARAMETER);
             String[] authors = request.getParameterValues(AUTHORS_PARAMETER);
             int status = Integer.parseInt(request.getParameter(STATUS_PARAMETER));
+
+            InputStream inputStream = null;
+
+            Part filePart = request.getPart("photo");
+            if (filePart != null) {
+
+                LOGGER.info(filePart.getName() +filePart.getSize()
+                        + filePart.getContentType());
+
+
+                inputStream = filePart.getInputStream();
+            }
             book.setTitle(title);
-            book.setCover(cover);
+            book.setInputStream(inputStream);
             book.setPublisher(publisher);
             book.setPublishDate(publishDate);
             book.setPageCount(pageCount);
@@ -51,7 +64,7 @@ public class EditBookCommand implements Command{
             bookService.editBook(book);
             return new CurrentJsp(CurrentJsp.BOOK_PAGE_PATH, false);
 
-        } catch (ServiceException exception) {
+        } catch (Exception exception) {
             LOGGER.error(exception.getMessage(), exception);
             return new CurrentJsp(CurrentJsp.ERROR_PAGE_PATH, true);
         }

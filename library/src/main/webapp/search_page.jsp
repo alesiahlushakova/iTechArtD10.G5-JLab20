@@ -32,8 +32,8 @@
                 <option>${genre.genre}</option>
             </c:forEach>
         </select>
-        <button id="create" class="create_confirm" id="submit" type="submit"
-        >Search <i class="fa fa-plus" aria-hidden="true"></i></button>
+        <button id="submit" class="create_confirm" id="submit" type="submit"
+        disabled>Search <i class="fa fa-plus" aria-hidden="true"></i></button>
 
     </form>
 </div>

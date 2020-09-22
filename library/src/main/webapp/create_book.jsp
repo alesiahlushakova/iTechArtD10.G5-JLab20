@@ -29,7 +29,7 @@
     <form method="POST" action="${pageContext.request.contextPath}/controller?command=add_book" enctype="multipart/form-data">
     <ul>
             <c:set var="id" value="${requestScope.book.id}" scope="session"/>
-            <input type="file" id="photo" name="photo"/>
+            <input type="file" id="photo" name="photo" onkeyup="checkCover()"/>
             <li>Title </li>
             <input id="title"  type="text" name="title" value="${requestScope.book.title}" onkeyup="checkTitle()"/>
 
@@ -68,14 +68,11 @@
             <li>Total amount  </li>
             <input id="totalAmount"  type="text" name="totalAmount" value="${requestScope.book.totalAmount}" onkeyup="checkTotalAmount()"/>
 
-            <li>Status
-
-
-            </li>
 
 
 
-            <button id="save" name="submit" class="save_button" type="submit"
+
+            <button id="submit" name="submit" class="save_button" type="submit"
             disabled>Save <i class="fa fa-plus-square"
                      aria-hidden="true"></i></button>
 

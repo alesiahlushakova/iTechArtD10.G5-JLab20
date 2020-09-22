@@ -7,6 +7,6 @@ public class EmptyCommand implements Command {
 
 
     public CurrentJsp execute(HttpServletRequest request) {
-        return new CurrentJsp(CurrentJsp.MAIN_PAGE_PATH, false);
+        return new CurrentJsp("/controller?command=book_list", false);
     }
 }

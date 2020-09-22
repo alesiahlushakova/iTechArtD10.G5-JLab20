@@ -6,6 +6,7 @@ var publishDateChecked = false;
 var pageCountChecked = false;
 var totalAmountChecked = false;
 var isbnChecked = false;
+var coverChecked = false;
 var descriptionChecked = false;
 
 var logRegEx = /\W/;
@@ -13,7 +14,7 @@ var regExp = /\d\W/;
 var punct = /[.,!?()\\|\[\]`@$^*-+=:;¹#"'_\s></%&*]+/;
 var digit = /[0-9]+/;
 var isbnReg = /^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/;
-var numberRegEx=/^[1-9][0-9]{0,2}$/;
+var numberRegEx = /^[1-9][0-9]{0,2}$/;
 
 var minLength = 1;
 var notFoundIndex = -1;
@@ -28,20 +29,18 @@ var pageCount = document.getElementById("pageCount");
 var totalAmount = document.getElementById("totalAmount");
 var isbn = document.getElementById("isbn");
 var description = document.getElementById("description");
-
+var cover = document.getElementById("photo");
 
 
 var submitChange = function () {
 
-    //  && publisherChecked
-    //     && pageCountChecked && totalAmountChecked && isbnChecked && descriptionChecked
-    if (titleChecked === true) {
+
+    if (titleChecked && coverChecked && publisherChecked
+        && pageCountChecked && totalAmountChecked && isbnChecked && descriptionChecked) {
 
         submit.disabled = false;
         submit.classList.add("active");
-        alert(titleChecked);
     } else {
-        alert(titleChecked+"((((");
         submit.disabled = true;
         submit.classList.remove("active");
     }
@@ -57,11 +56,11 @@ var notValidColor = function (element) {
     element.classList.remove("valid");
 }
 
-var checkTitle= function () {
+var checkTitle = function () {
     if (title.value.search(regExp) > notFoundIndex ||
         title.value.length < minLength) {
         notValidColor(title);
-        titleChecked =false;
+        titleChecked = false;
     } else {
         validColor(title);
         titleChecked = true;
@@ -84,11 +83,11 @@ var checkAuthor = function () {
 };
 
 
-var checkGenre= function () {
+var checkGenre = function () {
     if (genre.value.search(regExp) > notFoundIndex ||
         genre.value.length < minLength) {
         notValidColor(genre);
-        genreChecked =false;
+        genreChecked = false;
     } else {
         validColor(genre);
         genreChecked = true;
@@ -96,11 +95,11 @@ var checkGenre= function () {
     submitChange();
 };
 
-var checkPublisher= function () {
+var checkPublisher = function () {
     if (publisher.value.search(regExp) > notFoundIndex ||
         publisher.value.length < minLength) {
         notValidColor(publisher);
-        publisherChecked =false;
+        publisherChecked = false;
     } else {
         validColor(publisher);
         publisherChecked = true;
@@ -108,10 +107,10 @@ var checkPublisher= function () {
     submitChange();
 };
 
-var checkPublishDate= function () {
-    if (publishDate > new Date() ) {
+var checkPublishDate = function () {
+    if (publishDate > new Date()) {
         notValidColor(publishDate);
-        publishDateChecked =false;
+        publishDateChecked = false;
     } else {
         validColor(publishDate);
         publishDateChecked = true;
@@ -141,11 +140,11 @@ var checkTotalAmount = function () {
     submitChange();
 };
 
-var checkIsbn= function () {
+var checkIsbn = function () {
     if (isbn.value.search(isbnReg) > notFoundIndex ||
         isbn.value.length < minLength) {
         notValidColor(isbn);
-        isbnChecked =false;
+        isbnChecked = false;
     } else {
         validColor(isbn);
         isbnChecked = true;
@@ -153,13 +152,44 @@ var checkIsbn= function () {
     submitChange();
 };
 
-var checkDescription= function () {
-    if (description.value.search(regExp) > notFoundIndex ) {
+var checkDescription = function () {
+    if (description.value.search(regExp) > notFoundIndex) {
         notValidColor(description);
-        descriptionChecked =false;
+        descriptionChecked = false;
     } else {
         validColor(description);
         descriptionChecked = true;
     }
     submitChange();
 };
+
+var checkCover = function () {
+
+    var fuData = document.getElementById('photo');
+    var FileUploadPath = fuData.value;
+
+
+    var Extension = FileUploadPath.substring(FileUploadPath.lastIndexOf('.') + 1).toLowerCase();
+
+
+    if ( Extension === "png"  || Extension === "jpg") {
+
+
+        if (fuData.files && fuData.files[0]) {
+
+            var size = fuData.files[0].size;
+
+            if (size > 2097152) {
+                alert("Maximum file size exceeds");
+                coverChecked = false;
+            } else {
+               coverChecked = true;
+            }
+        }
+
+    } else {
+        coverChecked = false;
+        alert("Photo only allows file types of PNG, JPG. ");
+    }
+    submitChange();
+}
