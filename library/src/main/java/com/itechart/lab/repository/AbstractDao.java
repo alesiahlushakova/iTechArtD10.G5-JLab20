@@ -2,7 +2,12 @@ package com.itechart.lab.repository;
 
 import com.itechart.lab.model.Entity;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -18,15 +23,13 @@ import java.util.Map;
      public static final String UPDATE_ENTITY_QUERY_KEY = "UPDATE_ENTITY";
 
      private final Map<String, String> commonQueries;
-     protected Connection connection;
 
-     protected AbstractDao(final Connection newConnection) {
-         this.connection = newConnection;
+     protected AbstractDao() {
          this.commonQueries = initializeCommonQueries();
      }
 
 
-     public List<T> selectAll() throws DaoException {
+     public List<T> selectAll(Connection connection) throws DaoException {
          String sqlQuery = commonQueries.get(SELECT_ALL_QUERY_KEY);
 
          try (Statement statement = connection.createStatement()) {
@@ -35,7 +38,7 @@ import java.util.Map;
 
              ResultSet resultSet = statement.executeQuery(sqlQuery);
              while (resultSet.next()) {
-                 T entity = buildEntity(resultSet);
+                 T entity = buildEntity(connection, resultSet);
                  entities.add(entity);
              }
 
@@ -46,15 +49,15 @@ import java.util.Map;
      }
 
 
-     public T selectEntityById(final int id) throws DaoException {
+     public T selectEntityById(Connection connection, final int id) throws DaoException {
          String sqlQuery = commonQueries.get(SELECT_BY_ID_QUERY_KEY);
 
          try (PreparedStatement preparedStatement
-                      = prepareStatementForQuery(sqlQuery, id)) {
+                      = prepareStatementForQuery(connection, sqlQuery, id)) {
              T entity = null;
              ResultSet resultSet = preparedStatement.executeQuery();
              if (resultSet.next()) {
-                 entity = buildEntity(resultSet);
+                 entity = buildEntity(connection, resultSet);
              }
 
              return entity;
@@ -64,23 +67,23 @@ import java.util.Map;
      }
 
 
-     public boolean deleteById(int id) throws DaoException {
+     public boolean deleteById(Connection connection, int id) throws DaoException {
          String sqlQuery = commonQueries.get(DELETE_BY_ID_QUERY_KEY);
 
-         return executeQuery(sqlQuery, id);
+         return executeQuery(connection, sqlQuery, id);
      }
 
 
-     public boolean insert(final T entity) throws DaoException {
+     public boolean insert(Connection connection, final T entity) throws DaoException {
          String sqlQuery = commonQueries.get(INSERT_ENTITY_QUERY_KEY);
          List<String> parameters = getEntityParameters(entity);
 
-         return executeQuery(sqlQuery, parameters);
+         return executeQuery(connection, sqlQuery, parameters);
      }
 
 
 
-     public boolean update(final T entity) throws DaoException {
+     public boolean update(Connection connection, final T entity) throws DaoException {
          String sqlQuery = commonQueries.get(UPDATE_ENTITY_QUERY_KEY);
          List<String> parameters = getEntityParameters(entity);
 
@@ -88,12 +91,12 @@ import java.util.Map;
          String entityIdValue = String.valueOf(entityId);
          parameters.add(entityIdValue);
 
-         return executeQuery(sqlQuery, parameters);
+         return executeQuery(connection, sqlQuery, parameters);
      }
 
 
-     protected boolean executeQuery(String sqlQuery, Object... parameters) throws DaoException {
-         try (PreparedStatement preparedStatement = prepareStatementForQuery(sqlQuery, parameters)) {
+     protected boolean executeQuery(Connection connection, String sqlQuery, Object... parameters) throws DaoException {
+         try (PreparedStatement preparedStatement = prepareStatementForQuery(connection, sqlQuery, parameters)) {
              int queryResult = preparedStatement.executeUpdate();
 
              return queryResult != EMPTY_RESULT;
@@ -102,8 +105,8 @@ import java.util.Map;
          }
      }
 
-     private boolean executeQuery(String sqlQuery, List<String> parameters) throws DaoException {
-         try (PreparedStatement preparedStatement = preparedStatementForQuery(sqlQuery, parameters)) {
+     private boolean executeQuery(Connection connection, String sqlQuery, List<String> parameters) throws DaoException {
+         try (PreparedStatement preparedStatement = preparedStatementForQuery(connection, sqlQuery, parameters)) {
              int queryResult = preparedStatement.executeUpdate();
 
              return queryResult != EMPTY_RESULT;
@@ -113,7 +116,7 @@ import java.util.Map;
      }
 
 
-     protected PreparedStatement prepareStatementForQuery(String sqlQuery, Object... parameters) throws DaoException {
+     protected PreparedStatement prepareStatementForQuery(Connection connection, String sqlQuery, Object... parameters) throws DaoException {
          try {
              PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
 
@@ -136,7 +139,7 @@ import java.util.Map;
      }
 
 
-     private PreparedStatement preparedStatementForQuery(String sqlQuery, List<String> parameters) throws DaoException {
+     private PreparedStatement preparedStatementForQuery(Connection connection, String sqlQuery, List<String> parameters) throws DaoException {
          try {
              PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
 
@@ -161,7 +164,7 @@ import java.util.Map;
 
      protected abstract List<String> getEntityParameters(T entity);
 
-     protected abstract T buildEntity(ResultSet resultSet) throws DaoException;
+     protected abstract T buildEntity(Connection connection, ResultSet resultSet) throws DaoException;
 
      protected abstract Map<String, String> initializeCommonQueries();
 }

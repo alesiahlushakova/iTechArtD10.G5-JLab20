@@ -25,13 +25,16 @@ public class GenreDao extends AbstractDao<Genre> {
     private static final String ID_COLUMN = "id";
     private static final String GENRE_COLUMN = "genre";
 
-    public GenreDao(Connection connection) {
-        super(connection);
+    private GenreDao() {
     }
 
-    public boolean isGenreUnique(String genre) throws DaoException {
+    public static GenreDao getInstance() {
+        return GenreDaoHolder.GENRE_DAO;
+    }
+
+    public boolean isGenreUnique(Connection connection, String genre) throws DaoException {
         try (PreparedStatement preparedStatement
-                     = prepareStatementForQuery(SELECT_BY_GENRE_QUERY, genre)) {
+                     = prepareStatementForQuery(connection, SELECT_BY_GENRE_QUERY, genre)) {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             return !resultSet.next();
@@ -51,7 +54,7 @@ public class GenreDao extends AbstractDao<Genre> {
     }
 
     @Override
-    protected Genre buildEntity(ResultSet resultSet) throws DaoException {
+    protected Genre buildEntity(Connection connection, ResultSet resultSet) throws DaoException {
         try {
             Genre genre = new Genre();
 
@@ -76,5 +79,9 @@ public class GenreDao extends AbstractDao<Genre> {
         commonQueries.put(UPDATE_ENTITY_QUERY_KEY, UPDATE_ENTITY_QUERY);
 
         return commonQueries;
+    }
+
+    private static class GenreDaoHolder {
+        private static final GenreDao GENRE_DAO = new GenreDao();
     }
 }

@@ -1,29 +1,30 @@
 package com.itechart.lab.service;
 
-import com.itechart.lab.model.Book;
 import com.itechart.lab.model.Order;
 import com.itechart.lab.model.Period;
 import com.itechart.lab.model.Status;
-import com.itechart.lab.repository.BookDao;
 import com.itechart.lab.repository.DaoException;
 import com.itechart.lab.repository.OrderDao;
 import com.itechart.lab.repository.pool.ConnectionWrapper;
 
-import java.io.InputStream;
-import java.util.ArrayList;
+import java.sql.Connection;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 public class OrderService {
+    private OrderDao orderDao;
 
+    public OrderService() {
+        orderDao = OrderDao.getInstance();
+    }
 
     public boolean createOrder(int bookId, int readerId,String status, Period period,
                                String comment) throws ServiceException {
         try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
-           OrderDao orderDao = new OrderDao(connectionWrapper.getConnection());
+           Connection connection = connectionWrapper.getConnection();
            Order order = new Order();
-           orderDao.updateAmountWhenBorrowing(bookId);
+           orderDao.updateAmountWhenBorrowing(connection, bookId);
            order.setBookId(bookId);
            order.setReaderId(readerId);
            order.setStatus(Status.ORDERED);
@@ -34,7 +35,7 @@ public class OrderService {
            java.sql.Date dueDate = periodCalculator.calculateExpirationDate(period, date);
            order.setDueDate(dueDate);
            order.setReturnDate(null);
-           return orderDao.insert(order);
+           return orderDao.insert(connection, order);
         } catch (DaoException exception) {
             throw new ServiceException("Exception while creating order.", exception);
         }
@@ -43,12 +44,12 @@ public class OrderService {
 
     public boolean closeOrder(int id, Status status, Date returnDate) throws ServiceException {
         try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
-            OrderDao orderDao = new OrderDao(connectionWrapper.getConnection());
-            Order order = orderDao.selectEntityById(id);
+            Connection connection = connectionWrapper.getConnection();
+            Order order = orderDao.selectEntityById(connection, id);
             order.setStatus(status);
             order.setReturnDate((java.sql.Date) returnDate);
-            orderDao.updateAmountWhenReturning(order.getBookId());
-            return orderDao.update(order);
+            orderDao.updateAmountWhenReturning(connection, order.getBookId());
+            return orderDao.update(connection, order);
         } catch (DaoException exception) {
             throw new ServiceException("Exception while closing order record.", exception);
         }
@@ -56,9 +57,7 @@ public class OrderService {
 
     public List<Order> findBookOrderers(int bookId) throws ServiceException{
         try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
-            OrderDao orderDao = new OrderDao(connectionWrapper.getConnection());
-
-            return orderDao.selectBookOrders(bookId);
+            return orderDao.selectBookOrders(connectionWrapper.getConnection(), bookId);
         }
         catch (DaoException exception) {
             throw new ServiceException("Exception while finding order.", exception);
@@ -67,9 +66,7 @@ public class OrderService {
 
     public Order findOrder(int id) throws ServiceException{
         try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
-            OrderDao orderDao = new OrderDao(connectionWrapper.getConnection());
-
-            return orderDao.selectEntityById(id);
+            return orderDao.selectEntityById(connectionWrapper.getConnection(), id);
         }
         catch (DaoException exception) {
             throw new ServiceException("Exception while finding order.", exception);
@@ -78,18 +75,18 @@ public class OrderService {
 
     public boolean editOrder(int orderId,Status status) throws ServiceException {
         try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
-            OrderDao orderDao = new OrderDao(connectionWrapper.getConnection());
+            Connection connection = connectionWrapper.getConnection();
             Order order = new Order();
             order.setId(orderId);
-            Order order1 = orderDao.selectEntityById(orderId);
+            Order order1 = orderDao.selectEntityById(connection, orderId);
             if (status != order1.getStatus()){
                 if (status == Status.LOST || status == Status.RETURNED_AND_DAMAGED) {
-                    orderDao.updateTotalAmount(orderId);
+                    orderDao.updateTotalAmount(connection, orderId);
                 } else if (status == Status.RETURNED) {
-                    orderDao.updateAmountWhenReturning(orderId);
+                    orderDao.updateAmountWhenReturning(connection, orderId);
                 }
             }
-            return orderDao.updateStatus(status, orderId);
+            return orderDao.updateStatus(connection, status, orderId);
         } catch (DaoException exception) {
             throw new ServiceException("Exception while editing order.", exception);
         }
@@ -99,9 +96,9 @@ public class OrderService {
     public boolean saveOrder(int bookId, int readerId,  Period period,
                              String comment) throws ServiceException {
         try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
-            OrderDao orderDao = new OrderDao(connectionWrapper.getConnection());
             Order order = new Order();
-            orderDao.updateAmountWhenBorrowing(bookId);
+            Connection connection = connectionWrapper.getConnection();
+            orderDao.updateAmountWhenBorrowing(connection,bookId);
             order.setBookId(bookId);
             order.setReaderId(readerId);
             order.setStatus(Status.ORDERED);
@@ -114,10 +111,14 @@ public class OrderService {
             order.setDueDate(dueDate);
             order.setBorrowDate(new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
             order.setReturnDate(null);
-            return orderDao.insert(order);
+            return orderDao.insert(connection, order);
         } catch (DaoException exception) {
             throw new ServiceException("Exception while creating order.", exception);
         }
 
+    }
+
+    public List<Order> findAll() {
+        return null;
     }
 }

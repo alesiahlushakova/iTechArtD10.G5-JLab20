@@ -1,11 +1,16 @@
 package com.itechart.lab.repository;
 
+import com.itechart.lab.model.Book;
 import com.itechart.lab.model.Order;
 import com.itechart.lab.model.Period;
 import com.itechart.lab.model.Reader;
 import com.itechart.lab.model.Status;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,24 +21,31 @@ public class OrderDao extends AbstractDao<Order> {
      * Common queries.
      */
     private static final String SELECT_ALL_QUERY = "SELECT * FROM book_order";
+    private static final String SELECT_ALL_ABOUT_BOOK_QUERY = "SELECT * FROM book WHERE id=?";
     private static final String SELECT_ALL_ABOUT_READER_QUERY = "SELECT * FROM reader WHERE id=?";
     private static final String SELECT_BY_ID_QUERY = "SELECT * FROM book_order WHERE id=?";
-    private static final String UPDATE_TOTAL_AMOUNT_QUERY = "UPDATE book_order SET total_amount=total_amount-1 WHERE id=?";
+    private static final String UPDATE_TOTAL_AMOUNT_QUERY =
+            "UPDATE book_order SET total_amount=total_amount-1 WHERE id=?";
     private static final String SELECT_BY_BOOK_ID_QUERY = "SELECT * FROM book_order WHERE book_id=?";
     private static final String DELETE_BY_ID_QUERY = "DELETE FROM book_order WHERE id=?";
-    private static final String INSERT_ENTITY_QUERY = "INSERT INTO book_order (`book_id`,`reader_id`,`borrow_date`,`borrow_period`,`status`,`comment`,`due_date`,`return_date`)  VALUES(?,?,?,?,?,?,?,?)";
-    private static final String UPDATE_ENTITY_QUERY = "UPDATE book_order SET  book_id=?, reader_id=?, borrow_date=?,`borrow_period`=?, status=?, comment=?, due_date=?, return_date=? WHERE id=?";
+    private static final String INSERT_ENTITY_QUERY =
+            "INSERT INTO book_order (`book_id`,`reader_id`,`borrow_date`,`borrow_period`,`status`,`comment`,`due_date`,`return_date`)  VALUES(?,?,?,?,?,?,?,?)";
+    private static final String UPDATE_ENTITY_QUERY =
+            "UPDATE book_order SET  book_id=?, reader_id=?, borrow_date=?,`borrow_period`=?, status=?, comment=?, due_date=?, return_date=? WHERE id=?";
     private static final String UPDATE_STATUS_ENTITY_QUERY = "UPDATE book_order SET  status=? WHERE id=?";
     private static final String SELECT_BOOK_AVAILABILITY_DATE_QUERY = "SELECT due_date from book_order " +
-            "WHERE return_date IS NULL AND book_id=? " +
-            "ORDER BY due_date " +
-            "LIMIT 1";
-    private static final String SELECT_RECORD_QUERY = "SELECT email, name, borrow_date, borrow_period, status, comment" +
+                                                                      "WHERE return_date IS NULL AND book_id=? " +
+                                                                      "ORDER BY due_date " +
+                                                                      "LIMIT 1";
+    private static final String SELECT_RECORD_QUERY =
+            "SELECT email, name, borrow_date, borrow_period, status, comment" +
             "FROM book_order INNER JOIN reader" +
             "ON reader_id=reader.id" +
             "WHERE book_id=? ";
-    private static final String UPDATE_WHEN_BORROWING_QUERY = "UPDATE book SET remaining_amount=total_amount-1 WHERE id=?";
-    private static final String UPDATE_WHEN_RETURNING_QUERY = "UPDATE book SET remaining_amount=total_amount+1 WHERE id=?";
+    private static final String UPDATE_WHEN_BORROWING_QUERY =
+            "UPDATE book SET remaining_amount=total_amount-1 WHERE id=?";
+    private static final String UPDATE_WHEN_RETURNING_QUERY =
+            "UPDATE book SET remaining_amount=total_amount+1 WHERE id=?";
     private static final String ID_COLUMN = "id";
     private static final String BOOK_ID_COLUMN = "book_id";
     private static final String READER_ID_COLUMN = "reader_id";
@@ -50,15 +62,17 @@ public class OrderDao extends AbstractDao<Order> {
     private static final String PHONE_COLUMN = "phone";
     private static final String REGISTRATION_DATE_COLUMN = "date_of_registration";
 
-
-    public OrderDao(Connection connection){
-        super(connection);
+    private OrderDao() {
     }
 
-    public Date getAvailabilityDate(int bookId) throws DaoException{
+    public static OrderDao getInstance() {
+        return OrderDaoHolder.ORDER_DAO;
+    }
+
+    public Date getAvailabilityDate(Connection connection, int bookId) throws DaoException {
         try (PreparedStatement preparedStatement
-                = prepareStatementForQuery(SELECT_BOOK_AVAILABILITY_DATE_QUERY,
-                bookId)) {
+                     = prepareStatementForQuery(connection, SELECT_BOOK_AVAILABILITY_DATE_QUERY,
+                                                bookId)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             Date availabilityDate = null;
             if (resultSet.next()) {
@@ -70,13 +84,13 @@ public class OrderDao extends AbstractDao<Order> {
         }
     }
 
-    public  List<Order> selectBookOrders(int id) throws DaoException{
-        try(PreparedStatement statement = prepareStatementForQuery(SELECT_BY_BOOK_ID_QUERY, id)){
+    public List<Order> selectBookOrders(Connection connection, int id) throws DaoException {
+        try (PreparedStatement statement = prepareStatementForQuery(connection, SELECT_BY_BOOK_ID_QUERY, id)) {
             ResultSet resultSet = statement.executeQuery();
-            Order order = new Order();
+            Order order;
             ArrayList<Order> orders = new ArrayList<>();
-            while (resultSet.next()){
-                order = buildEntity(resultSet);
+            while (resultSet.next()) {
+                order = buildEntity(connection, resultSet);
                 orders.add(order);
             }
 
@@ -87,15 +101,29 @@ public class OrderDao extends AbstractDao<Order> {
     }
 
 
-    public  Reader getReader(int id) throws DaoException{
-        try(PreparedStatement statement = prepareStatementForQuery(SELECT_ALL_ABOUT_READER_QUERY, id)){
+    public Reader getReader(Connection connection, int id) throws DaoException {
+        try (PreparedStatement statement = prepareStatementForQuery(connection, SELECT_ALL_ABOUT_READER_QUERY, id)) {
             ResultSet resultSet = statement.executeQuery();
             Reader reader = new Reader();
-            while (resultSet.next()){
-               reader = buildReaderEntity(resultSet);
+            while (resultSet.next()) {
+                reader = ReaderDao.getInstance().buildEntity(connection, resultSet);
             }
 
             return reader;
+        } catch (SQLException exception) {
+            throw new DaoException(exception.getMessage(), exception);
+        }
+    }
+
+    public Book getBook(Connection connection, int id) throws DaoException {
+        try (PreparedStatement statement = prepareStatementForQuery(connection, SELECT_ALL_ABOUT_BOOK_QUERY, id)) {
+            ResultSet resultSet = statement.executeQuery();
+            Book book = new Book();
+            while (resultSet.next()) {
+                book = BookDao.getInstance().buildEntity(connection, resultSet);
+            }
+
+            return book;
         } catch (SQLException exception) {
             throw new DaoException(exception.getMessage(), exception);
         }
@@ -105,11 +133,11 @@ public class OrderDao extends AbstractDao<Order> {
     protected List<String> getEntityParameters(Order entity) {
         List<String> parameters = new ArrayList<>();
 
-        int bookId = entity.getBookId();
+        int bookId = entity.getBook().getId();
         String bookIdValue = String.valueOf(bookId);
         parameters.add(bookIdValue);
 
-        int readerId = entity.getReaderId();
+        int readerId = entity.getReader().getId();
         String readerIdValue = String.valueOf(readerId);
         parameters.add(readerIdValue);
 
@@ -146,63 +174,64 @@ public class OrderDao extends AbstractDao<Order> {
         return parameters;
     }
 
-    public boolean updateStatus(Status status, int id) throws DaoException{
-        return executeQuery(UPDATE_STATUS_ENTITY_QUERY,String.valueOf(status),id);
+    public boolean updateStatus(Connection connection, Status status, int id) throws DaoException {
+        return executeQuery(connection, UPDATE_STATUS_ENTITY_QUERY, String.valueOf(status), id);
     }
 
 
-    public boolean updateAmountWhenBorrowing(int id) throws DaoException{
-        return executeQuery(UPDATE_WHEN_BORROWING_QUERY,id);
+    public boolean updateAmountWhenBorrowing(Connection connection, int id) throws DaoException {
+        return executeQuery(connection, UPDATE_WHEN_BORROWING_QUERY, id);
     }
 
-    public boolean updateAmountWhenReturning( int id) throws DaoException{
-        return executeQuery(UPDATE_WHEN_RETURNING_QUERY,id);
+    public boolean updateAmountWhenReturning(Connection connection, int id) throws DaoException {
+        return executeQuery(connection, UPDATE_WHEN_RETURNING_QUERY, id);
     }
 
-    public boolean updateTotalAmount( int id) throws DaoException{
-        return executeQuery(UPDATE_TOTAL_AMOUNT_QUERY,id);
+    public boolean updateTotalAmount(Connection connection, int id) throws DaoException {
+        return executeQuery(connection, UPDATE_TOTAL_AMOUNT_QUERY, id);
     }
 
     @Override
-    protected Order buildEntity(ResultSet resultSet) throws DaoException {
+    protected Order buildEntity(Connection connection, ResultSet resultSet) throws DaoException {
         try {
-           Order order = new Order();
+            Order order = new Order();
 
-           int id = resultSet.getInt(ID_COLUMN);
-           order.setId(id);
+            int id = resultSet.getInt(ID_COLUMN);
+            order.setId(id);
 
-           int bookId = resultSet.getInt(BOOK_ID_COLUMN);
-           order.setBookId(bookId);
+            int bookId = resultSet.getInt(BOOK_ID_COLUMN);
+            order.setBookId(bookId);
+            order.setBook(getBook(connection, bookId));
 
-           int readerId = resultSet.getInt(READER_ID_COLUMN);
-           order.setReaderId(readerId);
-           order.setReader(getReader(readerId));
+            int readerId = resultSet.getInt(READER_ID_COLUMN);
+            order.setReaderId(readerId);
+            order.setReader(getReader(connection, readerId));
 
-           Date borrowDate = resultSet.getDate(BORROW_DATE_COLUMN);
-           order.setBorrowDate(borrowDate);
+            Date borrowDate = resultSet.getDate(BORROW_DATE_COLUMN);
+            order.setBorrowDate(borrowDate);
 
             String periodValue = resultSet.getString(PERIOD_COLUMN);
             Period period = Period.valueOf(periodValue);
             order.setPeriod(period);
 
-           String statusValue = resultSet.getString(STATUS_COLUMN);
-           Status status = Status.valueOf(statusValue);
-           order.setStatus(status);
+            String statusValue = resultSet.getString(STATUS_COLUMN);
+            Status status = Status.valueOf(statusValue);
+            order.setStatus(status);
 
-           String comment = resultSet.getString(COMMENT_COLUMN);
-           order.setComment(comment);
+            String comment = resultSet.getString(COMMENT_COLUMN);
+            order.setComment(comment);
 
-           Date dueDate = resultSet.getDate(DUE_DATE_COLUMN);
-           order.setDueDate(dueDate);
+            Date dueDate = resultSet.getDate(DUE_DATE_COLUMN);
+            order.setDueDate(dueDate);
 
-           Date returnDate = resultSet.getDate(RETURN_DATE_COLUMN);
-           order.setReturnDate(returnDate);
+            Date returnDate = resultSet.getDate(RETURN_DATE_COLUMN);
+            order.setReturnDate(returnDate);
 
-           return order;
+            return order;
         } catch (SQLException exception) {
             throw new DaoException(exception.getMessage(), exception);
         }
-        }
+    }
 
     protected Reader buildReaderEntity(ResultSet resultSet) throws DaoException {
         try {
@@ -227,7 +256,7 @@ public class OrderDao extends AbstractDao<Order> {
             reader.setPhone(phone);
 
             Date registrationDate = resultSet.getDate(REGISTRATION_DATE_COLUMN);
-            reader.setDateOfRegistration((java.sql.Date) registrationDate);
+            reader.setDateOfRegistration(registrationDate);
 
             return reader;
 
@@ -248,4 +277,7 @@ public class OrderDao extends AbstractDao<Order> {
         return commonQueries;
     }
 
+    private static class OrderDaoHolder {
+        private static final OrderDao ORDER_DAO = new OrderDao();
+    }
 }

@@ -2,14 +2,19 @@ package com.itechart.lab.repository;
 
 import com.itechart.lab.model.Reader;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 
-public class ReaderDao extends AbstractDao<Reader>{
+public class ReaderDao extends AbstractDao<Reader> {
     /**
      * Common queries.
      */
@@ -17,11 +22,14 @@ public class ReaderDao extends AbstractDao<Reader>{
     private static final String SELECT_BY_ID_QUERY = "SELECT * FROM reader WHERE id=?";
     private static final String SELECT_EMAIL_BY_ID_QUERY = "SELECT id FROM reader WHERE email=?";
     private static final String DELETE_BY_ID_QUERY = "DELETE FROM reader WHERE id=?";
-    private static final String INSERT_ENTITY_QUERY = "INSERT INTO reader (`first_name`,`last_name`,`email`,`gender`,`phone`,`date_of_registration`)  VALUES(?,?,?,?,?,?)";
-    private static final String UPDATE_ENTITY_QUERY = "UPDATE reader SET  first_name=?, last_name=?, email=?,gender=?, phone=?, date_of_registration=? WHERE id=?";
+    private static final String INSERT_ENTITY_QUERY =
+            "INSERT INTO reader (`first_name`,`last_name`,`email`,`gender`,`phone`,`date_of_registration`)  VALUES(?,?,?,?,?,?)";
+    private static final String UPDATE_ENTITY_QUERY =
+            "UPDATE reader SET  first_name=?, last_name=?, email=?,gender=?, phone=?, date_of_registration=? WHERE id=?";
     private static final String SELECT_EMAIL_QUERY = "SELECT email FROM reader";
     private static final String SELECT_NAME_BY_MAIL_QUERY = "SELECT first_name FROM reader WHERE email=?";
-    private static final String SELECT_RECORD_QUERY = "SELECT email, first_name, borrow_date, borrow_period, status, comment" +
+    private static final String SELECT_RECORD_QUERY =
+            "SELECT email, first_name, borrow_date, borrow_period, status, comment" +
             "FROM book_order INNER JOIN reader" +
             "ON reader_id=reader.id" +
             "WHERE book_id=? ";
@@ -34,9 +42,11 @@ public class ReaderDao extends AbstractDao<Reader>{
     private static final String PHONE_COLUMN = "phone";
     private static final String REGISTRATION_DATE_COLUMN = "date_of_registration";
 
+    private ReaderDao() {
+    }
 
-    public ReaderDao(Connection connection){
-        super(connection);
+    public static ReaderDao getInstance() {
+        return ReaderDaoHolder.READER_DAO;
     }
 
 //    public List<Reader> selectBookBorrowers(int bookId) throws DaoException{
@@ -54,12 +64,12 @@ public class ReaderDao extends AbstractDao<Reader>{
 //        }
 //    }
 
-    public List<String> getEmails() throws DaoException{
-        try(Statement statement
-                    = connection.createStatement()) {
+    public List<String> getEmails(Connection connection) throws DaoException {
+        try (Statement statement
+                     = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(SELECT_EMAIL_QUERY);
             List<String> emails = new ArrayList<>();
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 String email = resultSet.getString(EMAIL_COLUMN);
                 emails.add(email);
             }
@@ -69,13 +79,13 @@ public class ReaderDao extends AbstractDao<Reader>{
         }
     }
 
-    public String getNameByEmail(String email) throws DaoException {
-        try(PreparedStatement preparedStatement
-                = prepareStatementForQuery(SELECT_NAME_BY_MAIL_QUERY, email)){
+    public String getNameByEmail(Connection connection, String email) throws DaoException {
+        try (PreparedStatement preparedStatement
+                     = prepareStatementForQuery(connection, SELECT_NAME_BY_MAIL_QUERY, email)) {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             String name = null;
-            if(resultSet.next()) {
+            if (resultSet.next()) {
                 name = resultSet.getString(FIRST_NAME_COLUMN);
             }
             return name;
@@ -84,15 +94,15 @@ public class ReaderDao extends AbstractDao<Reader>{
         }
     }
 
-    public int selectIdByMail(String email) throws DaoException {
+    public int selectIdByMail(Connection connection, String email) throws DaoException {
         int result = 0;
-        try(PreparedStatement preparedStatement
-                    = prepareStatementForQuery(SELECT_EMAIL_BY_ID_QUERY, email)){
+        try (PreparedStatement preparedStatement
+                     = prepareStatementForQuery(connection, SELECT_EMAIL_BY_ID_QUERY, email)) {
             ResultSet resultSet = preparedStatement.executeQuery();
 
 
-            if(resultSet.next()) {
-               result= resultSet.getInt(ID_COLUMN);
+            if (resultSet.next()) {
+                result = resultSet.getInt(ID_COLUMN);
             }
             return result;
         } catch (SQLException exception) {
@@ -113,7 +123,7 @@ public class ReaderDao extends AbstractDao<Reader>{
         String email = entity.getEmail();
         parameters.add(email);
 
-       int gender = entity.getGender();
+        int gender = entity.getGender();
         String genderValue = String.valueOf(gender);
         parameters.add(genderValue);
 
@@ -132,7 +142,7 @@ public class ReaderDao extends AbstractDao<Reader>{
     }
 
     @Override
-    protected Reader buildEntity(ResultSet resultSet) throws DaoException {
+    protected Reader buildEntity(Connection connection, ResultSet resultSet) throws DaoException {
         try {
             Reader reader = new Reader();
 
@@ -155,7 +165,7 @@ public class ReaderDao extends AbstractDao<Reader>{
             reader.setPhone(phone);
 
             Date registrationDate = resultSet.getDate(REGISTRATION_DATE_COLUMN);
-            reader.setDateOfRegistration((java.sql.Date) registrationDate);
+            reader.setDateOfRegistration(registrationDate);
 
             return reader;
 
@@ -176,4 +186,7 @@ public class ReaderDao extends AbstractDao<Reader>{
         return commonQueries;
     }
 
+    private static class ReaderDaoHolder {
+        private static final ReaderDao READER_DAO = new ReaderDao();
     }
+}

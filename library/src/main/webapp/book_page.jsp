@@ -14,17 +14,17 @@
 <div class="reg_form">
     <form method="POST" action="${pageContext.request.contextPath}/controller?command=edit_book&bookId=${requestScope.book.id}" enctype="multipart/form-data">
 
-        <img  width="300" height="400" src="${pageContext.request.contextPath}/imageServlet?bookId=${requestScope.book.id}" onerror="this.src='${pageContext.request.contextPath}/images/avatar.png'" />
+        <img  width="300" height="400" src="${pageContext.request.contextPath}/imageServlet?bookId=${requestScope.book.id}" onerror="this.src='${pageContext.request.contextPath}/images/avatar.png'" class = "center" />
         <ul>
             <c:set var="id" value="${requestScope.book.id}" scope="session"/>
             <input type="file" id="photo" name="photo" onkeyup="checkCover()"/>
             <li>Title </li>
             <input id="title"  type="text" name="title" value="${requestScope.book.title}" onkeyup="checkTitle()"/>
 
-            <li>Author(s)
+            <li><div>Author(s)</div>
 
                 <select class="mdb-select colorful-select dropdown-primary md-form" name="authors" multiple searchable="Search here..">
-                    <option value="" disabled selected>Choose genre</option>
+                    <option value="" disabled selected>Choose author</option>
                     <c:forEach var="author" items="${requestScope.book.authors}">
                         <option>${author}</option>
                     </c:forEach>
@@ -34,7 +34,7 @@
             <input id="publisher" type="text" name="publisher" value="${requestScope.book.publisher}" onkeyup="checkPublisher()"/>
             <li>Publish Date </li>
             <input id="publishDate"  type="date" name="publishDate" value="${requestScope.book.publishDate}" onkeyup="checkPublishDate()"/>
-            <li>Genre(s)
+            <li><div>Genre(s)</div>
 
                 <select name="genres" multiple>
                     <c:forEach var="genre" items="${requestScope.book.genres}">
@@ -42,7 +42,7 @@
                     </c:forEach>
                 </select>
             </li>
-             <li>Page count </li>
+            <li>Page count </li>
             <input id="pageCount"  type="text" name="pageCount" value="${requestScope.book.pageCount}" onkeyup="checkPageCount()"/>
 
             <li>ISBN </li>
@@ -73,8 +73,8 @@
                 <a href="${pageContext.request.contextPath}/controller?command=book_list">Discard
                     <i class="fa fa-info-circle" aria-hidden="true"></i></a></li>
             <button id="submit" class="save_button" type="submit"
-           disabled >Save <i class="fa fa-plus-square"
-                     aria-hidden="true"></i></button>
+                    disabled >Save <i class="fa fa-plus-square"
+                                      aria-hidden="true"></i></button>
 
         </ul>
     </form>

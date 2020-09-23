@@ -8,14 +8,19 @@ import com.itechart.lab.repository.pool.ConnectionWrapper;
 import java.util.List;
 
 public class AuthorService {
+    private AuthorDao authorDao;
+
+    public AuthorService() {
+        authorDao = AuthorDao.getInstance();
+    }
+
     public boolean saveAuthor(String author) throws ServiceException {
         try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
-            AuthorDao authorDao = new AuthorDao(connectionWrapper.getConnection());
-            boolean isUnique =  authorDao.isAuthorUnique(author);
+            boolean isUnique = authorDao.isAuthorUnique(connectionWrapper.getConnection(), author);
             if (isUnique) {
                 Author authorEntity = new Author();
                 authorEntity.setName(author);
-                return authorDao.insert(authorEntity);
+                return authorDao.insert(connectionWrapper.getConnection(), authorEntity);
             }
             return false;
         } catch (DaoException exception) {
@@ -26,8 +31,7 @@ public class AuthorService {
 
     public List<Author> findAllAuthors() throws ServiceException {
         try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
-            AuthorDao authorDao = new AuthorDao(connectionWrapper.getConnection());
-            return authorDao.selectAll();
+            return authorDao.selectAll(connectionWrapper.getConnection());
 
         } catch (DaoException exception) {
             throw new ServiceException("Exception finding authors.", exception);

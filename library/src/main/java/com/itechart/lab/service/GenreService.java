@@ -5,18 +5,24 @@ import com.itechart.lab.repository.DaoException;
 import com.itechart.lab.repository.GenreDao;
 import com.itechart.lab.repository.pool.ConnectionWrapper;
 
+import java.sql.Connection;
 import java.util.List;
 
 public class GenreService {
+    private GenreDao genreDao;
+
+    public GenreService() {
+        genreDao = GenreDao.getInstance();
+    }
 
     public boolean saveGenre(String genre) throws ServiceException {
         try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
-            GenreDao genreDao = new GenreDao(connectionWrapper.getConnection());
-            boolean isUnique =  genreDao.isGenreUnique(genre);
+            Connection connection = connectionWrapper.getConnection();
+            boolean isUnique =  genreDao.isGenreUnique(connection, genre);
             if (isUnique) {
                 Genre genreEntity = new Genre();
                 genreEntity.setGenre(genre);
-            return genreDao.insert(genreEntity);
+            return genreDao.insert(connection, genreEntity);
             }
             return false;
         } catch (DaoException exception) {
@@ -27,9 +33,7 @@ public class GenreService {
 
     public List<Genre> findAllGenres() throws ServiceException {
         try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
-            GenreDao genreDao = new GenreDao(connectionWrapper.getConnection());
-           return genreDao.selectAll();
-
+           return genreDao.selectAll(connectionWrapper.getConnection());
         } catch (DaoException exception) {
             throw new ServiceException("Exception finding genres.", exception);
         }

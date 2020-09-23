@@ -27,20 +27,20 @@
 <tag:nav_bar/>
 <div class="create_exercise">
     <form method="POST" action="${pageContext.request.contextPath}/controller?command=add_book" enctype="multipart/form-data">
-    <ul>
+        <ul>
             <c:set var="id" value="${requestScope.book.id}" scope="session"/>
-            <input type="file" id="photo" name="photo" onkeyup="checkCover()"/>
+            <input type="file" id="photo" name="photo" onkeyup="checkCover()" class = "center_input"/>
             <li>Title </li>
             <input id="title"  type="text" name="title" value="${requestScope.book.title}" onkeyup="checkTitle()"/>
 
             <li>Author(s)
 
-                <select class="mdb-select colorful-select dropdown-primary md-form" name="authors" multiple searchable="Search here..">
+                <div><select class="mdb-select colorful-select dropdown-primary md-form" name="authors" multiple searchable="Search here..">
                     <option value="" disabled selected>Choose genre</option>
                     <c:forEach var="author" items="${sessionScope.authors}">
                         <option>${author.name}</option>
                     </c:forEach>
-                </select>
+                </select></div>
                 <button class="btn-save btn btn-primary btn-sm">Save</button>
             </li>
             <li>Publisher</li>
@@ -48,11 +48,11 @@
             <li>Publish Date </li>
             <input id="publishDate"  type="date" name="publishDate" value="${requestScope.book.publishDate}" onkeyup="checkPublishDate()"/>
             <li>Genre(s)
-                <select name="genres" multiple>
+                <div><select name="genres" multiple>
                     <c:forEach var="genre" items="${sessionScope.genres}">
                         <option>${genre.genre}</option>
                     </c:forEach>
-                </select>
+                </select> </div>
 
             </li>
 
@@ -72,9 +72,9 @@
 
 
 
-            <button id="submit" name="submit" class="save_button" type="submit"
-            disabled>Save <i class="fa fa-plus-square"
-                     aria-hidden="true"></i></button>
+            <div class ="create_button"><button id="submit" name="submit" class="save_button" type="submit"
+                                                disabled>Save <i class="fa fa-plus-square"
+                                                                 aria-hidden="true"></i></button></div>
 
         </ul>
     </form>

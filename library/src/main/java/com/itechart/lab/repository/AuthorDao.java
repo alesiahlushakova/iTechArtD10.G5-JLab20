@@ -2,7 +2,6 @@ package com.itechart.lab.repository;
 
 import com.itechart.lab.model.Author;
 
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,14 +25,16 @@ public class AuthorDao extends AbstractDao<Author> {
     private static final String ID_COLUMN = "id";
     private static final String FIRSTNAME_COLUMN = "name";
 
-
-    public AuthorDao(Connection connection) {
-        super(connection);
+    private AuthorDao() {
     }
 
-    public boolean isAuthorUnique(String fitstname) throws DaoException {
+    public static AuthorDao getInstance() {
+        return AuthorDaoHolder.AUTHOR_DAO;
+    }
+
+    public boolean isAuthorUnique(Connection connection, String fitstname) throws DaoException {
         try (PreparedStatement preparedStatement
-                     = prepareStatementForQuery(SELECT_BY_INITIALS_QUERY, fitstname)) {
+                     = prepareStatementForQuery(connection, SELECT_BY_INITIALS_QUERY, fitstname)) {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             return !resultSet.next();
@@ -53,7 +54,7 @@ public class AuthorDao extends AbstractDao<Author> {
     }
 
     @Override
-    protected Author buildEntity(ResultSet resultSet) throws DaoException {
+    protected Author buildEntity(Connection connection, ResultSet resultSet) throws DaoException {
         try {
             Author author = new Author();
 
@@ -80,5 +81,9 @@ public class AuthorDao extends AbstractDao<Author> {
         commonQueries.put(UPDATE_ENTITY_QUERY_KEY, UPDATE_ENTITY_QUERY);
 
         return commonQueries;
+    }
+
+    private static class AuthorDaoHolder {
+        private static final AuthorDao AUTHOR_DAO = new AuthorDao();
     }
 }

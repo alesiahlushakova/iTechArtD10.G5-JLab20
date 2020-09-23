@@ -12,11 +12,8 @@ public class Order extends Entity{
     private Status status;
     private String comment;
     private Date dueDate;
-
-
-
     private Reader reader;
-    private Author author;
+    private Book book;
     private Date returnDate;
 
 
@@ -46,13 +43,6 @@ public class Order extends Entity{
 
     public Period getPeriod() {
         return period;
-    }
-    public Author getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(Author author) {
-        this.author = author;
     }
 
     public void setPeriod(Period period) {
@@ -106,6 +96,14 @@ public class Order extends Entity{
 
     public void setReturnDate(Date returnDate) {
         this.returnDate = returnDate;
+    }
+
+    public Book getBook() {
+        return book;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
     }
 
     @Override

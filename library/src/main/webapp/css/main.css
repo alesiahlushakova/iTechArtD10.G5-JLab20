@@ -166,7 +166,7 @@
 
 .reg_form {
     background-color: rgba(240, 23, 192, 0.44);
-    width: 350px;
+    width: 500px;
     border-radius: 8px;
     margin: 0 auto;
     padding: 10px;
@@ -678,7 +678,6 @@
     border-color: grey;
     color: #de81df;
 }
-
 .edit_training_program_wrapper_button:active, :focus {
     outline: none;
     border-color: grey;
@@ -795,5 +794,22 @@
         width:33%;
         border-radius:0 0 30px 30px;
     }
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 75%;
+    margin-bottom: 10px;
+}
+.create_button {
+    margin-top: 15px;
+}
+.center_input {
+    display: block;
+    margin-left: auto;
+    width: 75%;
+    margin-bottom: 10px;
 }
 
