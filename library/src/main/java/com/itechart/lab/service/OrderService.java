@@ -42,6 +42,14 @@ public class OrderService {
 
     }
 
+    public List<Order> findAll() throws ServiceException {
+        try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
+            return orderDao.selectAll(connectionWrapper.getConnection());
+        } catch (DaoException exception) {
+            throw new ServiceException("Exception during finding all books by pages operation.", exception);
+        }
+    }
+
     public boolean closeOrder(int id, Status status, Date returnDate) throws ServiceException {
         try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
             Connection connection = connectionWrapper.getConnection();
@@ -118,7 +126,5 @@ public class OrderService {
 
     }
 
-    public List<Order> findAll() {
-        return null;
-    }
+
 }
