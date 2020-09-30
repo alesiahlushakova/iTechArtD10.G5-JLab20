@@ -11,18 +11,22 @@ import java.util.List;
 public class GenreService {
     private GenreDao genreDao;
 
-    public GenreService() {
+    private GenreService() {
         genreDao = GenreDao.getInstance();
+    }
+
+    public static GenreService getInstance() {
+        return GenreServiceHolder.GENRE_SERVICE;
     }
 
     public boolean saveGenre(String genre) throws ServiceException {
         try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
             Connection connection = connectionWrapper.getConnection();
-            boolean isUnique =  genreDao.isGenreUnique(connection, genre);
+            boolean isUnique = genreDao.isGenreUnique(connection, genre);
             if (isUnique) {
                 Genre genreEntity = new Genre();
                 genreEntity.setGenre(genre);
-            return genreDao.insert(connection, genreEntity);
+                return genreDao.insert(connection, genreEntity);
             }
             return false;
         } catch (DaoException exception) {
@@ -33,9 +37,13 @@ public class GenreService {
 
     public List<Genre> findAllGenres() throws ServiceException {
         try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
-           return genreDao.selectAll(connectionWrapper.getConnection());
+            return genreDao.selectAll(connectionWrapper.getConnection());
         } catch (DaoException exception) {
             throw new ServiceException("Exception finding genres.", exception);
         }
+    }
+
+    private static class GenreServiceHolder {
+        private static final GenreService GENRE_SERVICE = new GenreService();
     }
 }

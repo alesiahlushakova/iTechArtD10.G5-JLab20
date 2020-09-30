@@ -20,13 +20,7 @@ public class ConnectionMaker {
     private static final String USER_PROPERTY_KEY = "db.user";
     private static final String PASSWORD_PROPERTY_KEY = "db.password";
     private static final String URL_PROPERTY_KEY = "db.url";
-
-    private static final String USER_PROPERTY = "user";
-    private static final String PASSWORD_PROPERTY = "password";
-
-
-    private final static ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(RESOURCE_BUNDLE_FILE_NAME);
-
+    private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(RESOURCE_BUNDLE_FILE_NAME);
 
     public LinkedList<Connection> createPool() {
         LinkedList<Connection> pool = new LinkedList<>();
@@ -43,7 +37,6 @@ public class ConnectionMaker {
         return pool;
     }
 
-
     private Connection create() {
         try {
             DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
@@ -56,14 +49,8 @@ public class ConnectionMaker {
         String connectionUrlValue = RESOURCE_BUNDLE.getString(URL_PROPERTY_KEY);
         String userValue = RESOURCE_BUNDLE.getString(USER_PROPERTY_KEY);
         String passwordValue = RESOURCE_BUNDLE.getString(PASSWORD_PROPERTY_KEY);
-
-
-        Properties properties = new Properties();
-        properties.put(USER_PROPERTY, userValue);
-        properties.put(PASSWORD_PROPERTY, passwordValue);
         try {
             Connection connection = DriverManager.getConnection(connectionUrlValue, userValue, passwordValue);
-
             LOGGER.info("Connection was created successfully");
             return connection;
         } catch (SQLException exception) {

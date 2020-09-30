@@ -25,7 +25,7 @@ public class ReaderDao extends AbstractDao<Reader> {
     private static final String INSERT_ENTITY_QUERY =
             "INSERT INTO reader (`first_name`,`last_name`,`email`,`gender`,`phone`,`date_of_registration`)  VALUES(?,?,?,?,?,?)";
     private static final String UPDATE_ENTITY_QUERY =
-            "UPDATE reader SET  first_name=?, last_name=?, email=?,gender=?, phone=?, date_of_registration=? WHERE id=?";
+            "UPDATE reader SET  first_name=?, last_name=? WHERE id=?";
     private static final String SELECT_EMAIL_QUERY = "SELECT email FROM reader";
     private static final String SELECT_NAME_BY_MAIL_QUERY = "SELECT first_name FROM reader WHERE email=?";
     private static final String SELECT_RECORD_QUERY =

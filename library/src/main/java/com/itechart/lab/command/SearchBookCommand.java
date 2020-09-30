@@ -14,20 +14,22 @@ import java.util.List;
 import static com.itechart.lab.view.MessageManager.INFORMATION_NOT_FOUND_MESSAGE_KEY;
 
 public class SearchBookCommand implements Command {
-
     private static final Logger LOGGER = LogManager.getLogger(SearchBookCommand.class);
+    private BookService bookService;
+
+    public SearchBookCommand() {
+        bookService = BookService.getInstance();
+    }
 
     @Override
     public CurrentJsp execute(HttpServletRequest request) {
-
         try {
             String title = request.getParameter("title");
             String description = request.getParameter("description");
             String[] genres = request.getParameterValues(GENRES_PARAMETER);
             String[] authors = request.getParameterValues(AUTHORS_PARAMETER);
-            List<String> authorList = new ArrayList<>();
-            BookService bookService = new BookService();
-            List<String> genreList = new ArrayList<>();
+            List<String> authorList;
+            List<String> genreList;
             if (genres == null) {
                 genreList = new ArrayList<>();
             } else {
@@ -38,18 +40,12 @@ public class SearchBookCommand implements Command {
             } else {
                 authorList = Arrays.asList(authors);
             }
-            List<Book> books = bookService.searchForBook(title, description,
-                    genreList, authorList);
+            List<Book> books = bookService.searchForBook(title, description, genreList, authorList);
             if (books.isEmpty()) {
-                return new CurrentJsp(CurrentJsp.SEARCH_PAGE_PATH,
-                        false, INFORMATION_NOT_FOUND_MESSAGE_KEY);
+                return new CurrentJsp(CurrentJsp.SEARCH_PAGE_PATH, false, INFORMATION_NOT_FOUND_MESSAGE_KEY);
             }
-
             request.setAttribute(LIST_ATTRIBUTE, books);
-
-
             return new CurrentJsp(CurrentJsp.BOOK_LIST_PAGE_PATH, false);
-
         } catch (ServiceException exception) {
             LOGGER.error(exception.getMessage(), exception);
             return new CurrentJsp(CurrentJsp.ERROR_PAGE_PATH, true);

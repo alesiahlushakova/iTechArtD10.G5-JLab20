@@ -22,16 +22,18 @@ import java.util.*;
 import static com.itechart.lab.view.MessageManager.*;
 
 public class AddBookCommand implements Command{
-
     private static final Logger LOGGER = LogManager.getLogger(AddBookCommand.class);
+    private BookService bookService;
+
+    public AddBookCommand() {
+        bookService = BookService.getInstance();
+    }
+
     @Override
     public CurrentJsp execute(HttpServletRequest request) {
 
         HttpSession session = request.getSession();
         try {
-
-            BookService bookService = new BookService();
-
             String title = request.getParameter(TITLE_PARAMETER);
 
             String publisher = request.getParameter(PUBLISHER_PARAMETER);
@@ -71,33 +73,22 @@ public class AddBookCommand implements Command{
 
             Part filePart = request.getPart("photo");
             if (filePart != null) {
-
-                LOGGER.info(filePart.getName() +filePart.getSize()
-                        + filePart.getContentType());
-
-
+                LOGGER.info(filePart.getName() +filePart.getSize() + filePart.getContentType());
                 inputStream = filePart.getInputStream();
             }
 
           boolean isOperationSuccessful =  bookService.createBook(inputStream,title,publisher,publishDate,
                   pageCount,description,totalAmount,isbn, authorIdArray, genreIdArray);
             if (!isOperationSuccessful) {
-                return new CurrentJsp("/controller?command=book_list",
-                        true, BOOK_WAS_NOT_ADDED_MESSAGE_KEY);
+                return new CurrentJsp("/controller?command=book_list", true, BOOK_WAS_NOT_ADDED_MESSAGE_KEY);
             }
 
             session.setAttribute(IS_RECORD_INSERTED, true);
 
-
-            return new CurrentJsp("/controller?command=book_list",
-                    true, BOOK_WAS_ADDED_MESSAGE_KEY);
-
-
-
+            return new CurrentJsp("/controller?command=book_list", true, BOOK_WAS_ADDED_MESSAGE_KEY);
         } catch (Exception exception) {
             LOGGER.error(exception.getMessage(), exception);
             return new CurrentJsp(CurrentJsp.ERROR_PAGE_PATH, true);
         }
-
     }
 }

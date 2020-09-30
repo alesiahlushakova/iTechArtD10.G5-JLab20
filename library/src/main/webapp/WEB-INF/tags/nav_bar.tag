@@ -30,10 +30,12 @@
                 <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
             </form>
         </li>
-
+        <li>  <a href="${pageContext.request.contextPath}/create_book.jsp">Add book
+            <i class="fa fa-info-circle" aria-hidden="true"></i></a></li>
                     <li>
-                        <a href="${pageContext.request.contextPath}/controller?command=book_list">${pageScope.create_training_program}</a>
+                        <a href="${pageContext.request.contextPath}/controller?command=book_list">Book list</a>
                     </li>
+        <li>
         <a href="${pageContext.request.contextPath}/search_page.jsp">Search
             <i class="fa fa-info-circle" aria-hidden="true"></i></a></li>
     </ul>

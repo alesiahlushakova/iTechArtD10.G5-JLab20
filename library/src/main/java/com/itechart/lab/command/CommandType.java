@@ -47,11 +47,7 @@ public enum CommandType {
             this.command = new DeleteBookCommand();
         }
     },
-    ADD_ORDER{
-        {
-            this.command = new AddRecordCommand();
-        }
-    },
+
     SEARCH_BOOK{
         {
             this.command = new SearchBookCommand();

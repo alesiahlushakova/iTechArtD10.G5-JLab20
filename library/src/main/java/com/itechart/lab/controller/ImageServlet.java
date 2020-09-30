@@ -26,7 +26,7 @@ public class ImageServlet extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response) {
         OutputStream oImage;
         ResultSet rs = null;
-        BookService bookService = new BookService();
+        BookService bookService = BookService.getInstance();
         PreparedStatement pstmt = null;
       int bookId = Integer.parseInt( request.getParameter("bookId"));
         try {

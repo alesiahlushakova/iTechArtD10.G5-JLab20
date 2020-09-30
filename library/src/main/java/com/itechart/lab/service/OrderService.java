@@ -15,8 +15,12 @@ import java.util.List;
 public class OrderService {
     private OrderDao orderDao;
 
-    public OrderService() {
+    private OrderService() {
         orderDao = OrderDao.getInstance();
+    }
+
+    public static OrderService getInstance() {
+        return OrderServiceHolder.ORDER_SERVICE;
     }
 
     public boolean createOrder(int bookId, int readerId,String status, Period period,
@@ -40,14 +44,6 @@ public class OrderService {
             throw new ServiceException("Exception while creating order.", exception);
         }
 
-    }
-
-    public List<Order> findAll() throws ServiceException {
-        try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
-            return orderDao.selectAll(connectionWrapper.getConnection());
-        } catch (DaoException exception) {
-            throw new ServiceException("Exception during finding all books by pages operation.", exception);
-        }
     }
 
     public boolean closeOrder(int id, Status status, Date returnDate) throws ServiceException {
@@ -88,6 +84,9 @@ public class OrderService {
             order.setId(orderId);
             Order order1 = orderDao.selectEntityById(connection, orderId);
             if (status != order1.getStatus()){
+                long millis=System.currentTimeMillis();
+                java.sql.Date date=new java.sql.Date(millis);
+                orderDao.updateReturnDate(connection, date, orderId);
                 if (status == Status.LOST || status == Status.RETURNED_AND_DAMAGED) {
                     orderDao.updateTotalAmount(connection, orderId);
                 } else if (status == Status.RETURNED) {
@@ -126,5 +125,15 @@ public class OrderService {
 
     }
 
+    public List<Order> findAll() throws ServiceException {
+        try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
+            return orderDao.selectAll(connectionWrapper.getConnection());
+        } catch (DaoException exception) {
+            throw new ServiceException("Exception during finding all books by pages operation.", exception);
+        }
+    }
 
+    private static class OrderServiceHolder {
+        private static final OrderService ORDER_SERVICE = new OrderService();
+    }
 }

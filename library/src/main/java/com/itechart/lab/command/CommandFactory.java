@@ -13,13 +13,9 @@ import static com.itechart.lab.view.MessageManager.COMMAND_ERROR_MESSAGE_KEY;
 
 
 public class CommandFactory {
-
     private static final Logger LOGGER = LogManager.getLogger(CommandFactory.class);
-
-
     public Command defineCommand(HttpServletRequest request) {
         Command currentCommand = new EmptyCommand();
-
         String action = request.getParameter(COMMAND_PARAMETER);
         if (action == null || action.isEmpty()) {
             LOGGER.info(String.format("Command - %s, is empty.", action));
@@ -31,7 +27,6 @@ public class CommandFactory {
             currentCommand = currentType.getCurrentCommand();
         } catch (IllegalArgumentException exception) {
             LOGGER.warn(String.format("Command - %s, caused the exception.", action) + exception);
-
             String message = String.format("%s %s", action, MessageManager.getProperty(COMMAND_ERROR_MESSAGE_KEY));
             request.setAttribute(MESSAGE_ATTRIBUTE, message);
         }

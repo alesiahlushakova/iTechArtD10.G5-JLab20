@@ -21,7 +21,11 @@ public class EmailJob implements Job {
     private static final String USERNAME = "filippovich184@gmail.com";
     private static final String PASSWORD = "filippovich27";
 
-    private OrderService orderService = new OrderService();
+    private OrderService orderService;
+
+    public EmailJob() {
+        orderService = OrderService.getInstance();
+    }
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {

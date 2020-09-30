@@ -10,8 +10,12 @@ import java.util.List;
 public class AuthorService {
     private AuthorDao authorDao;
 
-    public AuthorService() {
+    private AuthorService() {
         authorDao = AuthorDao.getInstance();
+    }
+
+    public static AuthorService getInstance() {
+        return AuthorServiceHolder.AUTHOR_SERVICE;
     }
 
     public boolean saveAuthor(String author) throws ServiceException {
@@ -36,5 +40,9 @@ public class AuthorService {
         } catch (DaoException exception) {
             throw new ServiceException("Exception finding authors.", exception);
         }
+    }
+
+    private static class AuthorServiceHolder {
+        private static final AuthorService AUTHOR_SERVICE = new AuthorService();
     }
 }

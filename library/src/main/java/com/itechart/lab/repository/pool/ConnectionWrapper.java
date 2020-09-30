@@ -11,12 +11,10 @@ public class ConnectionWrapper  implements AutoCloseable{
     private static final Logger LOGGER = LogManager.getLogger(ConnectionWrapper.class);
     private final Connection connection;
 
-
     public ConnectionWrapper() {
 
         connection = ConnectionPool.getInstance().getConnection();
     }
-
 
     public void startTransaction() {
         try {
@@ -26,7 +24,6 @@ public class ConnectionWrapper  implements AutoCloseable{
         }
     }
 
-
     public void commitTransaction() {
         try {
             connection.commit();
@@ -34,7 +31,6 @@ public class ConnectionWrapper  implements AutoCloseable{
             LOGGER.error("Transaction commit failed. ");
         }
     }
-
 
     public void rollbackTransaction() {
         try {
@@ -44,7 +40,6 @@ public class ConnectionWrapper  implements AutoCloseable{
         }
     }
 
-
     public void endTransaction() {
         try {
             connection.setAutoCommit(true);
@@ -53,11 +48,9 @@ public class ConnectionWrapper  implements AutoCloseable{
         }
     }
 
-
     public Connection getConnection() {
         return connection;
     }
-
 
     @Override
     public void close() {

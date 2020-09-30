@@ -22,7 +22,8 @@ public class MessageManager {
     public static final String ORDER_WAS_ADDED_MESSAGE_KEY = "message.order_added";
     public static final String ORDER_WAS_NOT_ADDED_MESSAGE_KEY = "message.order_not_added";
     public static final String INFORMATION_NOT_FOUND_MESSAGE_KEY ="message.no_info";
-
+    public static final String EDITING_SUCCESS_MESSAGE_KEY ="message.edit_success";
+    public static final String EDITING_FAILURE_MESSAGE_KEY ="message.edit_failure";
     public static ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_FILE_NAME, DEFAULT_LOCALE);
 
     private MessageManager() {

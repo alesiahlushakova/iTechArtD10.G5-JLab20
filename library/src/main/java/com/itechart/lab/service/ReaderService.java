@@ -11,8 +11,12 @@ import java.util.List;
 public class ReaderService {
     private ReaderDao readerDao;
 
-    public ReaderService() {
+    private ReaderService() {
         readerDao = ReaderDao.getInstance();
+    }
+
+    public static ReaderService getInstance() {
+        return ReaderServiceHolder.READER_SERVICE;
     }
 
     public Reader findReader(int readerId) throws ServiceException {
@@ -48,12 +52,11 @@ public class ReaderService {
         }
     }
 
-    public boolean editReader(int id, String email, String firstname, String lastname)
+    public boolean editReader(int id,  String firstname, String lastname)
             throws ServiceException {
         try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
             Reader reader = new Reader();
             reader.setId(id);
-            reader.setEmail(email);
             reader.setFirstname(firstname);
             reader.setLastname(lastname);
 
@@ -71,5 +74,9 @@ public class ReaderService {
         } catch (DaoException e) {
             throw new ServiceException("Error in finding a reader");
         }
+    }
+
+    private static class ReaderServiceHolder {
+        private static final ReaderService READER_SERVICE = new ReaderService();
     }
 }

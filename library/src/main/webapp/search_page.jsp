@@ -16,7 +16,7 @@
         <input type="hidden" name="command" value="search_book"/>
         <p><label>description <textarea id="description" title="description"
                                         type="text" name="description" value="" ></textarea></label></p>
-
+<p>title</p>
         <p><textarea title="title" id="title" name="title"
         ></textarea></p>
         <p>author</p>
@@ -33,7 +33,7 @@
             </c:forEach>
         </select>
         <button id="submit" class="create_confirm" id="submit" type="submit"
-        disabled>Search <i class="fa fa-plus" aria-hidden="true"></i></button>
+        >Search <i class="fa fa-plus" aria-hidden="true"></i></button>
 
     </form>
 </div>

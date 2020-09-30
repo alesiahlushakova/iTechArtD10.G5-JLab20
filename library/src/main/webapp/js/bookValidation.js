@@ -8,6 +8,7 @@ var totalAmountChecked = false;
 var isbnChecked = false;
 var coverChecked = false;
 var descriptionChecked = false;
+var commentChecked = false;
 
 var logRegEx = /\W/;
 var regExp = /\d\W/;
@@ -16,6 +17,9 @@ var digit = /[0-9]+/;
 var isbnReg = /^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/;
 var numberRegEx = /^[1-9][0-9]{0,2}$/;
 
+var borrowDate = document.getElementById("borrowDate");
+
+var comment = document.getElementById("comment");
 var minLength = 1;
 var notFoundIndex = -1;
 
@@ -29,13 +33,19 @@ var pageCount = document.getElementById("pageCount");
 var totalAmount = document.getElementById("totalAmount");
 var isbn = document.getElementById("isbn");
 var description = document.getElementById("description");
-var cover = document.getElementById("photo");
+var submitModal = document.getElementById("save");
+var submitModal1 = document.getElementById("save1");
+var modal = document.getElementById("myModal");
+var modal1 = document.getElementById("myModal1");
+var btn = document.getElementById("myBtn");
+var btn1 = document.getElementById("editButton");
+var span = document.getElementById("close");
+var span1 = document.getElementById("close1");
 
 
 var submitChange = function () {
-
-
-    if (titleChecked && coverChecked && publisherChecked
+//alert(titleChecked +" "+coverChecked+" "+publisherChecked+" "+pageCountChecked+" "+totalAmountChecked+" "+isbnChecked+" "+descriptionChecked);
+    if (titleChecked  && publisherChecked
         && pageCountChecked && totalAmountChecked && isbnChecked && descriptionChecked) {
 
         submit.disabled = false;
@@ -43,6 +53,25 @@ var submitChange = function () {
     } else {
         submit.disabled = true;
         submit.classList.remove("active");
+    }
+};
+var submitChangeModal = function () {
+    if (commentChecked) {
+        submitModal.disabled = false;
+        submitModal.classList.add("active");
+    } else {
+        submitModal.disabled = true;
+        submitModal.classList.remove("active");
+    }
+};
+
+var submitChangeModal1 = function () {
+    if (commentChecked) {
+        submitModal1.disabled = false;
+        submitModal1.classList.add("active");
+    } else {
+        submitModal1.disabled = true;
+        submitModal1.classList.remove("active");
     }
 };
 
@@ -167,13 +196,10 @@ var checkCover = function () {
 
     var fuData = document.getElementById('photo');
     var FileUploadPath = fuData.value;
-
-
     var Extension = FileUploadPath.substring(FileUploadPath.lastIndexOf('.') + 1).toLowerCase();
 
-
-    if ( Extension === "png"  || Extension === "jpg") {
-
+    alert(Extension);
+    if (Extension === "png" || Extension === "jpg") {
 
         if (fuData.files && fuData.files[0]) {
 
@@ -183,7 +209,7 @@ var checkCover = function () {
                 alert("Maximum file size exceeds");
                 coverChecked = false;
             } else {
-               coverChecked = true;
+                coverChecked = true;
             }
         }
 
@@ -192,4 +218,70 @@ var checkCover = function () {
         alert("Photo only allows file types of PNG, JPG. ");
     }
     submitChange();
+}
+
+
+
+btn.onclick = function () {
+    modal.style.display = "block";
+}
+
+
+span.onclick = function () {
+    modal.style.display = "none";
+    document.getElementById("comment").value = "";
+}
+var closeWindow = function () {
+
+    modal.style.display = "none";
+}
+var checkComment = function () {
+    if (comment.value.search(regExp) > notFoundIndex) {
+        notValidColor(comment);
+        commentChecked = false;
+    } else {
+        validColor(comment);
+        commentChecked = true;
+    }
+    submitChangeModal();
+};
+
+
+btn1.onclick = function () {
+
+    modal1.style.display = "block";
+    var id=document.getElementById("orderI").value;
+
+    document.getElementById("orderID").value = id;
+}
+
+
+
+span1.onclick = function () {
+    modal1.style.display = "none";
+
+}
+var closeWindow1 = function () {
+
+    modal1.style.display = "none";
+}
+
+function myFunction() {
+    // Declare variables
+    var input, filter, ul, li, a, i, txtValue;
+    input = document.getElementById('myInput');
+    filter = input.value.toUpperCase();
+    ul = document.getElementById("myUL");
+    li = ul.getElementsByTagName('li');
+
+    // Loop through all list items, and hide those who don't match the search query
+    for (i = 0; i < li.length; i++) {
+        a = li[i].getElementsByTagName("a")[0];
+        txtValue = a.textContent || a.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            li[i].style.display = "";
+        } else {
+            li[i].style.display = "none";
+        }
+    }
 }

@@ -23,8 +23,8 @@
         </select>
 
 
-        <button id="submit" class="save_button" type="submit"
-        disabled>Edit status <i class="fa fa-plus-square"
+        <button id="submit" class="save_button" type="button"
+        >Edit status <i class="fa fa-plus-square"
                         aria-hidden="true"></i></button>
     </form>
 </div>

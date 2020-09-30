@@ -25,11 +25,11 @@
 <body class="page">
 
 <tag:nav_bar/>
-<div class="create_exercise">
+<div class="reg_form">
     <form method="POST" action="${pageContext.request.contextPath}/controller?command=add_book" enctype="multipart/form-data">
         <ul>
             <c:set var="id" value="${requestScope.book.id}" scope="session"/>
-            <input type="file" id="photo" name="photo" onkeyup="checkCover()" class = "center_input"/>
+            <input type="file" id="photo" name="photo"  class = "center_input" onkeyup="checkCover()"/>
             <li>Title </li>
             <input id="title"  type="text" name="title" value="${requestScope.book.title}" onkeyup="checkTitle()"/>
 
@@ -41,7 +41,7 @@
                         <option>${author.name}</option>
                     </c:forEach>
                 </select></div>
-                <button class="btn-save btn btn-primary btn-sm">Save</button>
+
             </li>
             <li>Publisher</li>
             <input id="publisher" type="text" name="publisher" value="${requestScope.book.publisher}" onkeyup="checkPublisher()"/>
@@ -73,7 +73,7 @@
 
 
             <div class ="create_button"><button id="submit" name="submit" class="save_button" type="submit"
-                                                disabled>Save <i class="fa fa-plus-square"
+                                               disabled >Save <i class="fa fa-plus-square"
                                                                  aria-hidden="true"></i></button></div>
 
         </ul>

@@ -26,6 +26,8 @@ public class OrderDao extends AbstractDao<Order> {
     private static final String SELECT_BY_ID_QUERY = "SELECT * FROM book_order WHERE id=?";
     private static final String UPDATE_TOTAL_AMOUNT_QUERY =
             "UPDATE book_order SET total_amount=total_amount-1 WHERE id=?";
+    private static final String UPDATE_RETURN_DATE_QUERY =
+            "UPDATE book_order SET return_date=? WHERE id=?";
     private static final String SELECT_BY_BOOK_ID_QUERY = "SELECT * FROM book_order WHERE book_id=?";
     private static final String DELETE_BY_ID_QUERY = "DELETE FROM book_order WHERE id=?";
     private static final String INSERT_ENTITY_QUERY =
@@ -133,11 +135,11 @@ public class OrderDao extends AbstractDao<Order> {
     protected List<String> getEntityParameters(Order entity) {
         List<String> parameters = new ArrayList<>();
 
-        int bookId = entity.getBook().getId();
+        int bookId = entity.getBookId();
         String bookIdValue = String.valueOf(bookId);
         parameters.add(bookIdValue);
 
-        int readerId = entity.getReader().getId();
+        int readerId = entity.getReaderId();
         String readerIdValue = String.valueOf(readerId);
         parameters.add(readerIdValue);
 
@@ -190,6 +192,11 @@ public class OrderDao extends AbstractDao<Order> {
     public boolean updateTotalAmount(Connection connection, int id) throws DaoException {
         return executeQuery(connection, UPDATE_TOTAL_AMOUNT_QUERY, id);
     }
+
+    public boolean updateReturnDate(Connection connection,Date returnDate, int id) throws DaoException {
+        return executeQuery(connection, UPDATE_RETURN_DATE_QUERY, returnDate, id);
+    }
+
 
     @Override
     protected Order buildEntity(Connection connection, ResultSet resultSet) throws DaoException {

@@ -17,9 +17,13 @@ public class BookService {
     private BookDao bookDao;
     private OrderDao orderDao;
 
-    public BookService() {
+    private BookService() {
         bookDao = BookDao.getInstance();
         orderDao = OrderDao.getInstance();
+    }
+
+    public static BookService getInstance() {
+        return BookServiceHolder.BOOK_SERVICE;
     }
 
     public Map<List<Book>, Integer> findAllBooksByPages(int offSet, int numberOfRecords) throws ServiceException {
@@ -153,4 +157,7 @@ public class BookService {
         }
     }
 
+    private static class BookServiceHolder{
+        private static final BookService BOOK_SERVICE = new BookService();
+    }
 }

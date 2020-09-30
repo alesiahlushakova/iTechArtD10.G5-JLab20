@@ -1,8 +1,5 @@
 package com.itechart.lab.repository.pool;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.sql.Connection;
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -12,8 +9,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 
 public class ConnectionPool {
-    private final static Logger LOGGER = LogManager.getLogger(ConnectionPool.class);
-
     private static Lock instanceLocker = new ReentrantLock();
     private static Lock poolLocker = new ReentrantLock();
     private static Condition poolCondition = poolLocker.newCondition();
@@ -28,9 +23,7 @@ public class ConnectionPool {
         pool = connectionCreator.createPool();
     }
 
-
     public static ConnectionPool getInstance() {
-
         if (isInstanceAvailable.get()) {
             instanceLocker.lock();
             try {
@@ -43,35 +36,27 @@ public class ConnectionPool {
                 instanceLocker.unlock();
             }
         }
-
         return instance;
     }
-
 
     public Connection getConnection() {
         Connection connection;
         poolLocker.lock();
-
         try {
-
             if (pool.isEmpty()) {
                 poolCondition.await();
             }
-
             connection = pool.poll();
         } catch (InterruptedException exception) {
             throw new IllegalStateException("Can't get connection. ", exception);
         } finally {
             poolLocker.unlock();
         }
-
         return connection;
     }
 
-
     public void returnConnection(Connection connection) {
         poolLocker.lock();
-
         try {
             pool.addLast(connection);
             poolCondition.signal();

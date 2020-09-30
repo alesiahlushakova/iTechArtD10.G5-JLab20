@@ -3,7 +3,12 @@ package com.itechart.lab.command;
 import com.itechart.lab.model.Author;
 import com.itechart.lab.model.Book;
 import com.itechart.lab.model.Genre;
-import com.itechart.lab.service.*;
+import com.itechart.lab.service.AuthorService;
+import com.itechart.lab.service.BookService;
+import com.itechart.lab.service.GenreService;
+import com.itechart.lab.service.OrderService;
+import com.itechart.lab.service.ReaderService;
+import com.itechart.lab.service.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,29 +19,32 @@ import java.util.Map;
 import java.util.Set;
 
 public class BookListCommand implements Command {
-
     private static final Logger LOGGER = LogManager.getLogger(BookListCommand.class);
     private static final int MAX_RECORDS_PER_PAGE_COUNT = 10;
     private static final int FIRST_PAGE_INDEX = 1;
+    private BookService bookService;
+    private ReaderService readerService;
+    private AuthorService authorService;
+    private GenreService genreService;
+
+    public BookListCommand() {
+        bookService = BookService.getInstance();
+        readerService = ReaderService.getInstance();
+        authorService = AuthorService.getInstance();
+        genreService = GenreService.getInstance();
+    }
+
     @Override
     public CurrentJsp execute(HttpServletRequest request) {
          try {
-
              int pageIndex = FIRST_PAGE_INDEX;
-
              String pageParameterValue = request.getParameter(PAGE_PARAMETER);
              if (pageParameterValue != null) {
                  pageIndex = Integer.parseInt(pageParameterValue);
              }
              int currentOffSet = (pageIndex - 1) * MAX_RECORDS_PER_PAGE_COUNT;
-
-             AuthorService authorService = new AuthorService();
              List<Author> authors = authorService.findAllAuthors();
-
-             GenreService genreService = new GenreService();
              List<Genre> genres = genreService.findAllGenres();
-
-             BookService bookService = new BookService();
              Map<List<Book>, Integer> books = bookService.findAllBooksByPages(currentOffSet, MAX_RECORDS_PER_PAGE_COUNT);
              Set<Map.Entry<List<Book>, Integer>> entries = books.entrySet();
 
@@ -51,7 +59,6 @@ public class BookListCommand implements Command {
 
              int numberOfPages = (int) Math.ceil(numberOfRecords * 1.0 / MAX_RECORDS_PER_PAGE_COUNT);
 
-             ReaderService readerService = new ReaderService();
              List<String> emails = readerService.findEmails();
              HttpSession httpSession = request.getSession();
              httpSession.setAttribute("emails", emails);
