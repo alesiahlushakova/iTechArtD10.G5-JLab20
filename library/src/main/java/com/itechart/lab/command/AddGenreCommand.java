@@ -1,6 +1,7 @@
 package com.itechart.lab.command;
 
 import com.itechart.lab.service.GenreService;
+import com.itechart.lab.service.impl.GenreServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,7 +16,7 @@ public class AddGenreCommand implements Command {
     private GenreService genreService;
 
     public AddGenreCommand() {
-        genreService = GenreService.getInstance();
+        genreService = GenreServiceImpl.getInstance();
     }
 
     @Override

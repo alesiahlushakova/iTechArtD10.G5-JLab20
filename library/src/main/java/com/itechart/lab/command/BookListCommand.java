@@ -3,12 +3,11 @@ package com.itechart.lab.command;
 import com.itechart.lab.model.Author;
 import com.itechart.lab.model.Book;
 import com.itechart.lab.model.Genre;
-import com.itechart.lab.service.AuthorService;
-import com.itechart.lab.service.BookService;
-import com.itechart.lab.service.GenreService;
-import com.itechart.lab.service.OrderService;
-import com.itechart.lab.service.ReaderService;
-import com.itechart.lab.service.ServiceException;
+import com.itechart.lab.service.*;
+import com.itechart.lab.service.impl.AuthorServiceImpl;
+import com.itechart.lab.service.impl.BookServiceImpl;
+import com.itechart.lab.service.impl.GenreServiceImpl;
+import com.itechart.lab.service.impl.ReaderServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,10 +27,10 @@ public class BookListCommand implements Command {
     private GenreService genreService;
 
     public BookListCommand() {
-        bookService = BookService.getInstance();
-        readerService = ReaderService.getInstance();
-        authorService = AuthorService.getInstance();
-        genreService = GenreService.getInstance();
+        bookService = BookServiceImpl.getInstance();
+        readerService = ReaderServiceImpl.getInstance();
+        authorService = AuthorServiceImpl.getInstance();
+        genreService = GenreServiceImpl.getInstance();
     }
 
     @Override

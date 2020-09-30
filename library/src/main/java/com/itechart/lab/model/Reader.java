@@ -3,7 +3,7 @@ package com.itechart.lab.model;
 import java.sql.Date;
 import java.util.Objects;
 
-public class Reader extends Entity {
+public class Reader implements Entity {
     private int id;
     private String firstname;
     private String lastname;
@@ -12,6 +12,7 @@ public class Reader extends Entity {
     private String phone;
     private Date dateOfRegistration;
 
+    @Override
     public int getId() {
         return id;
     }

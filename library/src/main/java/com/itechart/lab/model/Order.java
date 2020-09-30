@@ -3,7 +3,7 @@ package com.itechart.lab.model;
 import java.sql.Date;
 import java.util.Objects;
 
-public class Order extends Entity{
+public class Order implements Entity{
     private int id;
     private int bookId;
     private int readerId;
@@ -49,7 +49,7 @@ public class Order extends Entity{
         this.period = period;
     }
 
-
+    @Override
     public int getId() {
         return id;
     }

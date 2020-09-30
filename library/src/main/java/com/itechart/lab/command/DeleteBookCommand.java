@@ -1,6 +1,7 @@
 package com.itechart.lab.command;
 
 import com.itechart.lab.service.BookService;
+import com.itechart.lab.service.impl.BookServiceImpl;
 import com.itechart.lab.service.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,7 +17,7 @@ public class DeleteBookCommand implements Command {
     private BookService bookService;
 
     public DeleteBookCommand() {
-        bookService = BookService.getInstance();
+        bookService = BookServiceImpl.getInstance();
     }
 
     @Override

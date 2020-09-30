@@ -5,7 +5,7 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Objects;
 
-public class Book extends Entity {
+public class Book implements Entity {
     private int id;
     private String cover;
     private InputStream inputStream;
@@ -46,6 +46,8 @@ public class Book extends Entity {
     public void setInputStream(InputStream inputStream) {
         this.inputStream = inputStream;
     }
+
+    @Override
     public int getId() {
         return id;
     }

@@ -1,6 +1,7 @@
 package com.itechart.lab.command;
 
 import com.itechart.lab.service.AuthorService;
+import com.itechart.lab.service.impl.AuthorServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,7 +16,7 @@ public class AddAuthorCommand implements Command {
     private AuthorService authorService;
 
     public AddAuthorCommand() {
-        authorService = AuthorService.getInstance();
+        authorService = AuthorServiceImpl.getInstance();
     }
     @Override
     public CurrentJsp execute(HttpServletRequest request) {

@@ -2,10 +2,9 @@ package com.itechart.lab.service.mail;
 
 import com.itechart.lab.model.Order;
 import com.itechart.lab.model.Status;
-import com.itechart.lab.service.OrderService;
+import com.itechart.lab.service.impl.OrderServiceImpl;
 import com.itechart.lab.service.ServiceException;
 import org.quartz.Job;
-import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.stringtemplate.v4.ST;
@@ -21,16 +20,16 @@ public class EmailJob implements Job {
     private static final String USERNAME = "filippovich184@gmail.com";
     private static final String PASSWORD = "filippovich27";
 
-    private OrderService orderService;
+    private OrderServiceImpl orderServiceImpl;
 
     public EmailJob() {
-        orderService = OrderService.getInstance();
+        orderServiceImpl = OrderServiceImpl.getInstance();
     }
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         try {
-            List<Order> orders = orderService.findAll();
+            List<Order> orders = orderServiceImpl.findAll();
             orders.stream().filter(order -> order.getStatus().equals(Status.ORDERED) &&
                                             order.getDueDate().toLocalDate().minusDays(1L).equals(LocalDate.now()) ||
                                             order.getDueDate().toLocalDate().minusWeeks(1L).equals(LocalDate.now()))

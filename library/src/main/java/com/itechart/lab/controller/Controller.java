@@ -4,7 +4,6 @@ package com.itechart.lab.controller;
 import com.itechart.lab.command.Command;
 import com.itechart.lab.command.CommandFactory;
 import com.itechart.lab.command.CurrentJsp;
-import com.itechart.lab.service.ReaderService;
 import com.itechart.lab.view.MessageManager;
 
 import javax.servlet.RequestDispatcher;
@@ -14,7 +13,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 import static com.itechart.lab.command.Command.MESSAGE_ATTRIBUTE;
 import static com.itechart.lab.view.MessageManager.NONE_MESSAGE_KEY;

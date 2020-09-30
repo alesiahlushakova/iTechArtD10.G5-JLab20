@@ -2,10 +2,11 @@ package com.itechart.lab.model;
 
 import java.util.Objects;
 
-public class Genre extends Entity {
+public class Genre implements Entity {
     private int id;
     private String genre;
 
+    @Override
     public int getId() {
         return id;
     }

@@ -1,12 +1,11 @@
 package com.itechart.lab.controller;
 
-import com.itechart.lab.service.BookService;
+import com.itechart.lab.service.impl.BookServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.PreparedStatement;
@@ -26,7 +25,7 @@ public class ImageServlet extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response) {
         OutputStream oImage;
         ResultSet rs = null;
-        BookService bookService = BookService.getInstance();
+        BookServiceImpl bookService = BookServiceImpl.getInstance();
         PreparedStatement pstmt = null;
       int bookId = Integer.parseInt( request.getParameter("bookId"));
         try {

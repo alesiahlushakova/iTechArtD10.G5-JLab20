@@ -1,21 +1,16 @@
 package com.itechart.lab.command;
 
 import com.itechart.lab.model.Author;
-import com.itechart.lab.model.Book;
 import com.itechart.lab.model.Genre;
-import com.itechart.lab.service.AuthorService;
 import com.itechart.lab.service.BookService;
-import com.itechart.lab.service.GenreService;
-import com.itechart.lab.service.ServiceException;
+import com.itechart.lab.service.impl.BookServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.util.ArrayUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import java.io.InputStream;
-import java.sql.Array;
 import java.sql.Date;
 import java.util.*;
 
@@ -26,7 +21,7 @@ public class AddBookCommand implements Command{
     private BookService bookService;
 
     public AddBookCommand() {
-        bookService = BookService.getInstance();
+        bookService = BookServiceImpl.getInstance();
     }
 
     @Override

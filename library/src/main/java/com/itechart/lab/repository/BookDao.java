@@ -148,13 +148,28 @@ public class BookDao extends AbstractDao<Book> {
         sqlQuery.append("WHERE (title='").append(title).append("' OR '").append(title).
                 append("' = '' ) AND (description='").append(description).append("' OR '").append(description)
                 .append("' = ''  ) ");
+        if(!genres.isEmpty() && genres.get(0) != null){
+            sqlQuery.append("AND  (genre IN ( '");
+            for( int i=0; i<genres.size();i++){
+                if(i==(genres.size()-1)){
+                    sqlQuery.append(genres.get(i)).append("'))");
+                } else {
+                    sqlQuery.append(genres.get(i)).append("', '");
+                }
+            }
+        }
+        if(!authors.isEmpty() && authors.get(0) != null){
+            sqlQuery.append("AND  (a.name IN ( '");
+            for( int i=0; i<authors.size();i++){
+                if(i==(authors.size()-1)){
+                    sqlQuery.append(authors.get(i)).append("')");
+                } else {
+                    sqlQuery.append(authors.get(i)).append("', '");
+                }
+            }
+        }
 
-        for (String genre : genres) {
-            sqlQuery.append("AND  (genre='").append(genre).append("' OR '").append(genre).append("' = '' )");
-        }
-        for (String author : authors) {
-            sqlQuery.append("AND  (a.name='").append(author).append("' OR '").append(author).append("' = '' )");
-        }
+
         try (Statement preparedStatement
                      = connection.createStatement()) {
             ResultSet resultSet = preparedStatement.executeQuery(String.valueOf(sqlQuery));

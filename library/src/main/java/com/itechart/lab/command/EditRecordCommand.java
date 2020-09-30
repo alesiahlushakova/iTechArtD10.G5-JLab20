@@ -2,6 +2,7 @@ package com.itechart.lab.command;
 
 import com.itechart.lab.model.Status;
 import com.itechart.lab.service.OrderService;
+import com.itechart.lab.service.impl.OrderServiceImpl;
 import com.itechart.lab.service.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,7 +15,7 @@ public class EditRecordCommand implements Command {
     private OrderService orderService;
 
     public EditRecordCommand() {
-        orderService = OrderService.getInstance();
+        orderService = OrderServiceImpl.getInstance();
     }
 
     @Override

@@ -6,18 +6,17 @@ import com.itechart.lab.model.Status;
 import com.itechart.lab.service.BookService;
 import com.itechart.lab.service.OrderService;
 import com.itechart.lab.service.ReaderService;
-import com.itechart.lab.service.ServiceException;
+import com.itechart.lab.service.impl.BookServiceImpl;
+import com.itechart.lab.service.impl.OrderServiceImpl;
+import com.itechart.lab.service.impl.ReaderServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.util.ArrayUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import java.io.InputStream;
 import java.sql.Date;
 import java.util.Arrays;
-import java.util.List;
 
 import static com.itechart.lab.view.MessageManager.EDITING_FAILURE_MESSAGE_KEY;
 import static com.itechart.lab.view.MessageManager.EDITING_SUCCESS_MESSAGE_KEY;
@@ -29,9 +28,9 @@ public class EditBookCommand implements Command{
     private OrderService orderService;
 
     public EditBookCommand() {
-        bookService = BookService.getInstance();
-        readerService = ReaderService.getInstance();
-        orderService = OrderService.getInstance();
+        bookService = BookServiceImpl.getInstance();
+        readerService = ReaderServiceImpl.getInstance();
+        orderService = OrderServiceImpl.getInstance();
     }
 
     @Override

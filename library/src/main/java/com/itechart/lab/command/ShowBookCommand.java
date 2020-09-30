@@ -4,6 +4,8 @@ import com.itechart.lab.model.Book;
 import com.itechart.lab.model.Order;
 import com.itechart.lab.service.BookService;
 import com.itechart.lab.service.OrderService;
+import com.itechart.lab.service.impl.BookServiceImpl;
+import com.itechart.lab.service.impl.OrderServiceImpl;
 import com.itechart.lab.service.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,8 +22,8 @@ public class ShowBookCommand implements Command {
     private OrderService orderService;
 
     public ShowBookCommand() {
-        bookService = BookService.getInstance();
-        orderService = OrderService.getInstance();
+        bookService = BookServiceImpl.getInstance();
+        orderService = OrderServiceImpl.getInstance();
     }
 
     @Override

@@ -2,11 +2,11 @@ package com.itechart.lab.model;
 
 import java.util.Objects;
 
-public class Author extends Entity{
+public class Author implements Entity {
     private int id;
     private String name;
 
-
+    @Override
     public int getId() {
         return id;
     }
@@ -29,7 +29,7 @@ public class Author extends Entity{
         if (!(o instanceof Author)) return false;
         Author author = (Author) o;
         return getId() == author.getId() &&
-                getName().equals(author.getName()) ;
+                getName().equals(author.getName());
     }
 
     @Override
