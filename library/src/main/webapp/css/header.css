@@ -9,15 +9,16 @@
     padding: 5px;
 }
 
+.user_menu ul li.active a, .user_menu ul li a:hover {
+    text-decoration:none;
+    color: #ff7ad3;
+}
 .register_login_a {
     color: #de81df;
     text-decoration: none;
 }
 
-.logout_a {
-    color: #90d9d3;
-    text-decoration: none;
-}
+
 
 .hello_message a:hover {
     text-decoration: underline;

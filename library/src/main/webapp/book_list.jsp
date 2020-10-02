@@ -30,25 +30,59 @@
 <div class="navigation_buttons">
     <ul>
         <c:if test="${requestScope.pageIndex != 1}">
-            <li>
-                <a href="controller?command=book_list&page=${requestScope.pageIndex - 1}">previous</a>
-            </li>
+            <c:if test="${sessionScope.isFiltered eq true}">
+                <li>
+                    <a href="controller?command=book_list_filtered&page=${requestScope.pageIndex - 1}">previous</a>
+                </li>
+            </c:if>
+            <c:if test="${sessionScope.isFiltered eq false}">
+                <li>
+                    <a href="controller?command=book_list&page=${requestScope.pageIndex - 1}">previous</a>
+                </li>
+            </c:if>
+
         </c:if>
         <c:forEach begin="1" end="${requestScope.numberOfPages}" var="i">
             <li>
                 <c:choose>
                     <c:when test="${requestScope.pageIndex eq i}">${i}</c:when>
                     <c:otherwise>
-                        <a href="controller?command=book_list&page=${i}">${i}</a>
+                        <c:if test="${sessionScope.isFiltered eq true}">
+                            <a href="controller?command=book_list_filtered&page=${i}">${i}</a>
+                        </c:if>
+                        <c:if test="${sessionScope.isFiltered eq false}">
+                            <a href="controller?command=book_list&page=${i}">${i}</a>
+                        </c:if>
+
                     </c:otherwise>
                 </c:choose>
             </li>
         </c:forEach>
         <c:if test="${requestScope.pageIndex < requestScope.numberOfPages}">
+            <c:if test="${sessionScope.isFiltered eq true}">
+                <a href="controller?command=book_list&page=${i}">${i}</a>
+            </c:if>
             <li>
-                <a href="controller?command=book_list&page=${requestScope.pageIndex + 1}">next</a>
+                <c:if test="${sessionScope.isFiltered eq true}">
+                    <a href="controller?command=book_list_filtered&page=${requestScope.pageIndex + 1}">next</a>
+                </c:if>
+                <c:if test="${sessionScope.isFiltered eq false}">
+                    <a href="controller?command=book_list&page=${requestScope.pageIndex + 1}">next</a>
+                </c:if>
+
             </li>
         </c:if>
+        <li>
+            <form id="changePagination" name="changePagination" method="POST"
+                  action="${pageContext.request.contextPath}/controller?command=change_pagination">
+                <select class="mdb-select colorful-select dropdown-primary md-form" name="bookCount" multiple
+                       >
+                        <option selected>10</option>
+                    <option>20</option>
+                </select>
+                <button class="save_button" type="submit"><i class="fa fa-search" aria-hidden="true"> Choose</i></button>
+            </form>
+          </li>
 
     </ul>
 </div>

@@ -9,13 +9,19 @@ var isbnChecked = false;
 var coverChecked = false;
 var descriptionChecked = false;
 var commentChecked = false;
+var emailChecked = false;
+var lastNameChecked = false;
+var firstNameChecked = false;
+
+
+const regMail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 var logRegEx = /\W/;
 var regExp = /\d\W/;
 var punct = /[.,!?()\\|\[\]`@$^*-+=:;¹#"'_\s></%&*]+/;
 var digit = /[0-9]+/;
 var isbnReg = /^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/;
-var numberRegEx = /^[1-9][0-9]{0,2}$/;
+var numberRegEx = /^\d+$/;
 
 var borrowDate = document.getElementById("borrowDate");
 
@@ -23,6 +29,9 @@ var comment = document.getElementById("comment");
 var minLength = 1;
 var notFoundIndex = -1;
 
+var email = document.getElementById("myInput");
+var firstName = document.getElementById("readerName");
+var lastName = document.getElementById("readerSurname");
 var title = document.getElementById("title");
 var author = document.getElementById("author");
 var genre = document.getElementById("genre");
@@ -56,7 +65,7 @@ var submitChange = function () {
     }
 };
 var submitChangeModal = function () {
-    if (commentChecked) {
+    if (emailChecked && lastNameChecked && firstNameChecked) {
         submitModal.disabled = false;
         submitModal.classList.add("active");
     } else {
@@ -66,7 +75,7 @@ var submitChangeModal = function () {
 };
 
 var submitChangeModal1 = function () {
-    if (commentChecked) {
+    if ( emailChecked && lastNameChecked && firstNameChecked) {
         submitModal1.disabled = false;
         submitModal1.classList.add("active");
     } else {
@@ -85,6 +94,18 @@ var notValidColor = function (element) {
     element.classList.remove("valid");
 }
 
+
+var checkMail = function () {
+    if (regMail.test(String(email).toLowerCase())) {
+        notValidColor(title);
+        emailChecked = false;
+    } else {
+        validColor(email);
+        emailChecked= true;
+    }
+    submitChange();
+};
+
 var checkTitle = function () {
     if (title.value.search(regExp) > notFoundIndex ||
         title.value.length < minLength) {
@@ -96,6 +117,29 @@ var checkTitle = function () {
     }
     submitChange();
 };
+
+var checkName = function () {
+    if (firstName.value.search(punct) > notFoundIndex ||
+        firstName.value.search(digit) > notFoundIndex ||
+        firstName.value.length < 1) {
+        notValidColor(firstName);
+        firstNameChecked = false;
+    } else {
+        validColor(firstName);
+        firstNameChecked = true;
+    }
+    if (lastName.value.search(punct) > notFoundIndex ||
+        lastName.value.search(digit) > notFoundIndex ||
+        lastName.value.length < 1) {
+        notValidColor(lastName);
+        lastNameChecked = false;
+    } else {
+        validColor(lastName);
+        lastNameChecked = true;
+    }
+    submitChangeModal();
+};
+
 
 var checkAuthor = function () {
     if (
@@ -230,6 +274,9 @@ btn.onclick = function () {
 span.onclick = function () {
     modal.style.display = "none";
     document.getElementById("comment").value = "";
+    document.getElementById("myInput").value = "";
+    document.getElementById("readerName").value = "";
+    document.getElementById("readerSurname").value = "";
 }
 var closeWindow = function () {
 
@@ -284,4 +331,5 @@ function myFunction() {
             li[i].style.display = "none";
         }
     }
+    checkMail();
 }

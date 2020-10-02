@@ -18,6 +18,16 @@ public enum CommandType {
             this.command = new BookListCommand();
         }
     },
+CHANGE_PAGINATION{
+    {
+        this.command = new ChangePaginationCommand();
+    }
+},
+    BOOK_LIST_FILTERED{
+        {
+            this.command = new BookListFilteredCommand();
+        }
+    },
     ADD_AUTHOR {
         {
             this.command = new AddAuthorCommand();

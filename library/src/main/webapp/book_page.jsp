@@ -7,10 +7,9 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css">
-
 </head>
 <body class="page">
-<tag:nav_bar/>
+<tag:nav_bar_book/>
 <div class="reg_form">
     <form method="POST"
           action="${pageContext.request.contextPath}/controller?command=edit_book&bookId=${requestScope.book.id}"
@@ -100,16 +99,17 @@
 
                 <label>email </label>
                 <input type="email" name="email" id="myInput" onkeyup="myFunction()" placeholder="Search for emails..">
-                <label>name</label>
-                <input type="text" name="readerName" id="readerName">
-                <label>surname</label>
-                <input type="text" name="readerSurname" id="readerSurname">
                 <ul id="myUL">
                     <li><a href="#">Adele</a></li>
                     <c:forEach var="email" items="${sessionScope.emails}">
                         <li><a href="#">${email}</a></li>
                     </c:forEach>
                 </ul>
+
+                <label>name</label>
+                <input type="text" name="readerName" id="readerName" onkeyup="checkName()">
+                <label>surname</label>
+                <input type="text" name="readerSurname" id="readerSurname" onkeyup="checkName()">
 
 <%--                <select title="email" class="duration_select" name="email">--%>
 <%--                    <option value="" disabled selected>Choose email</option>--%>

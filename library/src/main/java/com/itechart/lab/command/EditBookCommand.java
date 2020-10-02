@@ -21,7 +21,7 @@ import java.util.Arrays;
 import static com.itechart.lab.view.MessageManager.EDITING_FAILURE_MESSAGE_KEY;
 import static com.itechart.lab.view.MessageManager.EDITING_SUCCESS_MESSAGE_KEY;
 
-public class EditBookCommand implements Command{
+public class EditBookCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(AddBookCommand.class);
     private BookService bookService;
     private ReaderService readerService;
@@ -38,28 +38,33 @@ public class EditBookCommand implements Command{
 
         try {
 
-            int bookId = Integer.parseInt( request.getParameter(BOOK_ID_PARAMETER));
+            int bookId = Integer.parseInt(request.getParameter(BOOK_ID_PARAMETER));
             String email = request.getParameter(EMAIL_PARAMETER);
-            String r =request.getParameter(PERIOD_PARAMETER);
+            String r = request.getParameter(PERIOD_PARAMETER);
             String readerName = request.getParameter("readerName");
             String readerSurname = request.getParameter("readerSurname");
             Period period = Period.ONE;
-            if (r != null){
+            if (r != null) {
                 period = Period.valueOf(request.getParameter(PERIOD_PARAMETER));
             }
             String comment = request.getParameter(COMMENT_PARAMETER);
             String statusOrder = request.getParameter("orderStatus");
-            int status = Integer.parseInt(request.getParameter("orderStatus"));
-            Integer orderId = Integer.parseInt(request.getParameter("orderID"));
+            Integer status = Integer.parseInt(request.getParameter("status"));
+            String orderIdValue = request.getParameter("orderID");
+            Integer orderId = null;
+            if (!orderIdValue.isEmpty()) {
+                orderId = Integer.parseInt(request.getParameter("orderID"));
+            }
+
             int readerId = readerService.findIdByMail(email);
             if (readerId < 1 && email != null) {
                 readerService.saveReader(email, readerName, readerSurname);
             }
-            if (statusOrder!=null || statusOrder !=""){
+            if (orderId != null && statusOrder != null) {
                 boolean isUpdated = readerService.editReader(readerId, readerName, readerSurname);
                 boolean isSuccessful = orderService.editOrder(orderId, Status.valueOf(statusOrder));
             }
-            if (status!=0 && email!=null && comment != null || comment!=""){
+            if (status != 0 && email != null ) {
                 boolean isOperationSuccessful = orderService.saveOrder(bookId, readerId, period, comment);
             }
 
@@ -77,7 +82,7 @@ public class EditBookCommand implements Command{
 
             Part filePart = request.getPart("photo");
             if (filePart != null) {
-                LOGGER.info(filePart.getName() +filePart.getSize() + filePart.getContentType());
+                LOGGER.info(filePart.getName() + filePart.getSize() + filePart.getContentType());
                 inputStream = filePart.getInputStream();
             }
             book.setTitle(title);
@@ -90,11 +95,11 @@ public class EditBookCommand implements Command{
             book.setStatus(status);
             book.setAuthors(Arrays.asList(authors));
             book.setGenres(Arrays.asList(genres));
-           boolean isSuccess = bookService.editBook(book);
-           if (isSuccess){
-               return new CurrentJsp(CurrentJsp.BOOK_PAGE_PATH, false, EDITING_SUCCESS_MESSAGE_KEY);
-           } else
-            return new CurrentJsp(CurrentJsp.BOOK_PAGE_PATH, false, EDITING_FAILURE_MESSAGE_KEY);
+            boolean isSuccess = bookService.editBook(book);
+            if (isSuccess) {
+                return new CurrentJsp(CurrentJsp.BOOK_PAGE_PATH, false, EDITING_SUCCESS_MESSAGE_KEY);
+            } else
+                return new CurrentJsp(CurrentJsp.BOOK_PAGE_PATH, false, EDITING_FAILURE_MESSAGE_KEY);
         } catch (Exception exception) {
             LOGGER.error(exception.getMessage(), exception);
             return new CurrentJsp(CurrentJsp.ERROR_PAGE_PATH, true);

@@ -24,7 +24,7 @@
 </head>
 <body class="page">
 
-<tag:nav_bar/>
+<tag:nav_bar_book/>
 <div class="reg_form">
     <form method="POST" action="${pageContext.request.contextPath}/controller?command=add_book" enctype="multipart/form-data">
         <ul>

@@ -75,12 +75,12 @@ public class AddBookCommand implements Command{
           boolean isOperationSuccessful =  bookService.createBook(inputStream,title,publisher,publishDate,
                   pageCount,description,totalAmount,isbn, authorIdArray, genreIdArray);
             if (!isOperationSuccessful) {
-                return new CurrentJsp("/controller?command=book_list", true, BOOK_WAS_NOT_ADDED_MESSAGE_KEY);
+                return new CurrentJsp("/controller?command=book_list", false, BOOK_WAS_NOT_ADDED_MESSAGE_KEY);
             }
 
             session.setAttribute(IS_RECORD_INSERTED, true);
 
-            return new CurrentJsp("/controller?command=book_list", true, BOOK_WAS_ADDED_MESSAGE_KEY);
+            return new CurrentJsp("/controller?command=book_list", false, BOOK_WAS_ADDED_MESSAGE_KEY);
         } catch (Exception exception) {
             LOGGER.error(exception.getMessage(), exception);
             return new CurrentJsp(CurrentJsp.ERROR_PAGE_PATH, true);

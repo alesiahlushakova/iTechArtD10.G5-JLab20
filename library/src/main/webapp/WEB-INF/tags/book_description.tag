@@ -15,7 +15,12 @@
             <th>Publish date</th>
             <th>Authors</th>
             <th>Available books</th>
-            <th></th>
+            <th>
+                <a href="controller?command=book_list_filtered">Show only available</a>
+            </th>
+            <th>
+                <a href="controller?command=book_list">Show all</a>
+            </th>
         </tr>
         <c:forEach var="book" items="${books}">
             <c:set var="count" value="${pageScope.count+1}"/>
@@ -30,10 +35,11 @@
                     ${author};
                 </c:forEach></td>
                 <td>${book.remainingAmount} out of ${book.totalAmount}</td>
-                <td><li>
+                <td>
                     <a href="controller?command=delete_book&bookId=${book.id}">Discard</a>
-                </li>
+
                 </td>
+                <td></td>
                    </tr>
         </c:forEach>
     </table>

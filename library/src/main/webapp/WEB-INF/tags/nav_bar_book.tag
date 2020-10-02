@@ -8,18 +8,15 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
-
 <script type="text/javascript">
-    $(function() {
+    $(function () {
 
         var url = window.location.href;
+        $(".user_menu a").each(function () {
 
-$(".user_menu a").each(function() {
-
-             if (url === (this.href)) {
+            if (url === (this.href)) {
                 $(this).closest("li").addClass("active");
-                 $(this).closest("li").parent().parent().addClass("active");
-
+                $(this).closest("li").parent().parent().addClass("active");
             }
         });
     });
@@ -27,14 +24,29 @@ $(".user_menu a").each(function() {
 
 <div class="user_menu">
     <ul>
-
+        <li>
+            <form id="addGenre" name="AddGenreForm" method="POST"
+                  action="${pageContext.request.contextPath}/controller">
+                <input type="hidden" name="command" value="add_genre"/>
+                <label>Add genre<input type="text" name="genre" value=""/></label>
+                <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+            </form>
+        </li>
+        <li>
+            <form id="addAuthor" name="AddAuthorForm" method="POST"
+                  action="${pageContext.request.contextPath}/controller">
+                <input type="hidden" name="command" value="add_author"/>
+                <label>Add author <input type="text" name="author" value=""/></label>
+                <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+            </form>
+        </li>
         <li>  <a href="${pageContext.request.contextPath}/create_book.jsp">Add book
             <i class="fa fa-info-circle" aria-hidden="true"></i></a></li>
-                    <li>
-                        <a href="${pageContext.request.contextPath}/controller?command=book_list">Book list</a>
-                    </li>
         <li>
-        <a href="${pageContext.request.contextPath}/search_page.jsp">Search
-            <i class="fa fa-info-circle" aria-hidden="true"></i></a></li>
+            <a href="${pageContext.request.contextPath}/controller?command=book_list">Book list</a>
+        </li>
+        <li>
+            <a href="${pageContext.request.contextPath}/search_page.jsp">Search
+                <i class="fa fa-info-circle" aria-hidden="true"></i></a></li>
     </ul>
 </div>

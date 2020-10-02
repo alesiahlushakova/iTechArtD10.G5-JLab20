@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.itechart.lab.view.MessageManager.CHOOSE_MESSAGE_KEY;
 import static com.itechart.lab.view.MessageManager.INFORMATION_NOT_FOUND_MESSAGE_KEY;
 
 public class SearchBookCommand implements Command {
@@ -49,7 +50,7 @@ public class SearchBookCommand implements Command {
             return new CurrentJsp(CurrentJsp.BOOK_LIST_PAGE_PATH, false);
         } catch (ServiceException exception) {
             LOGGER.error(exception.getMessage(), exception);
-            return new CurrentJsp(CurrentJsp.ERROR_PAGE_PATH, true);
+            return new CurrentJsp(CurrentJsp.ERROR_PAGE_PATH, true, CHOOSE_MESSAGE_KEY);
         }
     }
 }

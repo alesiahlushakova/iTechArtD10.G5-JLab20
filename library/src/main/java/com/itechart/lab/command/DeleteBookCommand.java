@@ -32,7 +32,7 @@ public class DeleteBookCommand implements Command {
             session.setAttribute(IS_RECORD_INSERTED, true);
             session.removeAttribute(BOOK_ATTRIBUTE);
 
-            return new CurrentJsp("/controller?command=book_list", true, DISCARD_BOOK_SUCCESS_MESSAGE_KEY);
+            return new CurrentJsp("/controller?command=book_list", false, DISCARD_BOOK_SUCCESS_MESSAGE_KEY);
         } catch (ServiceException exception) {
             LOGGER.error(exception.getMessage(), exception);
             return new CurrentJsp("/controller?command=book_list", true, DISCARD_BOOK_SUCCESS_MESSAGE_KEY);

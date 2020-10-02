@@ -19,7 +19,7 @@ import java.util.Set;
 
 public class BookListCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(BookListCommand.class);
-    private static final int MAX_RECORDS_PER_PAGE_COUNT = 10;
+    private  int bookPerPage = 10;
     private static final int FIRST_PAGE_INDEX = 1;
     private BookService bookService;
     private ReaderService readerService;
@@ -36,15 +36,21 @@ public class BookListCommand implements Command {
     @Override
     public CurrentJsp execute(HttpServletRequest request) {
          try {
+             HttpSession httpSession = request.getSession();
+             Integer perPageObject = (Integer) httpSession.getAttribute("bookPerPage");
+             if (perPageObject != null ){
+
+                 bookPerPage = perPageObject;
+             }
              int pageIndex = FIRST_PAGE_INDEX;
              String pageParameterValue = request.getParameter(PAGE_PARAMETER);
              if (pageParameterValue != null) {
                  pageIndex = Integer.parseInt(pageParameterValue);
              }
-             int currentOffSet = (pageIndex - 1) * MAX_RECORDS_PER_PAGE_COUNT;
+             int currentOffSet = (pageIndex - 1) * bookPerPage;
              List<Author> authors = authorService.findAllAuthors();
              List<Genre> genres = genreService.findAllGenres();
-             Map<List<Book>, Integer> books = bookService.findAllBooksByPages(currentOffSet, MAX_RECORDS_PER_PAGE_COUNT);
+             Map<List<Book>, Integer> books = bookService.findAllBooksByPages(currentOffSet, bookPerPage);
              Set<Map.Entry<List<Book>, Integer>> entries = books.entrySet();
 
              List<Book> foundBooks = null;
@@ -56,13 +62,14 @@ public class BookListCommand implements Command {
              }
 
 
-             int numberOfPages = (int) Math.ceil(numberOfRecords * 1.0 / MAX_RECORDS_PER_PAGE_COUNT);
+             int numberOfPages = (int) Math.ceil(numberOfRecords * 1.0 / bookPerPage);
 
              List<String> emails = readerService.findEmails();
-             HttpSession httpSession = request.getSession();
+
              httpSession.setAttribute("emails", emails);
              httpSession.setAttribute("genres", genres);
              httpSession.setAttribute("authors", authors);
+             httpSession.setAttribute("isFiltered",false);
              request.setAttribute(NUMBER_OF_PAGE_ATTRIBUTE, numberOfPages);
              request.setAttribute(CURRENT_PAGE_INDEX_ATTRIBUTE, pageIndex);
              request.setAttribute(LIST_ATTRIBUTE, foundBooks);

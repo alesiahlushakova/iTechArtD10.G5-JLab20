@@ -53,7 +53,7 @@ public class BookDao extends AbstractDao<Book> {
     private static final String UPDATE_STATUS_QUERY = "UPDATE book SET status=? WHERE id=?";
     private static final String SELECT_BY_FOUND_ROWS_QUERY = "SELECT SQL_CALC_FOUND_ROWS * FROM book LIMIT %d, %d";
     private static final String SELECT_BY_FOUND_ROWS_FILTERED_QUERY =
-            "SELECT SQL_CALC_FOUND_ROWS * FROM book WHERE status=true LIMIT %d, %d";
+            "SELECT SQL_CALC_FOUND_ROWS * FROM book WHERE status=1 LIMIT %d, %d";
     private static final String SELECT_FOUND_ROWS_QUERY = "SELECT COUNT(*) from book";
     private static final String ID_COLUMN = "id";
     private static final String COVER_COLUMN = "cover";
@@ -162,7 +162,7 @@ public class BookDao extends AbstractDao<Book> {
             sqlQuery.append("AND  (a.name IN ( '");
             for( int i=0; i<authors.size();i++){
                 if(i==(authors.size()-1)){
-                    sqlQuery.append(authors.get(i)).append("')");
+                    sqlQuery.append(authors.get(i)).append("'))");
                 } else {
                     sqlQuery.append(authors.get(i)).append("', '");
                 }

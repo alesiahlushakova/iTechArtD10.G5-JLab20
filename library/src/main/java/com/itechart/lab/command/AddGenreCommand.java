@@ -26,10 +26,10 @@ public class AddGenreCommand implements Command {
             String genre = request.getParameter("genre");
             boolean isOperationSuccessful = genreService.saveGenre(genre);
             if (!isOperationSuccessful) {
-                return new CurrentJsp("/controller?command=book_list", true, GENRE_WAS_NOT_ADDED_MESSAGE_KEY);
+                return new CurrentJsp("/controller?command=book_list", false, GENRE_WAS_NOT_ADDED_MESSAGE_KEY);
             }
             session.setAttribute(IS_RECORD_INSERTED, true);
-            return new CurrentJsp("/controller?command=book_list", true, GENRE_WAS_ADDED_MESSAGE_KEY);
+            return new CurrentJsp("/controller?command=book_list", false, GENRE_WAS_ADDED_MESSAGE_KEY);
         } catch (Exception exception) {
             LOGGER.error(exception.getMessage(), exception);
             return new CurrentJsp(CurrentJsp.ERROR_PAGE_PATH, true);
