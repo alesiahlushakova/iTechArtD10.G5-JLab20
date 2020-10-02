@@ -60,7 +60,10 @@
         </c:forEach>
         <c:if test="${requestScope.pageIndex < requestScope.numberOfPages}">
             <c:if test="${sessionScope.isFiltered eq true}">
-                <a href="controller?command=book_list&page=${i}">${i}</a>
+                <a href="controller?command=book_list_filtered&page=${i}">${i}</a>
+            </c:if>
+            <c:if test="${sessionScope.isFiltered eq true}">
+                <a href="controller?command=book_list_filtered&page=${i}">${i}</a>
             </c:if>
             <li>
                 <c:if test="${sessionScope.isFiltered eq true}">

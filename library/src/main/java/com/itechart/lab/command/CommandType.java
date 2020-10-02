@@ -62,9 +62,6 @@ CHANGE_PAGINATION{
         {
             this.command = new SearchBookCommand();
         }
-    },
-    EDIT_RECORD{
-        {this.command = new EditRecordCommand();}
     };
 
 
