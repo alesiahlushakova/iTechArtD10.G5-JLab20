@@ -59,7 +59,7 @@ public class BookServiceImpl implements BookService {
         try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
             Map<List<Book>, Integer> books = new HashMap<>();
 
-            List<Book> bookList = bookDao.selectAllBooks(connectionWrapper.getConnection(), offSet, numberOfRecords);
+            List<Book> bookList = bookDao.selectAllAvailableBooks(connectionWrapper.getConnection(), offSet, numberOfRecords);
             Integer countOfRecords = bookDao.getNumberOfRecords();
 
             books.put(bookList, countOfRecords);
@@ -94,14 +94,6 @@ public class BookServiceImpl implements BookService {
         }
     }
 
-    public boolean saveBook(Book book) throws ServiceException {
-        try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
-            return bookDao.insert(connectionWrapper.getConnection(), book);
-        } catch (DaoException exception) {
-            throw new ServiceException("Exception saving the book.", exception);
-        }
-
-    }
 
     @Override
     public boolean createBook(InputStream cover, String title, String publisher,
@@ -124,15 +116,21 @@ public class BookServiceImpl implements BookService {
             return false;
         } catch (DaoException exception) {
             connectionWrapper.rollbackTransaction();
+            connectionWrapper.close();
             throw new ServiceException("Exception while saving the book genres and authors.", exception);
         }
 
     }
 
     @Override
-    public boolean deleteBook(int id) throws ServiceException {
+    public boolean deleteBook(String[] books) throws ServiceException {
         try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
-            return bookDao.deleteById(connectionWrapper.getConnection(), id);
+            boolean isSuccess = false;
+            for (String book : books){
+                isSuccess = false;
+                isSuccess = bookDao.deleteById(connectionWrapper.getConnection(), Integer.parseInt(book));
+            }
+          return isSuccess;
         } catch (DaoException exception) {
             throw new ServiceException("Exception while deleting the book.", exception);
         }

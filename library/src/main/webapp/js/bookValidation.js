@@ -6,7 +6,7 @@ var publishDateChecked = false;
 var pageCountChecked = false;
 var totalAmountChecked = false;
 var isbnChecked = false;
-var coverChecked = false;
+var coverChecked = true;
 var descriptionChecked = false;
 var commentChecked = false;
 var emailChecked = false;
@@ -35,6 +35,7 @@ var lastName = document.getElementById("readerSurname");
 var title = document.getElementById("title");
 var author = document.getElementById("author");
 var genre = document.getElementById("genre");
+var status = document.getElementById("statusBook");
 var submit = document.getElementById("submit");
 var publisher = document.getElementById("publisher");
 var publishDate = document.getElementById("publishDate");
@@ -53,8 +54,9 @@ var span1 = document.getElementById("close1");
 
 
 var submitChange = function () {
+
 //alert(titleChecked +" "+coverChecked+" "+publisherChecked+" "+pageCountChecked+" "+totalAmountChecked+" "+isbnChecked+" "+descriptionChecked);
-    if (titleChecked  && publisherChecked
+    if ( coverChecked && titleChecked  && publisherChecked
         && pageCountChecked && totalAmountChecked && isbnChecked && descriptionChecked) {
 
         submit.disabled = false;
@@ -181,7 +183,7 @@ var checkPublisher = function () {
 };
 
 var checkPublishDate = function () {
-    if (publishDate > new Date()) {
+    if (new Date(publishDate.value) > new Date()) {
         notValidColor(publishDate);
         publishDateChecked = false;
     } else {
@@ -192,7 +194,9 @@ var checkPublishDate = function () {
 };
 
 var checkPageCount = function () {
-    if (pageCount.value.search(numberRegEx) > notFoundIndex) {
+
+    if(/\D/.test(pageCount.value)){
+
         notValidColor(pageCount);
         pageCountChecked = false;
     } else {
@@ -203,7 +207,7 @@ var checkPageCount = function () {
 };
 
 var checkTotalAmount = function () {
-    if (totalAmount.value.search(numberRegEx) > notFoundIndex) {
+    if(!/^[0-9]+$/.test(totalAmount.value)){
         notValidColor(totalAmount);
         totalAmountChecked = false;
     } else {
@@ -242,7 +246,7 @@ var checkCover = function () {
     var FileUploadPath = fuData.value;
     var Extension = FileUploadPath.substring(FileUploadPath.lastIndexOf('.') + 1).toLowerCase();
 
-    alert(Extension);
+
     if (Extension === "png" || Extension === "jpg") {
 
         if (fuData.files && fuData.files[0]) {
@@ -265,18 +269,26 @@ var checkCover = function () {
 }
 
 
+var openModal1 = function () {
 
-btn.onclick = function () {
+    modal1.style.display = "block";
+    var id=document.getElementById("orderI").value;
+
+    document.getElementById("orderID").value = id;
+
+}
+var openModal = function () {
     modal.style.display = "block";
+
 }
 
-
-span.onclick = function () {
+var closeModal = function () {
     modal.style.display = "none";
     document.getElementById("comment").value = "";
     document.getElementById("myInput").value = "";
     document.getElementById("readerName").value = "";
     document.getElementById("readerSurname").value = "";
+
 }
 var closeWindow = function () {
 
@@ -294,34 +306,26 @@ var checkComment = function () {
 };
 
 
-btn1.onclick = function () {
-
-    modal1.style.display = "block";
-    var id=document.getElementById("orderI").value;
-
-    document.getElementById("orderID").value = id;
-}
 
 
+var closeModal1 = function () {
 
-span1.onclick = function () {
     modal1.style.display = "none";
-
 }
+
 var closeWindow1 = function () {
 
     modal1.style.display = "none";
 }
 
+
 function myFunction() {
-    // Declare variables
+
     var input, filter, ul, li, a, i, txtValue;
     input = document.getElementById('myInput');
     filter = input.value.toUpperCase();
     ul = document.getElementById("myUL");
     li = ul.getElementsByTagName('li');
-
-    // Loop through all list items, and hide those who don't match the search query
     for (i = 0; i < li.length; i++) {
         a = li[i].getElementsByTagName("a")[0];
         txtValue = a.textContent || a.innerText;
@@ -333,3 +337,5 @@ function myFunction() {
     }
     checkMail();
 }
+
+

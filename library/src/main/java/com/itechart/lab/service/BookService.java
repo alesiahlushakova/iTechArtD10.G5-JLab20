@@ -23,7 +23,7 @@ public interface BookService {
                        int totalAmount, String isbn, List<Integer> authors, List<Integer> genres)
             throws ServiceException;
 
-    boolean deleteBook(int id) throws ServiceException;
+    boolean deleteBook(String[] books) throws ServiceException;
 
     List<Book> searchForBook(String title, String description, List<String> genres, List<String> authors)
             throws ServiceException;

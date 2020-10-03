@@ -28,7 +28,7 @@
                 <div>Author(s)</div>
 
                 <select class="mdb-select colorful-select dropdown-primary md-form" name="authors" multiple
-                        searchable="Search here..">
+                        searchable="Search here.." required>
                     <option value="" disabled selected>Choose author</option>
                     <c:forEach var="author" items="${requestScope.book.authors}">
                         <option>${author}</option>
@@ -44,7 +44,7 @@
             <li>
                 <div>Genre(s)</div>
 
-                <select name="genres" multiple>
+                <select name="genres" multiple required>
                     <option value="" disabled selected>Choose genre</option>
                     <c:forEach var="genre" items="${requestScope.book.genres}">
                         <option>${genre}</option>
@@ -52,8 +52,8 @@
                 </select>
             </li>
             <li>Page count</li>
-            <input id="pageCount" type="text" name="pageCount" value="${requestScope.book.pageCount}"
-                   onkeyup="checkPageCount()"/>
+            <input id="pageCount"  type="text" name="pageCount" value="${requestScope.book.pageCount}"
+                  onkeyup="checkPageCount()" />
 
             <li>ISBN</li>
             <input id="isbn" type="text" name="isbn" value="${requestScope.book.ISBN}" onkeyup="checkIsbn()"/>
@@ -63,13 +63,11 @@
                    onkeyup="checkDescription()"/>
 
             <li>Total amount</li>
-            <input id="totalAmount" type="text" name="totalAmount" value="${requestScope.book.totalAmount}"
+            <input id="totalAmount" pattern="[0-9]+" type="text" name="totalAmount" value="${requestScope.book.totalAmount}"
                    onkeyup="checkTotalAmount()"/>
 
             <li>Status
-
-                <input id="status" type="text" name="status" value="${requestScope.book.status}"/>
-
+            <input type="hidden" name="statusBook" value="${requestScope.book.status}">
                 <c:choose>
                     <c:when test="${requestScope.book.status eq 1}">
                         Available (${requestScope.book.remainingAmount} out of ${requestScope.book.totalAmount})
@@ -85,22 +83,24 @@
                 <a href="${pageContext.request.contextPath}/controller?command=book_list">Discard
                     <i class="fa fa-info-circle" aria-hidden="true"></i></a></li>
             <button id="submit" class="save_button" type="submit"
-                    disabled>Save <i class="fa fa-plus-square"
+                    >Save <i class="fa fa-plus-square"
                                      aria-hidden="true"></i></button>
 
         </ul>
-        <button id="myBtn" class="save_button" type="button">Add Order<i class="fa fa-plus-square"
-                                                     aria-hidden="true"></i></button>
-        <div id="myModal" class="modal create_training_program">
+        <c:if test="${requestScope.book.remainingAmount gt 0}">
+            <button id="myBtn" class="save_button" type="button" onclick="openModal()">Add Order<i class="fa fa-plus-square"
+                                                                             aria-hidden="true"></i></button>
+
+        </c:if>
+         <div id="myModal" class="modal create_training_program">
 
             <div id="modal-content">
-                <span id="close" class="close">&times;</span>
+                <span id="close" class="close" onclick="closeModal()">&times;</span>
 
 
                 <label>email </label>
                 <input type="email" name="email" id="myInput" onkeyup="myFunction()" placeholder="Search for emails..">
                 <ul id="myUL">
-                    <li><a href="#">Adele</a></li>
                     <c:forEach var="email" items="${sessionScope.emails}">
                         <li><a href="#">${email}</a></li>
                     </c:forEach>
@@ -111,16 +111,9 @@
                 <label>surname</label>
                 <input type="text" name="readerSurname" id="readerSurname" onkeyup="checkName()">
 
-<%--                <select title="email" class="duration_select" name="email">--%>
-<%--                    <option value="" disabled selected>Choose email</option>--%>
-<%--                    <c:forEach var="email" items="${sessionScope.emails}">--%>
-<%--                        <option value="${email}">${email}</option>--%>
-<%--                    </c:forEach>--%>
-
-<%--                </select>--%>
 
                 <label>time period</label>
-                <select title="period" class="duration_select" name="period">
+                <select title="period" class="duration_select" name="period" >
                     <option value="" disabled selected>Choose period</option>
                     <option value="ONE">month</option>
                     <option value="TWO">2 months</option>
@@ -139,14 +132,15 @@
                 disabled>Borrow book <i class="fa fa-plus-square"
                                 aria-hidden="true"></i></button>
             </div>
+        </div>
             <div id="myModal1" class="modal create_training_program">
 
-                <div id="modal-content-form" class="modal-content">
-                    <span id="close1" class="close">&times;</span>
+                <div id="modal-content-form" >
+                    <span id="close1" class="close" onclick="closeModal1()">&times;</span>
 
-                    <input id="orderID" name="orderID" type="text" value="">
+                    <input id="orderID" name="orderID" type="hidden" value="">
                     <label>status </label>
-                    <select title="status" class="duration_select" name="orderStatus">
+                    <select title="status" class="duration_select" name="orderStatus" >
                         <option value="" disabled selected>Choose ...</option>
                         <option value="RETURNED">returned</option>
                         <option value="RETURNED_AND_DAMAGED">returned and damaged</option>
@@ -159,7 +153,7 @@
                                     aria-hidden="true"></i></button>
                 </div>
             </div>
-        </div>
+
     </form>
 
 
@@ -192,8 +186,8 @@
                         <td>
                             <input id="orderI" type="hidden" value="${order.id}">
                             <c:set var="orderId" scope="session" value="${order.id}"/>
-                            <button type="button" class="save_button" id="editButton" >
-                                <i class="fa fa-info-circle" aria-hidden="true"></i> ${order.reader.firstname} ${order.reader.lastname}</button>
+                            <button type="button" class="save_button" id="editButton"  onclick="openModal1()">
+                                <i class="fa fa-info-circle" aria-hidden="true" ></i> ${order.reader.firstname} ${order.reader.lastname}</button>
                         </td>
                         <td>${order.borrowDate}</td>
                         <td>${order.dueDate}</td>

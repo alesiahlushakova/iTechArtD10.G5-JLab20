@@ -112,7 +112,7 @@ public class OrderServiceImpl  implements OrderService {
         try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
             Order order = new Order();
             Connection connection = connectionWrapper.getConnection();
-            orderDao.updateAmountWhenBorrowing(connection,bookId);
+
             order.setBookId(bookId);
             order.setReaderId(readerId);
             order.setStatus(Status.ORDERED);
@@ -125,6 +125,7 @@ public class OrderServiceImpl  implements OrderService {
             order.setDueDate(dueDate);
             order.setBorrowDate(new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
             order.setReturnDate(null);
+            orderDao.updateAmountWhenBorrowing(connection,bookId);
             return orderDao.insert(connection, order);
         } catch (DaoException exception) {
             throw new ServiceException("Exception while creating order.", exception);

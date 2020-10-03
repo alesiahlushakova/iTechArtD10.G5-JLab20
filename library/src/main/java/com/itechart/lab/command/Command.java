@@ -39,7 +39,7 @@ public interface Command {
     String MESSAGE_ATTRIBUTE = "message";
     String BOOK_ATTRIBUTE = "book";
     String ORDERS_ATTRIBUTE = "orders";
-    String AVAILABILITY_DATE = "availability_date";
+    String AVAILABILITY_DATE = "availabilityDate";
     String IS_RECORD_INSERTED = "recordInserted";
 
    CurrentJsp execute(HttpServletRequest request);

@@ -45,9 +45,9 @@ public class OrderDao extends AbstractDao<Order> {
             "ON reader_id=reader.id" +
             "WHERE book_id=? ";
     private static final String UPDATE_WHEN_BORROWING_QUERY =
-            "UPDATE book SET remaining_amount=total_amount-1 WHERE id=?";
+            "UPDATE book SET remaining_amount=remaining_amount-1 WHERE id=?";
     private static final String UPDATE_WHEN_RETURNING_QUERY =
-            "UPDATE book SET remaining_amount=total_amount+1 WHERE id=?";
+            "UPDATE book SET remaining_amount=remaining_amount+1 WHERE id=?";
     private static final String ID_COLUMN = "id";
     private static final String BOOK_ID_COLUMN = "book_id";
     private static final String READER_ID_COLUMN = "reader_id";

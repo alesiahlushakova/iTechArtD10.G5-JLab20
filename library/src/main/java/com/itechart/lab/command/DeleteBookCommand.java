@@ -24,8 +24,12 @@ public class DeleteBookCommand implements Command {
     public CurrentJsp execute(HttpServletRequest request) {
         try {
             HttpSession session = request.getSession();
-            int bookId = Integer.parseInt(request.getParameter(BOOK_ID_PARAMETER));
-            boolean isOperationSuccessful = bookService.deleteBook(bookId);
+          String[] books =   request.getParameterValues("isForDeletion");
+
+            boolean isOperationSuccessful = false;
+            if (books != null){
+                isOperationSuccessful =  bookService.deleteBook(books);
+            }
             if (!isOperationSuccessful) {
                 return new CurrentJsp(CurrentJsp.BOOK_LIST_PAGE_PATH, false, DISCARD_BOOK_FAILED_MESSAGE_KEY);
             }

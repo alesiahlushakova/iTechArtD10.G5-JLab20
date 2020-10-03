@@ -8,7 +8,7 @@ import java.util.Objects;
 public class Book implements Entity {
     private int id;
     private String cover;
-    private InputStream inputStream;
+    private InputStream coverImage;
     private String title;
     private String publisher;
     private Date publishDate;
@@ -39,12 +39,12 @@ public class Book implements Entity {
     }
 
 
-    public InputStream getInputStream() {
-        return inputStream;
+    public InputStream getCoverImage() {
+        return coverImage;
     }
 
-    public void setInputStream(InputStream inputStream) {
-        this.inputStream = inputStream;
+    public void setCoverImage(InputStream coverImage) {
+        this.coverImage = coverImage;
     }
 
     @Override

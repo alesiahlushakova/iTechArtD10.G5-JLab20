@@ -19,11 +19,14 @@
     </title>
 </head>
 <body class="page">
-<p class="error">${requestScope.message}</p>
+
 <tag:nav_bar/>
+<p class="error">${requestScope.message}</p>
+
 <div class="table_order">
 
     <tag:book_description books="${requestScope.list}"/>
+
 </div>
 
 
@@ -75,7 +78,7 @@
 
             </li>
         </c:if>
-        <li>
+
             <form id="changePagination" name="changePagination" method="POST"
                   action="${pageContext.request.contextPath}/controller?command=change_pagination">
                 <select class="mdb-select colorful-select dropdown-primary md-form" name="bookCount" multiple
@@ -85,7 +88,7 @@
                 </select>
                 <button class="save_button" type="submit"><i class="fa fa-search" aria-hidden="true"> Choose</i></button>
             </form>
-          </li>
+
 
     </ul>
 </div>

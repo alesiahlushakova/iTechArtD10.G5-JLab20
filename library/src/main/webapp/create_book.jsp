@@ -29,14 +29,14 @@
     <form method="POST" action="${pageContext.request.contextPath}/controller?command=add_book" enctype="multipart/form-data">
         <ul>
             <c:set var="id" value="${requestScope.book.id}" scope="session"/>
-            <input type="file" id="photo" name="photo"  class = "center_input" onkeyup="checkCover()"/>
+            <input type="file" id="photo" name="photo"  class = "center_input" onchange="checkCover()" onkeyup="checkCover()"/>
             <li>Title </li>
             <input id="title"  type="text" name="title" value="${requestScope.book.title}" onkeyup="checkTitle()"/>
 
             <li>Author(s)
 
-                <div><select class="mdb-select colorful-select dropdown-primary md-form" name="authors" multiple searchable="Search here..">
-                    <option value="" disabled selected>Choose genre</option>
+                <div><select class="mdb-select colorful-select dropdown-primary md-form" name="authors" multiple required searchable="Search here..">
+                    <option value="choose" disabled selected>Choose</option>
                     <c:forEach var="author" items="${sessionScope.authors}">
                         <option>${author.name}</option>
                     </c:forEach>
@@ -48,7 +48,8 @@
             <li>Publish Date </li>
             <input id="publishDate"  type="date" name="publishDate" value="${requestScope.book.publishDate}" onkeyup="checkPublishDate()"/>
             <li>Genre(s)
-                <div><select name="genres" multiple>
+                <div><select name="genres" multiple required>
+                    <option value="choose" disabled selected>Choose</option>
                     <c:forEach var="genre" items="${sessionScope.genres}">
                         <option>${genre.genre}</option>
                     </c:forEach>

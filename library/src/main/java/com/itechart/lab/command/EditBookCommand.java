@@ -49,7 +49,7 @@ public class EditBookCommand implements Command {
             }
             String comment = request.getParameter(COMMENT_PARAMETER);
             String statusOrder = request.getParameter("orderStatus");
-            Integer status = Integer.parseInt(request.getParameter("status"));
+            Integer status = Integer.parseInt(request.getParameter("statusBook"));
             String orderIdValue = request.getParameter("orderID");
             Integer orderId = null;
             if (!orderIdValue.isEmpty()) {
@@ -57,14 +57,17 @@ public class EditBookCommand implements Command {
             }
 
             int readerId = readerService.findIdByMail(email);
-            if (readerId < 1 && email != null) {
-                readerService.saveReader(email, readerName, readerSurname);
+            if (readerId < 1) {
+                readerId =readerService.saveReader(email, readerName, readerSurname);
+            } else {
+                       boolean isUpdated = readerService.editReader(readerId, readerName, readerSurname);
+
             }
             if (orderId != null && statusOrder != null) {
-                boolean isUpdated = readerService.editReader(readerId, readerName, readerSurname);
-                boolean isSuccessful = orderService.editOrder(orderId, Status.valueOf(statusOrder));
+                    boolean isSuccessful = orderService.editOrder(orderId, Status.valueOf(statusOrder));
+
             }
-            if (status != 0 && email != null ) {
+            if (status != 0 && (email != null || !email.isEmpty()) && !readerName.isEmpty() ) {
                 boolean isOperationSuccessful = orderService.saveOrder(bookId, readerId, period, comment);
             }
 
@@ -86,7 +89,7 @@ public class EditBookCommand implements Command {
                 inputStream = filePart.getInputStream();
             }
             book.setTitle(title);
-            book.setInputStream(inputStream);
+            book.setCoverImage(inputStream);
             book.setPublisher(publisher);
             book.setPublishDate(publishDate);
             book.setPageCount(pageCount);
@@ -97,9 +100,9 @@ public class EditBookCommand implements Command {
             book.setGenres(Arrays.asList(genres));
             boolean isSuccess = bookService.editBook(book);
             if (isSuccess) {
-                return new CurrentJsp(CurrentJsp.BOOK_PAGE_PATH, false, EDITING_SUCCESS_MESSAGE_KEY);
+                return new CurrentJsp("/controller?command=book_list", false, EDITING_SUCCESS_MESSAGE_KEY);
             } else
-                return new CurrentJsp(CurrentJsp.BOOK_PAGE_PATH, false, EDITING_FAILURE_MESSAGE_KEY);
+                return new CurrentJsp("/controller?command=book_list", false, EDITING_FAILURE_MESSAGE_KEY);
         } catch (Exception exception) {
             LOGGER.error(exception.getMessage(), exception);
             return new CurrentJsp(CurrentJsp.ERROR_PAGE_PATH, true);

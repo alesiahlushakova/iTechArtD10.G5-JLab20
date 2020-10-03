@@ -14,7 +14,8 @@
 <div class="create_training_program">
     <form method="POST" action="${pageContext.request.contextPath}/controller">
         <input type="hidden" name="command" value="search_book"/>
-        <p><label>description <textarea id="description" title="description"
+        <p>description </p>
+        <p><label><textarea id="description" title="description"
                                         type="text" name="description" value="" ></textarea></label></p>
 <p>title</p>
         <p><textarea title="title" id="title" name="title"
@@ -32,13 +33,13 @@
                 <option>${genre.genre}</option>
             </c:forEach>
         </select>
-        <button id="submit" class="create_confirm" id="submit" type="submit"
+        <p>        <button id="submit" class="create_confirm" id="submit" type="submit"
         >Search <i class="fa fa-plus" aria-hidden="true"></i></button>
-
+        </p>
     </form>
 </div>
 <script>
-<%--    <jsp:directive.include file="/js/searchValidation.js"/>--%>
+
 </script>
 </body>
 </html>

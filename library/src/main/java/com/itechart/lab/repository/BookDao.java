@@ -49,12 +49,13 @@ public class BookDao extends AbstractDao<Book> {
     private static final String SELECT_BOOK_GENRES_QUERY = "\n" +
                                                            "SELECT genre FROM book_genre\n" +
                                                            "            INNER JOIN genre ON genre_id = id\n" +
-                                                           "            WHERE genre_id=?";
+                                                           "            WHERE book_id=?";
     private static final String UPDATE_STATUS_QUERY = "UPDATE book SET status=? WHERE id=?";
     private static final String SELECT_BY_FOUND_ROWS_QUERY = "SELECT SQL_CALC_FOUND_ROWS * FROM book LIMIT %d, %d";
     private static final String SELECT_BY_FOUND_ROWS_FILTERED_QUERY =
             "SELECT SQL_CALC_FOUND_ROWS * FROM book WHERE status=1 LIMIT %d, %d";
     private static final String SELECT_FOUND_ROWS_QUERY = "SELECT COUNT(*) from book";
+    private static final String SELECT_FOUND_ROWS_FILTERED_QUERY = "SELECT COUNT(*) from book WHERE status=1";
     private static final String ID_COLUMN = "id";
     private static final String COVER_COLUMN = "cover";
     private static final String TITLE_COLUMN = "title";
@@ -131,7 +132,7 @@ public class BookDao extends AbstractDao<Book> {
             String genre;
             while (resultSet.next()) {
                 genre = resultSet.getString(1);
-                ;
+
                 authorList.add(genre);
             }
 
@@ -303,7 +304,7 @@ public class BookDao extends AbstractDao<Book> {
                 findClients.add(book);
             }
 
-            resultSet = statement.executeQuery(SELECT_FOUND_ROWS_QUERY);
+            resultSet = statement.executeQuery(SELECT_FOUND_ROWS_FILTERED_QUERY);
             if (resultSet.next()) {
                 this.numberOfRecords = resultSet.getInt(1);
             }
@@ -319,7 +320,7 @@ public class BookDao extends AbstractDao<Book> {
         List<String> parameters = new ArrayList<>();
 
 
-        InputStream cover = entity.getInputStream();
+        InputStream cover = entity.getCoverImage();
         if (cover == null) {
             parameters.add(NULL_PARAMETER);
         } else {
