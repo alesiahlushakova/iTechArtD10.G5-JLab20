@@ -42,5 +42,10 @@ public interface Command {
     String AVAILABILITY_DATE = "availabilityDate";
     String IS_RECORD_INSERTED = "recordInserted";
 
+    /**
+     * method executes command
+     * @param request request
+     * @return page
+     */
    CurrentJsp execute(HttpServletRequest request);
 }

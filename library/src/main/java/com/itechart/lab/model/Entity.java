@@ -1,6 +1,9 @@
 package com.itechart.lab.model;
 
 public interface Entity {
-
-int getId();
+    /**
+     * method gets id of entity
+     * @return id
+     */
+    int getId();
 }
