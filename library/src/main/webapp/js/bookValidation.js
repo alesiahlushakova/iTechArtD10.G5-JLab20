@@ -47,15 +47,15 @@ var submitModal = document.getElementById("save");
 var submitModal1 = document.getElementById("save1");
 var modal = document.getElementById("myModal");
 var modal1 = document.getElementById("myModal1");
-var btn = document.getElementById("myBtn");
-var btn1 = document.getElementById("editButton");
+
+var btn1 = document.getElementsByClassName("editButton");
 var span = document.getElementById("close");
 var span1 = document.getElementById("close1");
 
 
+
 var submitChange = function () {
 
-//alert(titleChecked +" "+coverChecked+" "+publisherChecked+" "+pageCountChecked+" "+totalAmountChecked+" "+isbnChecked+" "+descriptionChecked);
     if ( coverChecked && titleChecked  && publisherChecked
         && pageCountChecked && totalAmountChecked && isbnChecked && descriptionChecked) {
 
@@ -269,10 +269,9 @@ var checkCover = function () {
 }
 
 
-var openModal1 = function () {
+var openModal1 = function (id) {
 
     modal1.style.display = "block";
-    var id=document.getElementById("orderI").value;
 
     document.getElementById("orderID").value = id;
 

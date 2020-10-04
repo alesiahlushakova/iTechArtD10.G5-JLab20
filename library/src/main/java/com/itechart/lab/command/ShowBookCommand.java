@@ -31,6 +31,10 @@ public class ShowBookCommand implements Command {
         try {
            int bookId = Integer.parseInt(request.getParameter(BOOK_ID_PARAMETER));
             Book book = bookService.findBook(bookId);
+            if (book.getRemainingAmount() == 0 || book.getTotalAmount() == 0)  {
+                book.setStatus(0);
+            }
+
             Date availabilityDate = (Date) bookService.calculateBookAvailability(bookId);
             List<Order> orders= orderService.findBookOrderers(bookId);
             request.setAttribute(ORDERS_ATTRIBUTE,orders);

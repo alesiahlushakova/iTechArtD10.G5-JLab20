@@ -8,6 +8,13 @@ import java.util.List;
 import java.util.Map;
 
 public interface BookService {
+    /**
+     *
+     * @param offSet
+     * @param numberOfRecords
+     * @return
+     * @throws ServiceException
+     */
     Map<List<Book>, Integer> findAllBooksByPages(int offSet, int numberOfRecords)
             throws ServiceException;
 
@@ -28,7 +35,7 @@ public interface BookService {
     List<Book> searchForBook(String title, String description, List<String> genres, List<String> authors)
             throws ServiceException;
 
-    boolean editBook(Book book) throws ServiceException;
+    boolean editBook(Book book, List<Integer> authors, List<Integer> genres) throws ServiceException;
 
     Date calculateBookAvailability(int id) throws ServiceException;
 }

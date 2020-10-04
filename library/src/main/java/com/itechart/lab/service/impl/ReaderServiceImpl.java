@@ -60,12 +60,9 @@ public class ReaderServiceImpl implements ReaderService {
     public boolean editReader(int id,  String firstname, String lastname)
             throws ServiceException {
         try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
-            Reader reader = new Reader();
-            reader.setId(id);
-            reader.setFirstname(firstname);
-            reader.setLastname(lastname);
 
-            return readerDao.update(connectionWrapper.getConnection(), reader);
+            return readerDao.updateReaderInitials(connectionWrapper.getConnection(),
+                    firstname, lastname, id);
 
         } catch (DaoException e) {
             throw new ServiceException("Error in finding a reader");

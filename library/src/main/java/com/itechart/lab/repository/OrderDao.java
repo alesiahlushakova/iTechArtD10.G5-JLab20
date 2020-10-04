@@ -25,7 +25,7 @@ public class OrderDao extends AbstractDao<Order> {
     private static final String SELECT_ALL_ABOUT_READER_QUERY = "SELECT * FROM reader WHERE id=?";
     private static final String SELECT_BY_ID_QUERY = "SELECT * FROM book_order WHERE id=?";
     private static final String UPDATE_TOTAL_AMOUNT_QUERY =
-            "UPDATE book_order SET total_amount=total_amount-1 WHERE id=?";
+            "UPDATE book SET total_amount=total_amount-1 WHERE id=?";
     private static final String UPDATE_RETURN_DATE_QUERY =
             "UPDATE book_order SET return_date=? WHERE id=?";
     private static final String SELECT_BY_BOOK_ID_QUERY = "SELECT * FROM book_order WHERE book_id=?";

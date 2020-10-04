@@ -94,9 +94,10 @@ public class OrderServiceImpl  implements OrderService {
                 java.sql.Date date=new java.sql.Date(millis);
                 orderDao.updateReturnDate(connection, date, orderId);
                 if (status == Status.LOST || status == Status.RETURNED_AND_DAMAGED) {
-                    orderDao.updateTotalAmount(connection, orderId);
+                    orderDao.updateTotalAmount(connection, order1.getBookId());
+                    orderDao.updateAmountWhenReturning(connection, order1.getBookId());
                 } else if (status == Status.RETURNED) {
-                    orderDao.updateAmountWhenReturning(connection, orderId);
+                    orderDao.updateAmountWhenReturning(connection, order1.getBookId());
                 }
             }
             return orderDao.updateStatus(connection, status, orderId);

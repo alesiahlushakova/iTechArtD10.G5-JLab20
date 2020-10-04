@@ -1,8 +1,6 @@
 package com.itechart.lab.command;
 
-import com.itechart.lab.model.Book;
-import com.itechart.lab.model.Period;
-import com.itechart.lab.model.Status;
+import com.itechart.lab.model.*;
 import com.itechart.lab.service.BookService;
 import com.itechart.lab.service.OrderService;
 import com.itechart.lab.service.ReaderService;
@@ -13,10 +11,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import java.io.InputStream;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static com.itechart.lab.view.MessageManager.EDITING_FAILURE_MESSAGE_KEY;
 import static com.itechart.lab.view.MessageManager.EDITING_SUCCESS_MESSAGE_KEY;
@@ -37,7 +38,7 @@ public class EditBookCommand implements Command {
     public CurrentJsp execute(HttpServletRequest request) {
 
         try {
-
+            HttpSession session = request.getSession();
             int bookId = Integer.parseInt(request.getParameter(BOOK_ID_PARAMETER));
             String email = request.getParameter(EMAIL_PARAMETER);
             String r = request.getParameter(PERIOD_PARAMETER);
@@ -59,13 +60,15 @@ public class EditBookCommand implements Command {
             int readerId = readerService.findIdByMail(email);
             if (readerId < 1) {
                 readerId =readerService.saveReader(email, readerName, readerSurname);
-            } else {
+            } else if (!readerName.isEmpty()) {
                        boolean isUpdated = readerService.editReader(readerId, readerName, readerSurname);
 
             }
             if (orderId != null && statusOrder != null) {
                     boolean isSuccessful = orderService.editOrder(orderId, Status.valueOf(statusOrder));
-
+                    if(status == 0 && statusOrder.equalsIgnoreCase("RETURNED")) {
+                        status=1;
+                }
             }
             if (status != 0 && (email != null || !email.isEmpty()) && !readerName.isEmpty() ) {
                 boolean isOperationSuccessful = orderService.saveOrder(bookId, readerId, period, comment);
@@ -80,7 +83,29 @@ public class EditBookCommand implements Command {
             String isbn = request.getParameter(ISBN_PARAMETER);
             String[] genres = request.getParameterValues(GENRES_PARAMETER);
             String[] authors = request.getParameterValues(AUTHORS_PARAMETER);
+            List<Genre> genres1 = (List<Genre>) session.getAttribute("genres");
+            List<Author> authors1 = (List<Author>) session.getAttribute("authors");
+            List<Integer> genreIdArray = new ArrayList<>();
+            List<Integer> authorIdArray = new ArrayList<>();
+            for (Genre genre:
+                    genres1) {
+                for (String name:
+                        genres) {
+                    if(genre.getGenre().equals(name)){
+                        genreIdArray.add(genre.getId());
+                    }
+                }
+            }
 
+            for (Author author:
+                    authors1) {
+                for (String name:
+                        authors) {
+                    if(author.getName().equals(name)){
+                        authorIdArray.add(author.getId());
+                    }
+                }
+            }
             InputStream inputStream = null;
 
             Part filePart = request.getPart("photo");
@@ -98,7 +123,7 @@ public class EditBookCommand implements Command {
             book.setStatus(status);
             book.setAuthors(Arrays.asList(authors));
             book.setGenres(Arrays.asList(genres));
-            boolean isSuccess = bookService.editBook(book);
+            boolean isSuccess = bookService.editBook(book, authorIdArray, genreIdArray);
             if (isSuccess) {
                 return new CurrentJsp("/controller?command=book_list", false, EDITING_SUCCESS_MESSAGE_KEY);
             } else

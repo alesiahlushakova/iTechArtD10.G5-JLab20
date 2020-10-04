@@ -43,11 +43,11 @@ public class BookDao extends AbstractDao<Book> {
             "             INNER JOIN genre ON genre.id=genre_id\n";
     private static final String SELECT_IMAGE_BY_USER_ID_QUERY = "SELECT cover FROM book WHERE id=?";
     private static final String SELECT_BOOK_AUTHORS_QUERY = "\n" +
-                                                            "SELECT name FROM book_author\n" +
+                                                            "SELECT DISTINCT name FROM book_author\n" +
                                                             "            INNER JOIN author ON author_id = id\n" +
                                                             "            WHERE book_id=?";
     private static final String SELECT_BOOK_GENRES_QUERY = "\n" +
-                                                           "SELECT genre FROM book_genre\n" +
+                                                           "SELECT DISTINCT genre FROM book_genre\n" +
                                                            "            INNER JOIN genre ON genre_id = id\n" +
                                                            "            WHERE book_id=?";
     private static final String UPDATE_STATUS_QUERY = "UPDATE book SET status=? WHERE id=?";

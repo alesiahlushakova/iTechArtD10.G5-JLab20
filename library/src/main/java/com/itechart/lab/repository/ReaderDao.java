@@ -49,20 +49,7 @@ public class ReaderDao extends AbstractDao<Reader> {
         return ReaderDaoHolder.READER_DAO;
     }
 
-//    public List<Reader> selectBookBorrowers(int bookId) throws DaoException{
-//        try(PreparedStatement preparedStatement
-//                    = prepareStatementForQuery(SELECT_RECORD_QUERY, bookId)){
-//            ResultSet resultSet = preparedStatement.executeQuery();
-//
-//            Reader reader = new Reader();
-//            if(resultSet.next()) {
-//                name = resultSet.getString(FIRST_NAME_COLUMN);
-//            }
-//            return name;
-//        } catch (SQLException exception) {
-//            throw new DaoException(exception.getMessage(), exception);
-//        }
-//    }
+
 
     public List<String> getEmails(Connection connection) throws DaoException {
         try (Statement statement
@@ -94,6 +81,10 @@ public class ReaderDao extends AbstractDao<Reader> {
         }
     }
 
+    public boolean updateReaderInitials(Connection connection, String name, String surname, int id) throws DaoException {
+        return executeQuery(connection, UPDATE_ENTITY_QUERY,name,surname, id);
+    }
+
     public int selectIdByMail(Connection connection, String email) throws DaoException {
         int result = 0;
         try (PreparedStatement preparedStatement
@@ -121,6 +112,7 @@ public class ReaderDao extends AbstractDao<Reader> {
         parameters.add(lastname);
 
         String email = entity.getEmail();
+
         parameters.add(email);
 
         int gender = entity.getGender();

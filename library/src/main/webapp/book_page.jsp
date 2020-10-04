@@ -87,7 +87,7 @@
                                      aria-hidden="true"></i></button>
 
         </ul>
-        <c:if test="${requestScope.book.remainingAmount gt 0}">
+        <c:if test="${requestScope.book.remainingAmount gt 0 && requestScope.book.status gt 0 }">
             <button id="myBtn" class="save_button" type="button" onclick="openModal()">Add Order<i class="fa fa-plus-square"
                                                                              aria-hidden="true"></i></button>
 
@@ -184,9 +184,9 @@
                                 ${order.reader.email}
                         </td>
                         <td>
-                            <input id="orderI" type="hidden" value="${order.id}">
+
                             <c:set var="orderId" scope="session" value="${order.id}"/>
-                            <button type="button" class="save_button" id="editButton"  onclick="openModal1()">
+                            <button type="button" class="save_button" name="editButton" id="editButton"  onclick="openModal1('${order.id}')">
                                 <i class="fa fa-info-circle" aria-hidden="true" ></i> ${order.reader.firstname} ${order.reader.lastname}</button>
                         </td>
                         <td>${order.borrowDate}</td>

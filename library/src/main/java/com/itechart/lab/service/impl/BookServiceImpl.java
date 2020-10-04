@@ -1,5 +1,6 @@
 package com.itechart.lab.service.impl;
 
+import com.itechart.lab.model.Author;
 import com.itechart.lab.model.Book;
 import com.itechart.lab.repository.BookDao;
 import com.itechart.lab.repository.DaoException;
@@ -10,10 +11,7 @@ import com.itechart.lab.service.ServiceException;
 
 import java.io.InputStream;
 import java.sql.Connection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class BookServiceImpl implements BookService {
     private BookDao bookDao;
@@ -94,6 +92,29 @@ public class BookServiceImpl implements BookService {
         }
     }
 
+    @Override
+    public boolean editBook(Book book, List<Integer> authors, List<Integer> genres) throws ServiceException {
+        ConnectionWrapper connectionWrapper = new ConnectionWrapper();
+        try {
+            connectionWrapper.startTransaction();
+            Connection connection = connectionWrapper.getConnection();
+            bookDao.update(connection, book);
+
+            boolean isRelatedAuthor = bookDao.relateWithAuthors(connection, book.getId(), authors);
+            boolean isRelatedGenre = bookDao.relateWithGenres(connection, book.getId(), genres);
+            connectionWrapper.commitTransaction();
+            connectionWrapper.endTransaction();
+            return isRelatedAuthor && isRelatedGenre;
+
+
+        } catch (DaoException exception) {
+            connectionWrapper.rollbackTransaction();
+            connectionWrapper.close();
+            throw new ServiceException("Exception while updating the book genres and authors.", exception);
+        }
+
+    }
+
 
     @Override
     public boolean createBook(InputStream cover, String title, String publisher,
@@ -105,7 +126,7 @@ public class BookServiceImpl implements BookService {
             connectionWrapper.startTransaction();
             Connection connection = connectionWrapper.getConnection();
             int id = bookDao.insertBook(connection, cover, title, publisher,
-                                        publishDate, pageCount, description, totalAmount, isbn, 1);
+                    publishDate, pageCount, description, totalAmount, isbn, 1);
             if (id > 0) {
                 boolean isRelatedAuthor = bookDao.relateWithAuthors(connection, id, authors);
                 boolean isRelatedGenre = bookDao.relateWithGenres(connection, id, genres);
@@ -126,11 +147,11 @@ public class BookServiceImpl implements BookService {
     public boolean deleteBook(String[] books) throws ServiceException {
         try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
             boolean isSuccess = false;
-            for (String book : books){
+            for (String book : books) {
                 isSuccess = false;
                 isSuccess = bookDao.deleteById(connectionWrapper.getConnection(), Integer.parseInt(book));
             }
-          return isSuccess;
+            return isSuccess;
         } catch (DaoException exception) {
             throw new ServiceException("Exception while deleting the book.", exception);
         }
@@ -147,15 +168,6 @@ public class BookServiceImpl implements BookService {
         }
     }
 
-    @Override
-    public boolean editBook(Book book) throws ServiceException {
-        try (ConnectionWrapper connectionWrapper = new ConnectionWrapper()) {
-            return bookDao.update(connectionWrapper.getConnection(), book);
-        } catch (DaoException exception) {
-            throw new ServiceException("Exception while updating the book.", exception);
-        }
-
-    }
 
     @Override
     public Date calculateBookAvailability(int id) throws ServiceException {
@@ -166,7 +178,7 @@ public class BookServiceImpl implements BookService {
         }
     }
 
-    private static class BookServiceHolder{
+    private static class BookServiceHolder {
         private static final BookServiceImpl BOOK_SERVICE = new BookServiceImpl();
     }
 }
